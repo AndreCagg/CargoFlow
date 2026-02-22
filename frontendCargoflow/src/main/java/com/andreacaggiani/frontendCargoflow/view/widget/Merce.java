@@ -9,6 +9,13 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.theme.lumo.LumoIcon;
 
 public class Merce extends VerticalLayout{
+	private TextField elementoADR;
+	private Select<String> codiciImballaggi;
+	private TextField qtaADR;
+	private Select<String> umQTA;
+	private NumberField epalSN;
+	
+	
 	public Merce() {
 		TextField segnacollo=new TextField("ID merce");
 		segnacollo.setRequired(true);
@@ -28,6 +35,9 @@ public class Merce extends VerticalLayout{
 		
 		Checkbox fragile=new Checkbox("FRAGILE");
 		Checkbox epal=new Checkbox("EPAL");
+		epal.addValueChangeListener(listener->{
+			epalSN.setVisible(listener.getValue());
+		});
 		
 		HorizontalLayout rigaTipoMerce=new HorizontalLayout();
 		VerticalLayout colFragileEpal=new VerticalLayout();
@@ -35,28 +45,48 @@ public class Merce extends VerticalLayout{
 		
 		rigaTipoMerce.add(tipoMerce, colFragileEpal);
 		
+		epalSN=new NumberField("ID EPAL");
+		epalSN.setVisible(epal.getValue());
+		
 		Checkbox adr=new Checkbox("ADR");
-		TextField elementoADR=new TextField("Elemento ADR");
+		elementoADR=new TextField("Elemento ADR");
+		codiciImballaggi=new Select<>();
+		qtaADR=new TextField("Qta");
+		umQTA=new Select<>();
+		this.setVisibility(adr.getValue());
+		
 		elementoADR.setPrefixComponent(LumoIcon.SEARCH.create());
 		elementoADR.setPlaceholder("Cerca...");
 		
+		adr.addValueChangeListener(listener->{
+			this.setVisibility(listener.getValue());
+		});
+		
+		elementoADR.setVisible(adr.getValue());
+		
 		HorizontalLayout primaRigaADR=new HorizontalLayout();
+		primaRigaADR.setAlignItems(Alignment.BASELINE);
 		primaRigaADR.add(adr, elementoADR);
 		
-		Select<String> codiciImballaggi=new Select<>();
 		codiciImballaggi.setLabel("Codice imballaggio");
 		codiciImballaggi.setRequiredIndicatorVisible(true);
+		codiciImballaggi.setVisible(adr.getValue());
 		
-		TextField qtaADR=new TextField("Qta");
 		qtaADR.setRequired(true);
 		
-		Select<String> umQTA=new Select<>();
 		umQTA.setLabel("UM");
 		umQTA.setRequiredIndicatorVisible(true);
 		
 		HorizontalLayout infoADR=new HorizontalLayout();
 		infoADR.add(qtaADR, umQTA);
 		
-		add(segnacollo, rigaPesoVolumetrico, rigaTipoMerce, primaRigaADR, codiciImballaggi, infoADR);
+		add(segnacollo, rigaPesoVolumetrico, rigaTipoMerce, epalSN, primaRigaADR, codiciImballaggi, infoADR);
+	}
+	
+	private void setVisibility(Boolean visibility) {
+		elementoADR.setVisible(visibility);
+		codiciImballaggi.setVisible(visibility);
+		qtaADR.setVisible(visibility);
+		umQTA.setVisible(visibility);
 	}
 }

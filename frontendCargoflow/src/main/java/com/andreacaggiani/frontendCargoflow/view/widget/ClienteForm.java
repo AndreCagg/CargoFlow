@@ -3,6 +3,7 @@ package com.andreacaggiani.frontendCargoflow.view.widget;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.theme.lumo.LumoIcon;
 
 public class ClienteForm extends VerticalLayout {
     private TextField ragioneSociale;
@@ -12,6 +13,8 @@ public class ClienteForm extends VerticalLayout {
 
     public ClienteForm() {
         ragioneSociale = new TextField("Ragione sociale");
+        ragioneSociale.setPrefixComponent(LumoIcon.SEARCH.create());
+        ragioneSociale.setPlaceholder("Inizia a digitare ...");
         ragioneSociale.setRequired(true);
 
         indirizzo = new TextField("Indirizzo");
@@ -31,4 +34,9 @@ public class ClienteForm extends VerticalLayout {
     public String getIndirizzo() { return indirizzo.getValue(); }
     public String getCitta() { return citta.getValue(); }
     public String getCap() { return cap.getValue(); }
+    
+    public TextField getRagioneSocialeField() { return ragioneSociale; }
+    public TextField getIndirizzoField() { return indirizzo; }
+    public TextField getCittaField() { return citta; }
+    public TextField getCapField() { return cap; }
 }
