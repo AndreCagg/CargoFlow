@@ -17,6 +17,7 @@ public class Merce extends VerticalLayout{
 	
 	
 	public Merce() {
+		Checkbox riserva=new Checkbox("RISERVA");
 		TextField segnacollo=new TextField("ID merce");
 		segnacollo.setRequired(true);
 		
@@ -80,7 +81,7 @@ public class Merce extends VerticalLayout{
 		HorizontalLayout infoADR=new HorizontalLayout();
 		infoADR.add(qtaADR, umQTA);
 		
-		add(segnacollo, rigaPesoVolumetrico, rigaTipoMerce, epalSN, primaRigaADR, codiciImballaggi, infoADR);
+		add(riserva, segnacollo, rigaPesoVolumetrico, rigaTipoMerce, epalSN, primaRigaADR, codiciImballaggi, infoADR);
 	}
 	
 	private void setVisibility(Boolean visibility) {

@@ -37,6 +37,8 @@ public class CreaIncaricoView extends VerticalLayout{
 		TextField ldv=new TextField("LDV");
 		ldv.setRequired(true);
 		
+		TextField ddt=new TextField("DDT");
+		
 		
 		Checkbox ritiro=new Checkbox();
 		ritiro.setLabel("RITIRO");
@@ -44,7 +46,7 @@ public class CreaIncaricoView extends VerticalLayout{
 			this.aggiornaTitoloConsegna(listener.getValue());
 		});
 		
-		primaRiga.add(ldv, ritiro);
+		primaRiga.add(ldv, ddt, ritiro);
 		
 		HorizontalLayout rigaClienti=new HorizontalLayout();
 		
@@ -156,7 +158,9 @@ public class CreaIncaricoView extends VerticalLayout{
 		List<Merce> merci=new ArrayList<>();
 		merci.add(new Merce());
 		
+		VerticalLayout merceAccordion=new VerticalLayout();
 		HorizontalLayout merceLayout=new HorizontalLayout();
+		merceAccordion.add(new Checkbox("RISERVA"));
 		Accordion sezioneMerce=new Accordion();
 		merceLayout.setAlignItems(Alignment.CENTER);
 		for(Merce m : merci) {
@@ -166,8 +170,8 @@ public class CreaIncaricoView extends VerticalLayout{
 		Button aggiungiMerce=new Button(LumoIcon.PLUS.create());
 		merceLayout.add(aggiungiMerce);
 		
-		
-		FieldSet merce=new FieldSet(merceLayout);
+		merceAccordion.add(merceLayout);
+		FieldSet merce=new FieldSet(merceAccordion);
 		sezioneMerce.add("Merce", merce);
 		
 		add(primaRiga, accClienti, sezioneVettori, fieldsetConsegna, sezioneMerce);
