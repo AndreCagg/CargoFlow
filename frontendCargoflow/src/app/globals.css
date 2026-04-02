@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy:    #0F3D5C;
+  --color-navy2:   #112E4A;
+  --color-navy3:   #0A2840;
+  --color-navy4:   #07213A;
+  --color-accent:  #F97316;
+  --color-accent2: #EA6C0A;
+  --color-muted:   #7FA8C4;
+  --color-muted2:  #94A3B8;
+  --color-text:    #F1F5F9;
+
+  --font-mono: 'DM Mono', monospace;
+  --font-sans: 'DM Sans', sans-serif;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+html, body, #root {
+  height: 100%;
+  background: #0A2840;
+  color: #F1F5F9;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* shared input style — used as a plain CSS class across components */
+.cf-inp {
+  width: 100%;
+  background: #0A2840;
+  border: 1px solid #1A5C8A;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 13px;
+  color: #F1F5F9;
+  outline: none;
+  transition: border-color 0.15s;
+  font-family: 'DM Sans', sans-serif;
+}
+.cf-inp:focus {
+  border-color: #F97316;
+}
+.cf-inp::placeholder {
+  color: rgba(127, 168, 196, 0.4);
+}
+select.cf-inp {
+  cursor: pointer;
+}
+textarea.cf-inp {
+  resize: vertical;
+}
+
+@keyframes slide-in {
+  from { transform: translateX(16px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+.animate-slide-in {
+  animation: slide-in 0.2s ease forwards;
+}
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: #0A2840; }
+::-webkit-scrollbar-thumb { background: #1A5C8A; border-radius: 3px; }
