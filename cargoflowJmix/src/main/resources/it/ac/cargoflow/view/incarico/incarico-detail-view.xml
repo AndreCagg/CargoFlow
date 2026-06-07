@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://incaricoDetailView.title"
+      focusComponent="form">
+    <data>
+        <collection id="clientiDc" class="it.ac.cargoflow.entity.Cliente">
+            <loader id="clientiDl" readOnly="true">
+                <query>
+                    <![CDATA[select c from Cliente c
+                    order by c.ragione_sociale asc]]>
+                </query>
+            </loader>
+            <fetchPlan extends="_base">
+                <property name="fasce_orarie" fetchPlan="_base"/>
+            </fetchPlan>
+            <collection id="fasce_orarieDc" property="fasce_orarie"/>
+        </collection>
+        <instance id="incaricoDc"
+                  class="it.ac.cargoflow.entity.Incarico">
+            <fetchPlan extends="_base">
+                <property name="mittente" fetchPlan="_base">
+                    <property name="azienda" fetchPlan="_base"/>
+                </property>
+                <property name="destinatario" fetchPlan="_base">
+                    <property name="azienda" fetchPlan="_base"/>
+                </property>
+                <property name="azienda" fetchPlan="_base"/>
+                <property name="contrassegno_tipo" fetchPlan="_base"/>
+                <property name="sedi_mitt_dest" fetchPlan="_base"/>
+                <property name="merce" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="incaricoDl"/>
+            <collection id="sedi_mitt_destDc" property="sedi_mitt_dest"/>
+            <collection id="merceDc" property="merce"/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveCloseAction" type="detail_saveClose"/>
+        <action id="closeAction" type="detail_close"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="incaricoDc">
+            <responsiveSteps>
+                <responsiveStep minWidth="0" columns="1"/>
+                <responsiveStep minWidth="40em" columns="2"/>
+            </responsiveSteps>
+            <textField id="ldvField" property="ldv"/>
+            <textField id="ddtField" property="ddt"/>
+            <datePicker id="data_consegna_previstaField" property="data_consegna_prevista"/>
+            <textField id="valore_doganaleField" property="valore_doganale"/>
+            <checkbox id="ritiroField" property="ritiro"/>
+            <textField id="valore_assicurazioneField" property="valore_assicurazione"/>
+            <entityComboBox id="mittenteField" property="mittente" itemsContainer="clientiDc" allowCustomValue="true"/>
+
+            <entityComboBox id="destinatarioField" property="destinatario" itemsContainer="clientiDc"
+                            allowCustomValue="true"/>
+            <entityPicker id="aziendaField" property="azienda">
+                <actions>
+                    <action id="entityLookupAction" type="entity_lookup"/>
+                    <action id="entityClearAction" type="entity_clear"/>
+                </actions>
+            </entityPicker>
+            <checkbox id="contrassegnoField" property="contrassegno"/>
+            <textField id="contrassegno_valoreField" property="contrassegno_valore"/>
+            <entityComboBox id="contrassegno_tipoField" property="contrassegno_tipo"/>
+            <textArea id="noteField" height="9.5em" property="note"/>
+        </formLayout>
+        <hbox id="sedi_mitt_destButtonsPanel" classNames="buttons-panel">
+            <button action="sedi_mitt_destDataGrid.createAction"/>
+            <button action="sedi_mitt_destDataGrid.editAction"/>
+            <button action="sedi_mitt_destDataGrid.removeAction"/>
+        </hbox>
+        <dataGrid id="sedi_mitt_destDataGrid" dataContainer="sedi_mitt_destDc" width="100%" height="100%">
+            <actions>
+                <action id="createAction" type="list_create">
+                    <properties>
+                        <property name="openMode" value="DIALOG"/>
+                    </properties>
+                </action>
+                <action id="editAction" type="list_edit">
+                    <properties>
+                        <property name="openMode" value="DIALOG"/>
+                    </properties>
+                </action>
+                <action id="removeAction" type="list_remove"/>
+            </actions>
+            <columns>
+                <column property="dal"/>
+                <column property="al"/>
+                <column property="autorizzazione"/>
+            </columns>
+        </dataGrid>
+        <hbox id="merceButtonsPanel" classNames="buttons-panel">
+            <button action="merceDataGrid.createAction"/>
+            <button action="merceDataGrid.editAction"/>
+            <button action="merceDataGrid.removeAction"/>
+        </hbox>
+        <dataGrid id="merceDataGrid" dataContainer="merceDc" width="100%" height="100%">
+            <actions>
+                <action id="createAction" type="list_create">
+                    <properties>
+                        <property name="openMode" value="DIALOG"/>
+                    </properties>
+                </action>
+                <action id="editAction" type="list_edit">
+                    <properties>
+                        <property name="openMode" value="DIALOG"/>
+                    </properties>
+                </action>
+                <action id="removeAction" type="list_remove"/>
+            </actions>
+            <columns>
+                <column property="segnacollo"/>
+                <column property="merce_tipo"/>
+                <column property="peso_kg"/>
+                <column property="volume_m3"/>
+                <column property="fragile"/>
+                <column property="epal"/>
+                <column property="id_epal"/>
+            </columns>
+        </dataGrid>
+        <hbox id="fasce_orarieButtonsPanel" classNames="buttons-panel">
+            <button action="fasce_orarieDataGrid.createAction"/>
+            <button action="fasce_orarieDataGrid.editAction"/>
+            <button action="fasce_orarieDataGrid.removeAction"/>
+        </hbox>
+        <dataGrid id="fasce_orarieDataGrid" dataContainer="fasce_orarieDc" width="100%" height="100%">
+            <actions>
+                <action id="createAction" type="list_create">
+                    <properties>
+                        <property name="openMode" value="DIALOG"/>
+                    </properties>
+                </action>
+                <action id="editAction" type="list_edit">
+                    <properties>
+                        <property name="openMode" value="DIALOG"/>
+                    </properties>
+                </action>
+                <action id="removeAction" type="list_remove"/>
+            </actions>
+            <columns>
+                <column property="ritiro"/>
+            </columns>
+        </dataGrid>
+        <hbox id="detailActions">
+            <button id="saveAndCloseButton" action="saveCloseAction"/>
+            <button id="closeButton" action="closeAction"/>
+        </hbox>
+    </layout>
+</view>

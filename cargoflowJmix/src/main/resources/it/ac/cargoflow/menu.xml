@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<menu-config xmlns="http://jmix.io/schema/flowui/menu">
+
+    <menu id="application" title="msg://it.ac.cargoflow/menu.application.title" opened="true">
+        <item view="User.list" title="msg://it.ac.cargoflow.view.user/UserListView.title"/>
+        <item view="Azienda.list" title="msg://it.ac.cargoflow.view.azienda/aziendaListView.title"/>
+        <item view="Cliente.list" title="msg://it.ac.cargoflow.view.cliente/clienteListView.title"/>
+        <item view="ContrassegnoTipo.list"
+              title="msg://it.ac.cargoflow.view.contrassegnotipo/contrassegnoTipoListView.title"/>
+        <item view="FasciaOraria.list" title="msg://it.ac.cargoflow.view.fasciaoraria/fasciaOrariaListView.title"/>
+        <item view="FasciaOrariaCliente.list"
+              title="msg://it.ac.cargoflow.view.fasciaorariacliente/fasciaOrariaClienteListView.title"/>
+        <item view="Incarico.list" title="msg://it.ac.cargoflow.view.incarico/incaricoListView.title"/>
+    </menu>
+
+</menu-config>

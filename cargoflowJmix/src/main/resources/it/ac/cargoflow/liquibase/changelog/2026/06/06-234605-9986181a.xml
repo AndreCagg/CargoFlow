@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="cargoflowJmix">
+        <createTable tableName="AZIENDA">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_AZIENDA"/>
+            </column>
+            <column name="DENOMINAZIONE" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="cargoflowJmix">
+        <createTable tableName="CLIENTE">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CLIENTE"/>
+            </column>
+            <column name="RAGIONE_SOCIALE" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="INDIRIZZO" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CAP" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TEL" type="VARCHAR(20)"/>
+            <column name="EMAIL" type="VARCHAR(255)"/>
+            <column name="VETTORE" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="AZIENDA_ID" type="UUID"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="cargoflowJmix">
+        <createTable tableName="CONTRASSEGNO_TIPO">
+            <column name="ID" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CONTRASSEGNO_TIPO"/>
+            </column>
+            <column name="DESCRIZIONE" type="VARCHAR(25)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="4" author="cargoflowJmix">
+        <createTable tableName="FASCIA_ORARIA">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_FASCIA_ORARIA"/>
+            </column>
+            <column name="DALLE" type="TIME"/>
+            <column name="ALLE" type="TIME"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="5" author="cargoflowJmix">
+        <createTable tableName="FASCIA_ORARIA_CLIENTE">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_FASCIA_ORARIA_CLIENTE"/>
+            </column>
+            <column name="FASCIA_ORARIA_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CLIENTE_ID" type="UUID"/>
+            <column name="RITIRO" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="6" author="cargoflowJmix">
+        <createTable tableName="GIORNO_FASCE_ORARIE">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_GIORNO_FASCE_ORARIE"/>
+            </column>
+            <column name="GIORNO_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="FASCIA_ORARIA_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="7" author="cargoflowJmix">
+        <createTable tableName="GIORNO_PREFERITO">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_GIORNO_PREFERITO"/>
+            </column>
+            <column name="GIORNO" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="8" author="cargoflowJmix">
+        <createTable tableName="INCARICO">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_INCARICO"/>
+            </column>
+            <column name="LDV" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DDT" type="VARCHAR(50)"/>
+            <column name="DATA_CONSEGNA_PREVISTA" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VALORE_DOGANALE" type="DOUBLE"/>
+            <column name="RITIRO" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VALORE_ASSICURAZIONE" type="DOUBLE"/>
+            <column name="MITTENTE_ID" type="UUID"/>
+            <column name="DESTINATARIO_ID" type="UUID"/>
+            <column name="VETT_MITTENTE_ID" type="UUID"/>
+            <column name="VETT_DESTINATARIO_ID" type="UUID"/>
+            <column name="CHILD_ID" type="UUID"/>
+            <column name="AZIENDA_ID" type="UUID"/>
+            <column name="CONTRASSEGNO" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CONTRASSEGNO_VALORE" type="DOUBLE"/>
+            <column name="CONTRASSEGNO_TIPO_ID" type="INT"/>
+            <column name="NOTE" type="CLOB"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="9" author="cargoflowJmix">
+        <createTable tableName="MERCE">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_MERCE"/>
+            </column>
+            <column name="INCARICO_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SEDE_MITTENTE_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SEDE_DESTINATARIO_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DAL" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="AL" type="DATETIME"/>
+            <column name="AUTORIZZAZIONE" type="VARCHAR(255)"/>
+            <column name="AZIENDA_ID" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="10" author="cargoflowJmix">
+        <createTable tableName="MERCE_1">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_MERCE_1"/>
+            </column>
+            <column name="SEGNACOLLO" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="INCARICO_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MERCE_TIPO" type="VARCHAR(255)"/>
+            <column name="PESO_KG" type="DOUBLE"/>
+            <column name="VOLUME_M3" type="DOUBLE"/>
+            <column name="FRAGILE" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EPAL" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ID_EPAL" type="VARCHAR(50)"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="11" author="cargoflowJmix">
+        <createIndex indexName="IDX_CLIENTE_AZIENDA" tableName="CLIENTE">
+            <column name="AZIENDA_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="AZIENDA_ID" baseTableName="CLIENTE"
+                                 constraintName="FK_CLIENTE_ON_AZIENDA" referencedColumnNames="ID"
+                                 referencedTableName="AZIENDA"/>
+    </changeSet>
+    <changeSet id="12" author="cargoflowJmix">
+        <createIndex indexName="IDX_FASCIA_ORARIA_CLIENTE_CLIENTE" tableName="FASCIA_ORARIA_CLIENTE">
+            <column name="CLIENTE_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="CLIENTE_ID" baseTableName="FASCIA_ORARIA_CLIENTE"
+                                 constraintName="FK_FASCIA_ORARIA_CLIENTE_ON_CLIENTE" referencedColumnNames="ID"
+                                 referencedTableName="CLIENTE"/>
+    </changeSet>
+    <changeSet id="13" author="cargoflowJmix">
+        <createIndex indexName="IDX_FASCIA_ORARIA_CLIENTE_FASCIA_ORARIA" tableName="FASCIA_ORARIA_CLIENTE">
+            <column name="FASCIA_ORARIA_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="FASCIA_ORARIA_ID" baseTableName="FASCIA_ORARIA_CLIENTE"
+                                 constraintName="FK_FASCIA_ORARIA_CLIENTE_ON_FASCIA_ORARIA" referencedColumnNames="ID"
+                                 referencedTableName="GIORNO_FASCE_ORARIE"/>
+    </changeSet>
+    <changeSet id="14" author="cargoflowJmix">
+        <createIndex indexName="IDX_GIORNO_FASCE_ORARIE_FASCIA_ORARIA" tableName="GIORNO_FASCE_ORARIE">
+            <column name="FASCIA_ORARIA_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="FASCIA_ORARIA_ID" baseTableName="GIORNO_FASCE_ORARIE"
+                                 constraintName="FK_GIORNO_FASCE_ORARIE_ON_FASCIA_ORARIA" referencedColumnNames="ID"
+                                 referencedTableName="FASCIA_ORARIA"/>
+    </changeSet>
+    <changeSet id="15" author="cargoflowJmix">
+        <createIndex indexName="IDX_GIORNO_FASCE_ORARIE_GIORNO" tableName="GIORNO_FASCE_ORARIE">
+            <column name="GIORNO_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="GIORNO_ID" baseTableName="GIORNO_FASCE_ORARIE"
+                                 constraintName="FK_GIORNO_FASCE_ORARIE_ON_GIORNO" referencedColumnNames="ID"
+                                 referencedTableName="GIORNO_PREFERITO"/>
+    </changeSet>
+    <changeSet id="16" author="cargoflowJmix">
+        <createIndex indexName="IDX_INCARICO_AZIENDA" tableName="INCARICO">
+            <column name="AZIENDA_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="AZIENDA_ID" baseTableName="INCARICO"
+                                 constraintName="FK_INCARICO_ON_AZIENDA" referencedColumnNames="ID"
+                                 referencedTableName="AZIENDA"/>
+    </changeSet>
+    <changeSet id="17" author="cargoflowJmix">
+        <createIndex indexName="IDX_INCARICO_CHILD" tableName="INCARICO">
+            <column name="CHILD_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="CHILD_ID" baseTableName="INCARICO"
+                                 constraintName="FK_INCARICO_ON_CHILD" referencedColumnNames="ID"
+                                 referencedTableName="INCARICO"/>
+    </changeSet>
+    <changeSet id="18" author="cargoflowJmix">
+        <createIndex indexName="IDX_INCARICO_CONTRASSEGNO_TIPO" tableName="INCARICO">
+            <column name="CONTRASSEGNO_TIPO_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="CONTRASSEGNO_TIPO_ID" baseTableName="INCARICO"
+                                 constraintName="FK_INCARICO_ON_CONTRASSEGNO_TIPO" referencedColumnNames="ID"
+                                 referencedTableName="CONTRASSEGNO_TIPO"/>
+    </changeSet>
+    <changeSet id="19" author="cargoflowJmix">
+        <createIndex indexName="IDX_INCARICO_DESTINATARIO" tableName="INCARICO">
+            <column name="DESTINATARIO_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="DESTINATARIO_ID" baseTableName="INCARICO"
+                                 constraintName="FK_INCARICO_ON_DESTINATARIO" referencedColumnNames="ID"
+                                 referencedTableName="CLIENTE"/>
+    </changeSet>
+    <changeSet id="20" author="cargoflowJmix">
+        <createIndex indexName="IDX_INCARICO_MITTENTE" tableName="INCARICO">
+            <column name="MITTENTE_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="MITTENTE_ID" baseTableName="INCARICO"
+                                 constraintName="FK_INCARICO_ON_MITTENTE" referencedColumnNames="ID"
+                                 referencedTableName="CLIENTE"/>
+    </changeSet>
+    <changeSet id="21" author="cargoflowJmix">
+        <createIndex indexName="IDX_INCARICO_VETT_DESTINATARIO" tableName="INCARICO">
+            <column name="VETT_DESTINATARIO_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="VETT_DESTINATARIO_ID" baseTableName="INCARICO"
+                                 constraintName="FK_INCARICO_ON_VETT_DESTINATARIO" referencedColumnNames="ID"
+                                 referencedTableName="CLIENTE"/>
+    </changeSet>
+    <changeSet id="22" author="cargoflowJmix">
+        <createIndex indexName="IDX_INCARICO_VETT_MITTENTE" tableName="INCARICO">
+            <column name="VETT_MITTENTE_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="VETT_MITTENTE_ID" baseTableName="INCARICO"
+                                 constraintName="FK_INCARICO_ON_VETT_MITTENTE" referencedColumnNames="ID"
+                                 referencedTableName="CLIENTE"/>
+    </changeSet>
+    <changeSet id="23" author="cargoflowJmix">
+        <createIndex indexName="IDX_MERCE_1_INCARICO" tableName="MERCE_1">
+            <column name="INCARICO_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="INCARICO_ID" baseTableName="MERCE_1"
+                                 constraintName="FK_MERCE_1_ON_INCARICO" referencedColumnNames="ID"
+                                 referencedTableName="INCARICO"/>
+    </changeSet>
+    <changeSet id="24" author="cargoflowJmix">
+        <createIndex indexName="IDX_MERCE_AZIENDA" tableName="MERCE">
+            <column name="AZIENDA_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="AZIENDA_ID" baseTableName="MERCE" constraintName="FK_MERCE_ON_AZIENDA"
+                                 referencedColumnNames="ID" referencedTableName="AZIENDA"/>
+    </changeSet>
+    <changeSet id="25" author="cargoflowJmix">
+        <createIndex indexName="IDX_MERCE_INCARICO" tableName="MERCE">
+            <column name="INCARICO_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="INCARICO_ID" baseTableName="MERCE"
+                                 constraintName="FK_MERCE_ON_INCARICO" referencedColumnNames="ID"
+                                 referencedTableName="INCARICO"/>
+    </changeSet>
+    <changeSet id="26" author="cargoflowJmix">
+        <createIndex indexName="IDX_MERCE_SEDE_DESTINATARIO" tableName="MERCE">
+            <column name="SEDE_DESTINATARIO_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="SEDE_DESTINATARIO_ID" baseTableName="MERCE"
+                                 constraintName="FK_MERCE_ON_SEDE_DESTINATARIO" referencedColumnNames="ID"
+                                 referencedTableName="CLIENTE"/>
+    </changeSet>
+    <changeSet id="27" author="cargoflowJmix">
+        <createIndex indexName="IDX_MERCE_SEDE_MITTENTE" tableName="MERCE">
+            <column name="SEDE_MITTENTE_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="SEDE_MITTENTE_ID" baseTableName="MERCE"
+                                 constraintName="FK_MERCE_ON_SEDE_MITTENTE" referencedColumnNames="ID"
+                                 referencedTableName="CLIENTE"/>
+    </changeSet>
+</databaseChangeLog>

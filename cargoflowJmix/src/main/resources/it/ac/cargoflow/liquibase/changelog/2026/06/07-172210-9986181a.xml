@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="cargoflowJmix">
+        <dropForeignKeyConstraint baseTableName="fascia_oraria_cliente"
+                                  constraintName="fk_fascia_oraria_cliente_on_fascia_oraria"/>
+    </changeSet>
+    <changeSet id="2" author="cargoflowJmix">
+        <dropForeignKeyConstraint baseTableName="giorno_fasce_orarie"
+                                  constraintName="fk_giorno_fasce_orarie_on_fascia_oraria"/>
+    </changeSet>
+    <changeSet id="3" author="cargoflowJmix">
+        <dropForeignKeyConstraint baseTableName="giorno_fasce_orarie"
+                                  constraintName="fk_giorno_fasce_orarie_on_giorno"/>
+    </changeSet>
+    <changeSet id="4" author="cargoflowJmix">
+        <addColumn tableName="FASCIA_ORARIA">
+            <column name="GIORNO" type="VARCHAR(10)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="5" author="cargoflowJmix">
+        <addForeignKeyConstraint baseColumnNames="FASCIA_ORARIA_ID" baseTableName="FASCIA_ORARIA_CLIENTE"
+                                 constraintName="FK_FASCIA_ORARIA_CLIENTE_ON_FASCIA_ORARIA" referencedColumnNames="ID"
+                                 referencedTableName="FASCIA_ORARIA"/>
+    </changeSet>
+    <changeSet id="6" author="cargoflowJmix">
+        <dropTable cascadeConstraints="true" tableName="giorno_fasce_orarie"/>
+    </changeSet>
+    <changeSet id="7" author="cargoflowJmix">
+        <dropTable cascadeConstraints="true" tableName="giorno_preferito"/>
+    </changeSet>
+</databaseChangeLog>
