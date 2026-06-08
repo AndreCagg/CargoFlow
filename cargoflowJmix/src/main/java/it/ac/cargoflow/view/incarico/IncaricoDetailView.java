@@ -68,5 +68,36 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
         dialog.open();
     }
 
+    @Subscribe("destinatarioField")
+    public void onDestinatarioFieldCustomValueSet(
+            ComboBoxBase.CustomValueSetEvent<?> event) {
+
+        String ragioneSociale = event.getDetail();
+
+        Cliente cliente = dataManager.create(Cliente.class);
+        cliente.setRagione_sociale(ragioneSociale);
+
+        DialogWindow<ClienteDetailView> dialog =
+                dialogWindows.detail(this, Cliente.class)
+                        .withViewClass(ClienteDetailView.class)
+                        .editEntity(cliente)
+                        .build();
+
+        dialog.addAfterCloseListener(closeEvent -> {
+            if (closeEvent.closedWith(StandardOutcome.SAVE)) {
+
+                Cliente salvato = dialog.getView().getEditedEntity();
+
+                clientiDl.load();
+
+                mittenteField.setValue(salvato);
+            } else {
+                mittenteField.clear();
+            }
+        });
+
+        dialog.open();
+    }
+
 
 }
