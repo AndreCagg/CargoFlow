@@ -73,15 +73,7 @@
         <addNotNullConstraint columnName="VERSION" defaultNullValue="0" tableName="MERCE"/>
     </changeSet>
     <changeSet id="8" author="cargoflowJmix">
-        <dropIndex indexName="idx_merce_incarico" tableName="merce"/>
-    </changeSet>
-    <changeSet id="9" author="cargoflowJmix">
-        <createIndex indexName="IDX_MERCE_1_INCARICO" tableName="MERCE">
-            <column name="INCARICO_ID"/>
-        </createIndex>
-    </changeSet>
-    <changeSet id="10" author="cargoflowJmix">
-        <createIndex indexName="IDX_MERCE_AZIENDA" tableName="INCARICO_SEDE_MITT_DEST">
+        <createIndex indexName="IDX_INCARICO_SEDE_MITT_DEST_AZIENDA" tableName="INCARICO_SEDE_MITT_DEST">
             <column name="AZIENDA_ID"/>
         </createIndex>
 
@@ -89,8 +81,8 @@
                                  constraintName="FK_INCARICO_SEDE_MITT_DEST_ON_AZIENDA" referencedColumnNames="ID"
                                  referencedTableName="AZIENDA"/>
     </changeSet>
-    <changeSet id="11" author="cargoflowJmix">
-        <createIndex indexName="IDX_MERCE_INCARICO" tableName="INCARICO_SEDE_MITT_DEST">
+    <changeSet id="9" author="cargoflowJmix">
+        <createIndex indexName="IDX_INCARICO_SEDE_MITT_DEST_INCARICO" tableName="INCARICO_SEDE_MITT_DEST">
             <column name="INCARICO_ID"/>
         </createIndex>
 
@@ -98,8 +90,8 @@
                                  constraintName="FK_INCARICO_SEDE_MITT_DEST_ON_INCARICO" referencedColumnNames="ID"
                                  referencedTableName="INCARICO"/>
     </changeSet>
-    <changeSet id="12" author="cargoflowJmix">
-        <createIndex indexName="IDX_MERCE_SEDE_DESTINATARIO" tableName="INCARICO_SEDE_MITT_DEST">
+    <changeSet id="10" author="cargoflowJmix">
+        <createIndex indexName="IDX_INCARICO_SEDE_MITT_DEST_SEDE_DESTINATARIO" tableName="INCARICO_SEDE_MITT_DEST">
             <column name="SEDE_DESTINATARIO_ID"/>
         </createIndex>
 
@@ -107,8 +99,8 @@
                                  constraintName="FK_INCARICO_SEDE_MITT_DEST_ON_SEDE_DESTINATARIO"
                                  referencedColumnNames="ID" referencedTableName="CLIENTE"/>
     </changeSet>
-    <changeSet id="13" author="cargoflowJmix">
-        <createIndex indexName="IDX_MERCE_SEDE_MITTENTE" tableName="INCARICO_SEDE_MITT_DEST">
+    <changeSet id="11" author="cargoflowJmix">
+        <createIndex indexName="IDX_INCARICO_SEDE_MITT_DEST_SEDE_MITTENTE" tableName="INCARICO_SEDE_MITT_DEST">
             <column name="SEDE_MITTENTE_ID"/>
         </createIndex>
 
@@ -116,10 +108,10 @@
                                  constraintName="FK_INCARICO_SEDE_MITT_DEST_ON_SEDE_MITTENTE" referencedColumnNames="ID"
                                  referencedTableName="CLIENTE"/>
     </changeSet>
-    <changeSet id="14" author="cargoflowJmix">
+    <changeSet id="12" author="cargoflowJmix">
         <dropTable cascadeConstraints="true" tableName="merce_1"/>
     </changeSet>
-    <changeSet id="15" author="cargoflowJmix">
+    <changeSet id="13" author="cargoflowJmix">
         <dropColumn columnName="al" tableName="merce"/>
 
         <dropColumn columnName="autorizzazione" tableName="merce"/>

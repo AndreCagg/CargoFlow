@@ -10,10 +10,10 @@ import java.util.UUID;
 
 @JmixEntity
 @Table(name = "INCARICO_SEDE_MITT_DEST", indexes = {
-        @Index(name = "IDX_MERCE_INCARICO", columnList = "INCARICO_ID"),
-        @Index(name = "IDX_MERCE_SEDE_MITTENTE", columnList = "SEDE_MITTENTE_ID"),
-        @Index(name = "IDX_MERCE_SEDE_DESTINATARIO", columnList = "SEDE_DESTINATARIO_ID"),
-        @Index(name = "IDX_MERCE_AZIENDA", columnList = "AZIENDA_ID")
+        @Index(name = "IDX_INCARICO_SEDE_MITT_DEST_INCARICO", columnList = "INCARICO_ID"),
+        @Index(name = "IDX_INCARICO_SEDE_MITT_DEST_SEDE_MITTENTE", columnList = "SEDE_MITTENTE_ID"),
+        @Index(name = "IDX_INCARICO_SEDE_MITT_DEST_SEDE_DESTINATARIO", columnList = "SEDE_DESTINATARIO_ID"),
+        @Index(name = "IDX_INCARICO_SEDE_MITT_DEST_AZIENDA", columnList = "AZIENDA_ID")
 })
 @Entity
 public class IncaricoSedeMittDest {

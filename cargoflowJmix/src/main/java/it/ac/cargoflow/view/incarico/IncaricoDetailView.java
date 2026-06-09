@@ -1,5 +1,6 @@
 package it.ac.cargoflow.view.incarico;
 
+import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.BlurNotifier;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.combobox.ComboBoxBase;
@@ -10,6 +11,7 @@ import com.vaadin.flow.router.Route;
 import io.jmix.core.DataManager;
 import io.jmix.core.EntityStates;
 import io.jmix.flowui.DialogWindows;
+import io.jmix.flowui.Notifications;
 import io.jmix.flowui.component.checkbox.JmixCheckbox;
 import io.jmix.flowui.component.combobox.EntityComboBox;
 import io.jmix.flowui.component.grid.DataGrid;
@@ -23,6 +25,8 @@ import it.ac.cargoflow.entity.Incarico;
 import it.ac.cargoflow.entity.IncaricoSedeMittDest;
 import it.ac.cargoflow.view.cliente.ClienteDetailView;
 import it.ac.cargoflow.view.main.MainView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
@@ -34,6 +38,9 @@ import java.util.List;
 @ViewDescriptor(path = "incarico-detail-view.xml")
 @EditedEntityContainer("incaricoDc")
 public class IncaricoDetailView extends StandardDetailView<Incarico> {
+    @Autowired
+    private Notifications notifications;
+
     @Autowired
     private DataManager dm;
 
@@ -85,18 +92,38 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
     @ViewComponent
     private HorizontalLayout sedi_mitt_destButtonsPanel;
 
+    private Logger log = LoggerFactory.getLogger(IncaricoDetailView.class);
+    @Autowired
+    private ViewValidation viewValidation;
+
+    @Subscribe("ldvField")
+    public void onLdvFieldValueChange(final AbstractField.ComponentValueChangeEvent<TextField, String> event) {
+        log.info("ldv value changed, isInvalid: {}", this.ldvField.isInvalid());
+    }
+
     @Subscribe
     public void onBeforeSave(final BeforeSaveEvent event) {
+        log.info(String.valueOf("final "+this.viewValidation.validateUiComponent(this.ldvField).toString()));
+        if(this.ldvField.isInvalid()){
+            notifications.create("Impossibile salvare", "Controlla che tutti i campi siano corretti e riprova")
+                    .withType(Notifications.Type.WARNING).show();
+
+            event.preventSave();
+            return;
+        }
+
         Incarico incarico = this.getEditedEntity();
         IncaricoSedeMittDest ismd = this.dataManager.create(IncaricoSedeMittDest.class);
 
-        ismd.setSede_mittente(this.sedeMitt.getValue()!=null ? (Cliente) this.sedeMitt.getValue() : incarico.getMittente());
-        ismd.setSede_destinatario(this.sedeDest.getValue()!=null ? (Cliente) this.sedeDest.getValue() : incarico.getDestinatario());
-        ismd.setDal(LocalDateTime.now());
-        ismd.setAutorizzazione(Costants.GENESIS_EVENT);
-        ismd.setIncarico(incarico);
+        if(this.es.isNew(incarico)) {
+            ismd.setSede_mittente(this.sedeMitt.getValue() != null ? (Cliente) this.sedeMitt.getValue() : incarico.getMittente());
+            ismd.setSede_destinatario(this.sedeDest.getValue() != null ? (Cliente) this.sedeDest.getValue() : incarico.getDestinatario());
+            ismd.setDal(LocalDateTime.now());
+            ismd.setAutorizzazione(Costants.GENESIS_EVENT);
+            ismd.setIncarico(incarico);
 
-        incarico.setSedi_mitt_dest(List.of(ismd));
+            incarico.setSedi_mitt_dest(List.of(ismd));
+        }
     }
 
     @Subscribe(id = "contrassegnoField", subject = "clickListener")
@@ -187,6 +214,8 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
 
     @Subscribe("ldvField")
     public void onLdvFieldBlur(final BlurNotifier.BlurEvent<TypedTextField<String>> event) {
+        if(!this.es.isNew(this.getEditedEntity())) return;
+
         Incarico i = this.dm.load(Incarico.class)
                 .query("select i from Incarico i where i.ldv = :ldv")
                 .parameter("ldv", event.getSource().getValue())
@@ -195,11 +224,12 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
         if(i!=null){
             this.ldvField.setInvalid(true);
             this.ldvField.setErrorMessage(Costants.INCARICO_ESISTENTE);
-
+            log.info(String.valueOf(this.ldvField.isInvalid()));
             return;
         }
 
         this.ldvField.setInvalid(false);
+        log.info(String.valueOf(this.ldvField.isInvalid()));
     }
 
     @Subscribe("destinatarioField")
