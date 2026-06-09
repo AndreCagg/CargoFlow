@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <view xmlns="http://jmix.io/schema/flowui/view"
+      xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
       title="msg://incaricoDetailView.title"
       focusComponent="form">
     <data>
@@ -7,13 +8,11 @@
             <loader id="clientiDl" readOnly="true">
                 <query>
                     <![CDATA[select c from Cliente c
-                    order by c.ragione_sociale asc]]>
+                        where (:currentMittenteId is null or c.id <> :currentMittenteId)
+                        and (:currentDestinatarioId is null or c.id <> :currentDestinatarioId)
+                        order by c.ragioneSociale asc]]>
                 </query>
             </loader>
-            <fetchPlan extends="_base">
-                <property name="fasce_orarie" fetchPlan="_base"/>
-            </fetchPlan>
-            <collection id="fasce_orarieDc" property="fasce_orarie"/>
         </collection>
         <instance id="incaricoDc"
                   class="it.ac.cargoflow.entity.Incarico">
@@ -26,7 +25,23 @@
                 </property>
                 <property name="azienda" fetchPlan="_base"/>
                 <property name="contrassegno_tipo" fetchPlan="_base"/>
-                <property name="sedi_mitt_dest" fetchPlan="_base"/>
+                <property name="sedi_mitt_dest" fetchPlan="_base">
+                    <property name="incarico" fetchPlan="_base">
+                        <property name="destinatario" fetchPlan="_base">
+                            <property name="ragioneSociale"/>
+                        </property>
+                    </property>
+                    <property name="sede_mittente" fetchPlan="_base">
+                        <property name="ragioneSociale"/>
+                        <property name="indirizzo"/>
+                        <property name="cap"/>
+                    </property>
+                    <property name="sede_destinatario" fetchPlan="_base">
+                        <property name="ragioneSociale"/>
+                        <property name="indirizzo"/>
+                        <property name="cap"/>
+                    </property>
+                </property>
                 <property name="merce" fetchPlan="_base"/>
             </fetchPlan>
             <loader id="incaricoDl"/>
@@ -54,7 +69,6 @@
             <checkbox id="ritiroField" property="ritiro"/>
             <textField id="valore_assicurazioneField" property="valore_assicurazione"/>
             <entityComboBox id="mittenteField" property="mittente" itemsContainer="clientiDc" allowCustomValue="true"/>
-
             <entityComboBox id="destinatarioField" property="destinatario" itemsContainer="clientiDc"
                             allowCustomValue="true"/>
             <entityPicker id="aziendaField" property="azienda">
@@ -67,32 +81,22 @@
             <textField id="contrassegno_valoreField" property="contrassegno_valore"/>
             <entityComboBox id="contrassegno_tipoField" property="contrassegno_tipo"/>
             <textArea id="noteField" height="9.5em" property="note"/>
+
+            <hbox id="sedeMittDest">
+                <entityPicker id="sedeMitt" label="Sede mittente" metaClass="Cliente">
+                    <actions>
+                        <action id="entityLookupAction" type="entity_lookup"/>
+                        <action id="entityClearAction" type="entity_clear"/>
+                    </actions>
+                </entityPicker>
+                <entityPicker id="sedeDest" label="Sede destinatario" metaClass="Cliente">
+                    <actions>
+                        <action id="entityLookupAction" type="entity_lookup"/>
+                        <action id="entityClearAction" type="entity_clear"/>
+                    </actions>
+                </entityPicker>
+            </hbox>
         </formLayout>
-        <hbox id="sedi_mitt_destButtonsPanel" classNames="buttons-panel">
-            <button action="sedi_mitt_destDataGrid.createAction"/>
-            <button action="sedi_mitt_destDataGrid.editAction"/>
-            <button action="sedi_mitt_destDataGrid.removeAction"/>
-        </hbox>
-        <dataGrid id="sedi_mitt_destDataGrid" dataContainer="sedi_mitt_destDc" width="100%" height="100%">
-            <actions>
-                <action id="createAction" type="list_create">
-                    <properties>
-                        <property name="openMode" value="DIALOG"/>
-                    </properties>
-                </action>
-                <action id="editAction" type="list_edit">
-                    <properties>
-                        <property name="openMode" value="DIALOG"/>
-                    </properties>
-                </action>
-                <action id="removeAction" type="list_remove"/>
-            </actions>
-            <columns>
-                <column property="dal"/>
-                <column property="al"/>
-                <column property="autorizzazione"/>
-            </columns>
-        </dataGrid>
         <hbox id="merceButtonsPanel" classNames="buttons-panel">
             <button action="merceDataGrid.createAction"/>
             <button action="merceDataGrid.editAction"/>
@@ -122,12 +126,12 @@
                 <column property="id_epal"/>
             </columns>
         </dataGrid>
-        <hbox id="fasce_orarieButtonsPanel" classNames="buttons-panel">
-            <button action="fasce_orarieDataGrid.createAction"/>
-            <button action="fasce_orarieDataGrid.editAction"/>
-            <button action="fasce_orarieDataGrid.removeAction"/>
+        <hbox id="sedi_mitt_destButtonsPanel" classNames="buttons-panel">
+            <button action="sedi_mitt_destDataGrid.createAction"/>
+            <button action="sedi_mitt_destDataGrid.editAction"/>
+            <button action="sedi_mitt_destDataGrid.removeAction"/>
         </hbox>
-        <dataGrid id="fasce_orarieDataGrid" dataContainer="fasce_orarieDc" width="100%" height="100%">
+        <dataGrid id="sedi_mitt_destDataGrid" dataContainer="sedi_mitt_destDc" width="100%" height="100%">
             <actions>
                 <action id="createAction" type="list_create">
                     <properties>
@@ -142,7 +146,16 @@
                 <action id="removeAction" type="list_remove"/>
             </actions>
             <columns>
-                <column property="ritiro"/>
+                <column property="dal"/>
+                <column property="al"/>
+                <column property="autorizzazione"/>
+                <column property="incarico.destinatario.ragioneSociale"/>
+                <column property="sede_mittente"/>
+                <column property="sede_mittente.indirizzo"/>
+                <column property="sede_mittente.cap"/>
+                <column property="sede_destinatario"/>
+                <column property="sede_destinatario.indirizzo"/>
+                <column property="sede_destinatario.cap"/>
             </columns>
         </dataGrid>
         <hbox id="detailActions">

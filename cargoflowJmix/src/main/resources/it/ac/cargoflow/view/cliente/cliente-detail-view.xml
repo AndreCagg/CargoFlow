@@ -6,12 +6,10 @@
         <instance id="clienteDc"
                   class="it.ac.cargoflow.entity.Cliente">
             <fetchPlan extends="_base">
-                <property name="fasce_orarie" fetchPlan="_base">
-                    <property name="fascia_oraria" fetchPlan="_base"/>
-                </property>
+                <property name="fasceOrarie" fetchPlan="_base"/>
             </fetchPlan>
             <loader id="clienteDl"/>
-            <collection id="fasce_orarieDc" property="fasce_orarie"/>
+            <collection id="fasceOrarieDc" property="fasceOrarie"/>
         </instance>
     </data>
     <facets>
@@ -27,20 +25,20 @@
                 <responsiveStep minWidth="0" columns="1"/>
                 <responsiveStep minWidth="40em" columns="2"/>
             </responsiveSteps>
-            <textField id="ragione_socialeField" property="ragione_sociale"/>
+            <textField id="ragioneSocialeField" property="ragioneSociale"/>
             <textField id="indirizzoField" property="indirizzo"/>
             <textField id="capField" property="cap"/>
             <textField id="telField" property="tel"/>
             <textField id="emailField" property="email"/>
             <checkbox id="vettoreField" property="vettore"/>
         </formLayout>
-        <h4 text="msg://it.ac.cargoflow.entity/Cliente.fasce_orarie"/>
-        <hbox id="fasce_orarieButtonsPanel" classNames="buttons-panel">
-            <button action="fasce_orarieDataGrid.createAction"/>
-            <button action="fasce_orarieDataGrid.editAction"/>
-            <button action="fasce_orarieDataGrid.removeAction"/>
+        <h4 text="msg://it.ac.cargoflow.entity/Cliente.fasceOrarie"/>
+        <hbox id="fasceOrarieButtonsPanel" classNames="buttons-panel">
+            <button action="fasceOrarieDataGrid.createAction"/>
+            <button action="fasceOrarieDataGrid.editAction"/>
+            <button action="fasceOrarieDataGrid.removeAction"/>
         </hbox>
-        <dataGrid id="fasce_orarieDataGrid" dataContainer="fasce_orarieDc" width="100%" minHeight="20em">
+        <dataGrid id="fasceOrarieDataGrid" dataContainer="fasceOrarieDc" width="100%" minHeight="20em">
             <actions>
                 <action id="createAction" type="list_create">
                     <properties>
@@ -55,8 +53,10 @@
                 <action id="removeAction" type="list_remove"/>
             </actions>
             <columns>
+                <column property="giorno"/>
+                <column property="dalle"/>
+                <column property="alle"/>
                 <column property="ritiro"/>
-                <column property="fascia_oraria"/>
             </columns>
         </dataGrid>
         <hbox id="detailActions">

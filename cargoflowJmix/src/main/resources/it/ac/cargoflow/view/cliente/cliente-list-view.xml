@@ -6,22 +6,13 @@
     <data>
         <collection id="clientesDc"
                     class="it.ac.cargoflow.entity.Cliente">
-            <fetchPlan extends="_base">
-                <property name="azienda" fetchPlan="_base"/>
-            </fetchPlan>
+            <fetchPlan extends="_base"/>
             <loader id="clientesDl" readOnly="true">
                 <query>
                     <![CDATA[select e from Cliente e]]>
                 </query>
             </loader>
         </collection>
-        <instance id="clienteDc"
-                  class="it.ac.cargoflow.entity.Cliente">
-            <fetchPlan extends="_base">
-                <property name="azienda" fetchPlan="_base"/>
-            </fetchPlan>
-            <loader id="clienteDl"/>
-        </instance>
     </data>
     <facets>
         <dataLoadCoordinator auto="true"/>
@@ -34,74 +25,45 @@
         <action id="selectAction" type="lookup_select"/>
         <action id="discardAction" type="lookup_discard"/>
     </actions>
-    <layout padding="false">
-        <formLayout id="layoutWrapper" classNames="master-detail-layout" height="100%">
-            <vbox id="listLayout" height="100%">
-                <genericFilter id="genericFilter"
-                               dataLoader="clientesDl">
-                    <properties include=".*"/>
-                </genericFilter>
-                <hbox id="buttonsPanel" classNames="buttons-panel">
-                    <startSlot>
-                        <button id="createButton" action="clientesDataGrid.createAction"/>
-                        <button id="editButton" action="clientesDataGrid.editAction"/>
-                        <button id="refreshButton" action="clientesDataGrid.refreshAction"/>
-                        <button id="removeButton" action="clientesDataGrid.removeAction"/>
-                    </startSlot>
-                    <endSlot>
-                        <simplePagination id="pagination" dataLoader="clientesDl"/>
-                    </endSlot>
-                </hbox>
-                <dataGrid id="clientesDataGrid"
-                          width="100%"
-                          minHeight="20em"
-                          dataContainer="clientesDc"
-                          columnReorderingAllowed="true">
-                    <actions>
-                        <action id="createAction" type="list_create"/>
-                        <action id="editAction" type="list_edit"/>
-                        <action id="refreshAction" type="list_refresh"/>
-                        <action id="removeAction" type="list_remove"/>
-                    </actions>
-                    <columns resizable="true">
-                        <column property="ragione_sociale"/>
-                        <column property="indirizzo"/>
-                        <column property="cap"/>
-                        <column property="tel"/>
-                        <column property="email"/>
-                        <column property="vettore"/>
-                        <column property="azienda"/>
-                    </columns>
-                </dataGrid>
-                <hbox id="lookupActions" visible="false">
-                    <button id="selectButton" action="selectAction"/>
-                    <button id="discardButton" action="discardAction"/>
-                </hbox>
-            </vbox>
-            <vbox id="detailsLayout" height="100%">
-                <formLayout id="form" dataContainer="clienteDc">
-                    <responsiveSteps>
-                        <responsiveStep minWidth="0" columns="1"/>
-                        <responsiveStep minWidth="40em" columns="2"/>
-                    </responsiveSteps>
-                    <textField id="ragione_socialeField" property="ragione_sociale"/>
-                    <textField id="indirizzoField" property="indirizzo"/>
-                    <textField id="capField" property="cap"/>
-                    <textField id="telField" property="tel"/>
-                    <textField id="emailField" property="email"/>
-                    <checkbox id="vettoreField" property="vettore"/>
-                    <entityPicker id="aziendaField" property="azienda">
-                        <actions>
-                            <action id="entityLookupAction" type="entity_lookup"/>
-                            <action id="entityClearAction" type="entity_clear"/>
-                        </actions>
-                    </entityPicker>
-                </formLayout>
-                <hbox id="detailActions">
-                    <button id="saveButton" text="msg:///actions.Save" icon="OK" themeNames="primary"/>
-                    <button id="cancelButton" text="msg:///actions.Cancel" icon="CANCEL"/>
-                </hbox>
-            </vbox>
-        </formLayout>
+    <layout>
+        <genericFilter id="genericFilter"
+                       dataLoader="clientesDl">
+            <properties include=".*"/>
+        </genericFilter>
+        <hbox id="buttonsPanel" classNames="buttons-panel">
+            <startSlot>
+                <button id="createButton" action="clientesDataGrid.createAction"/>
+                <button id="editButton" action="clientesDataGrid.editAction"/>
+                <button id="refreshButton" action="clientesDataGrid.refreshAction"/>
+                <button id="removeButton" action="clientesDataGrid.removeAction"/>
+            </startSlot>
+            <endSlot>
+                <simplePagination id="pagination" dataLoader="clientesDl"/>
+            </endSlot>
+        </hbox>
+        <dataGrid id="clientesDataGrid"
+                  width="100%"
+                  minHeight="20em"
+                  dataContainer="clientesDc"
+                  columnReorderingAllowed="true">
+            <actions>
+                <action id="createAction" type="list_create"/>
+                <action id="editAction" type="list_edit"/>
+                <action id="refreshAction" type="list_refresh"/>
+                <action id="removeAction" type="list_remove"/>
+            </actions>
+            <columns resizable="true">
+                <column property="ragioneSociale"/>
+                <column property="indirizzo"/>
+                <column property="cap"/>
+                <column property="tel"/>
+                <column property="email"/>
+                <column property="vettore"/>
+            </columns>
+        </dataGrid>
+        <hbox id="lookupActions" visible="false">
+            <button id="selectButton" action="selectAction"/>
+            <button id="discardButton" action="discardAction"/>
+        </hbox>
     </layout>
 </view>

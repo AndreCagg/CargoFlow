@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://incaricoSedeMittDestDetailView.title"
+      focusComponent="form">
+    <data>
+        <instance id="incaricoSedeMittDestDc"
+                  class="it.ac.cargoflow.entity.IncaricoSedeMittDest">
+            <fetchPlan extends="_base">
+                <property name="sede_mittente" fetchPlan="_base"/>
+                <property name="sede_destinatario" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="incaricoSedeMittDestDl"/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveCloseAction" type="detail_saveClose"/>
+        <action id="closeAction" type="detail_close"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="incaricoSedeMittDestDc">
+            <responsiveSteps>
+                <responsiveStep minWidth="0" columns="1"/>
+                <responsiveStep minWidth="40em" columns="2"/>
+            </responsiveSteps>
+            <entityPicker id="sede_mittenteField" property="sede_mittente">
+                <actions>
+                    <action id="entityLookupAction" type="entity_lookup"/>
+                    <action id="entityClearAction" type="entity_clear"/>
+                </actions>
+            </entityPicker>
+            <entityPicker id="sede_destinatarioField" property="sede_destinatario">
+                <actions>
+                    <action id="entityLookupAction" type="entity_lookup"/>
+                    <action id="entityClearAction" type="entity_clear"/>
+                </actions>
+            </entityPicker>
+            <dateTimePicker id="dalField" property="dal"/>
+            <dateTimePicker id="alField" property="al"/>
+            <textField id="autorizzazioneField" property="autorizzazione"/>
+        </formLayout>
+        <hbox id="detailActions">
+            <button id="saveAndCloseButton" action="saveCloseAction"/>
+            <button id="closeButton" action="closeAction"/>
+        </hbox>
+    </layout>
+</view>

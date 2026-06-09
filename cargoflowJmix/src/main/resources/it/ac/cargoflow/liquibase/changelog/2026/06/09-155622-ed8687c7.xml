@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="cargoflowJmix">
+        <dropForeignKeyConstraint baseTableName="merce_1" constraintName="fk_merce_1_on_incarico"/>
+    </changeSet>
+    <changeSet id="2" author="cargoflowJmix">
+        <createTable tableName="INCARICO_SEDE_MITT_DEST">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_INCARICO_SEDE_MITT_DEST"/>
+            </column>
+            <column name="INCARICO_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SEDE_MITTENTE_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SEDE_DESTINATARIO_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DAL" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="AL" type="DATETIME"/>
+            <column name="AUTORIZZAZIONE" type="VARCHAR(255)"/>
+            <column name="AZIENDA_ID" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="cargoflowJmix">
+        <addColumn tableName="MERCE">
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+            <column name="ID_EPAL" type="VARCHAR(50)"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="MERCE_TIPO" type="VARCHAR(255)"/>
+            <column name="PESO_KG" type="DOUBLE"/>
+            <column name="VOLUME_M3" type="DOUBLE"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="4" author="cargoflowJmix">
+        <addColumn tableName="MERCE">
+            <column name="EPAL" type="BOOLEAN"/>
+        </addColumn>
+
+        <addNotNullConstraint columnName="EPAL" defaultNullValue="false" tableName="MERCE"/>
+    </changeSet>
+    <changeSet id="5" author="cargoflowJmix">
+        <addColumn tableName="MERCE">
+            <column name="FRAGILE" type="BOOLEAN"/>
+        </addColumn>
+
+        <addNotNullConstraint columnName="FRAGILE" defaultNullValue="false" tableName="MERCE"/>
+    </changeSet>
+    <changeSet id="6" author="cargoflowJmix">
+        <addColumn tableName="MERCE">
+            <column name="SEGNACOLLO" type="VARCHAR(255)"/>
+        </addColumn>
+
+        <addNotNullConstraint columnName="SEGNACOLLO" defaultNullValue="''" tableName="MERCE"/>
+    </changeSet>
+    <changeSet id="7" author="cargoflowJmix">
+        <addColumn tableName="MERCE">
+            <column name="VERSION" type="INT"/>
+        </addColumn>
+
+        <addNotNullConstraint columnName="VERSION" defaultNullValue="0" tableName="MERCE"/>
+    </changeSet>
+    <changeSet id="8" author="cargoflowJmix">
+        <dropIndex indexName="idx_merce_incarico" tableName="merce"/>
+    </changeSet>
+    <changeSet id="9" author="cargoflowJmix">
+        <createIndex indexName="IDX_MERCE_1_INCARICO" tableName="MERCE">
+            <column name="INCARICO_ID"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="10" author="cargoflowJmix">
+        <createIndex indexName="IDX_MERCE_AZIENDA" tableName="INCARICO_SEDE_MITT_DEST">
+            <column name="AZIENDA_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="AZIENDA_ID" baseTableName="INCARICO_SEDE_MITT_DEST"
+                                 constraintName="FK_INCARICO_SEDE_MITT_DEST_ON_AZIENDA" referencedColumnNames="ID"
+                                 referencedTableName="AZIENDA"/>
+    </changeSet>
+    <changeSet id="11" author="cargoflowJmix">
+        <createIndex indexName="IDX_MERCE_INCARICO" tableName="INCARICO_SEDE_MITT_DEST">
+            <column name="INCARICO_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="INCARICO_ID" baseTableName="INCARICO_SEDE_MITT_DEST"
+                                 constraintName="FK_INCARICO_SEDE_MITT_DEST_ON_INCARICO" referencedColumnNames="ID"
+                                 referencedTableName="INCARICO"/>
+    </changeSet>
+    <changeSet id="12" author="cargoflowJmix">
+        <createIndex indexName="IDX_MERCE_SEDE_DESTINATARIO" tableName="INCARICO_SEDE_MITT_DEST">
+            <column name="SEDE_DESTINATARIO_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="SEDE_DESTINATARIO_ID" baseTableName="INCARICO_SEDE_MITT_DEST"
+                                 constraintName="FK_INCARICO_SEDE_MITT_DEST_ON_SEDE_DESTINATARIO"
+                                 referencedColumnNames="ID" referencedTableName="CLIENTE"/>
+    </changeSet>
+    <changeSet id="13" author="cargoflowJmix">
+        <createIndex indexName="IDX_MERCE_SEDE_MITTENTE" tableName="INCARICO_SEDE_MITT_DEST">
+            <column name="SEDE_MITTENTE_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="SEDE_MITTENTE_ID" baseTableName="INCARICO_SEDE_MITT_DEST"
+                                 constraintName="FK_INCARICO_SEDE_MITT_DEST_ON_SEDE_MITTENTE" referencedColumnNames="ID"
+                                 referencedTableName="CLIENTE"/>
+    </changeSet>
+    <changeSet id="14" author="cargoflowJmix">
+        <dropTable cascadeConstraints="true" tableName="merce_1"/>
+    </changeSet>
+    <changeSet id="15" author="cargoflowJmix">
+        <dropColumn columnName="al" tableName="merce"/>
+
+        <dropColumn columnName="autorizzazione" tableName="merce"/>
+
+        <dropColumn columnName="azienda_id" tableName="merce"/>
+
+        <dropColumn columnName="dal" tableName="merce"/>
+
+        <dropColumn columnName="sede_destinatario_id" tableName="merce"/>
+
+        <dropColumn columnName="sede_mittente_id" tableName="merce"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="cargoflowJmix">
+        <dropForeignKeyConstraint baseTableName="fascia_oraria_cliente"
+                                  constraintName="fk_fascia_oraria_cliente_on_cliente"/>
+    </changeSet>
+    <changeSet id="2" author="cargoflowJmix">
+        <dropForeignKeyConstraint baseTableName="fascia_oraria_cliente_fascia_oraria_link"
+                                  constraintName="fk_fasoraclifasora_on_fascia_oraria"/>
+    </changeSet>
+    <changeSet id="3" author="cargoflowJmix">
+        <dropForeignKeyConstraint baseTableName="fascia_oraria_cliente_fascia_oraria_link"
+                                  constraintName="fk_fasoraclifasora_on_fascia_oraria_cliente"/>
+    </changeSet>
+    <changeSet id="4" author="cargoflowJmix">
+        <addColumn tableName="FASCIA_ORARIA">
+            <column name="CLIENTE_ID" type="UUID"/>
+        </addColumn>
+
+        <addNotNullConstraint columnName="CLIENTE_ID" tableName="FASCIA_ORARIA"/>
+    </changeSet>
+    <changeSet id="5" author="cargoflowJmix">
+        <addColumn tableName="FASCIA_ORARIA">
+            <column name="RITIRO" type="BOOLEAN"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="6" author="cargoflowJmix">
+        <createIndex indexName="IDX_FASCIA_ORARIA_CLIENTE" tableName="FASCIA_ORARIA">
+            <column name="CLIENTE_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="CLIENTE_ID" baseTableName="FASCIA_ORARIA"
+                                 constraintName="FK_FASCIA_ORARIA_ON_CLIENTE" referencedColumnNames="ID"
+                                 referencedTableName="CLIENTE"/>
+    </changeSet>
+    <changeSet id="7" author="cargoflowJmix">
+        <dropTable cascadeConstraints="true" tableName="fascia_oraria_cliente"/>
+    </changeSet>
+    <changeSet id="8" author="cargoflowJmix">
+        <dropTable cascadeConstraints="true" tableName="fascia_oraria_cliente_fascia_oraria_link"/>
+    </changeSet>
+</databaseChangeLog>

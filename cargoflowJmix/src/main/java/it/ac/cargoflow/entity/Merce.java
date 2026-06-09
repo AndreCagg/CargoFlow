@@ -18,7 +18,7 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @JmixEntity
-@Table(name = "MERCE_1", indexes = {
+@Table(name = "MERCE", indexes = {
         @Index(name = "IDX_MERCE_1_INCARICO", columnList = "INCARICO_ID")
 })
 @Entity

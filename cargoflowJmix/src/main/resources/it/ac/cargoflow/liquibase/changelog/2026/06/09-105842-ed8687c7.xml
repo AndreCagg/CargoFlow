@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="cargoflowJmix">
+        <createTable tableName="FASCIA_ORARIA_CLIENTE_FASCIA_ORARIA_LINK">
+            <column name="FASCIA_ORARIA_CLIENTE_ID" type="UUID">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="PK_FASCIA_ORARIA_CLIENTE_FASCIA_ORARIA_LINK"/>
+            </column>
+            <column name="FASCIA_ORARIA_ID" type="UUID">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="PK_FASCIA_ORARIA_CLIENTE_FASCIA_ORARIA_LINK"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="cargoflowJmix">
+        <addForeignKeyConstraint baseColumnNames="FASCIA_ORARIA_ID"
+                                 baseTableName="FASCIA_ORARIA_CLIENTE_FASCIA_ORARIA_LINK"
+                                 constraintName="FK_FASORACLIFASORA_ON_FASCIA_ORARIA" referencedColumnNames="ID"
+                                 referencedTableName="FASCIA_ORARIA"/>
+    </changeSet>
+    <changeSet id="3" author="cargoflowJmix">
+        <addForeignKeyConstraint baseColumnNames="FASCIA_ORARIA_CLIENTE_ID"
+                                 baseTableName="FASCIA_ORARIA_CLIENTE_FASCIA_ORARIA_LINK"
+                                 constraintName="FK_FASORACLIFASORA_ON_FASCIA_ORARIA_CLIENTE" referencedColumnNames="ID"
+                                 referencedTableName="FASCIA_ORARIA_CLIENTE"/>
+    </changeSet>
+    <changeSet id="4" author="cargoflowJmix">
+        <dropColumn columnName="fascia_oraria_id" tableName="fascia_oraria_cliente"/>
+    </changeSet>
+</databaseChangeLog>

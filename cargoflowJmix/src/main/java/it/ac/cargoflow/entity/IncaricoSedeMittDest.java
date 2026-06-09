@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @JmixEntity
-@Table(name = "MERCE", indexes = {
+@Table(name = "INCARICO_SEDE_MITT_DEST", indexes = {
         @Index(name = "IDX_MERCE_INCARICO", columnList = "INCARICO_ID"),
         @Index(name = "IDX_MERCE_SEDE_MITTENTE", columnList = "SEDE_MITTENTE_ID"),
         @Index(name = "IDX_MERCE_SEDE_DESTINATARIO", columnList = "SEDE_DESTINATARIO_ID"),

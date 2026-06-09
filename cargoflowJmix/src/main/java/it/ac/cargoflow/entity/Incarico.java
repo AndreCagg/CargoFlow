@@ -9,6 +9,7 @@ import io.jmix.core.metamodel.annotation.Composition;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -45,12 +46,14 @@ public class Incarico {
     @NotNull
     private LocalDate data_consegna_prevista;
 
+    @PositiveOrZero
     @Column(name = "VALORE_DOGANALE")
     private Double valore_doganale;
 
     @Column(name = "RITIRO")
     private Boolean ritiro = false;
 
+    @PositiveOrZero
     @Column(name = "VALORE_ASSICURAZIONE")
     private Double valore_assicurazione;
 
@@ -71,7 +74,7 @@ public class Incarico {
 
     @OnDelete(DeletePolicy.CASCADE)
     @Composition
-    @OneToMany(mappedBy = "incarico")
+    @OneToMany(mappedBy = "incarico", cascade = CascadeType.PERSIST)
     private List<IncaricoSedeMittDest> sedi_mitt_dest;
 
     @OnDelete(DeletePolicy.CASCADE)
@@ -316,5 +319,4 @@ public class Incarico {
     public void setId(UUID id) {
         this.id = id;
     }
-
 }

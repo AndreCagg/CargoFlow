@@ -33,7 +33,7 @@ public class Cliente {
     @Column(name = "RAGIONE_SOCIALE", nullable = false)
     @NotNull
     @InstanceName
-    private String ragione_sociale;
+    private String ragioneSociale;
 
     @Column(name = "INDIRIZZO", nullable = false)
     @NotNull
@@ -59,7 +59,7 @@ public class Cliente {
     @OnDelete(DeletePolicy.CASCADE)
     @Composition
     @OneToMany(mappedBy = "cliente")
-    private List<FasciaOrariaCliente> fasce_orarie;
+    private List<FasciaOraria> fasceOrarie;
 
     @Column(name = "VERSION", nullable = false)
     @Version
@@ -89,12 +89,12 @@ public class Cliente {
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
 
-    public List<FasciaOrariaCliente> getFasce_orarie() {
-        return fasce_orarie;
+    public List<FasciaOraria> getFasceOrarie() {
+        return fasceOrarie;
     }
 
-    public void setFasce_orarie(List<FasciaOrariaCliente> fasce_orarie) {
-        this.fasce_orarie = fasce_orarie;
+    public void setFasceOrarie(List<FasciaOraria> fasceOrarie) {
+        this.fasceOrarie = fasceOrarie;
     }
 
     public Azienda getAzienda() {
@@ -145,12 +145,12 @@ public class Cliente {
         this.indirizzo = indirizzo;
     }
 
-    public String getRagione_sociale() {
-        return ragione_sociale;
+    public String getRagioneSociale() {
+        return ragioneSociale;
     }
 
-    public void setRagione_sociale(String ragione_sociale) {
-        this.ragione_sociale = ragione_sociale;
+    public void setRagioneSociale(String ragioneSociale) {
+        this.ragioneSociale = ragioneSociale;
     }
 
     public OffsetDateTime getDeletedDate() {
