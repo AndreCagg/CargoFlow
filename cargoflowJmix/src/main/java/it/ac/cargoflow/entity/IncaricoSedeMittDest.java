@@ -101,7 +101,7 @@ public class IncaricoSedeMittDest {
         }
 
         return this.stato.stream()
-                .filter(s -> s.getCreatedDate() != null)
+                .filter(s -> s.getDataStato() != null)
                 .max(Comparator.comparing(StatoVariazioneSedi::getCreatedDate))
                 .orElse(null);
     }

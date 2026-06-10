@@ -13,6 +13,7 @@ import io.jmix.core.EntityStates;
 import io.jmix.flowui.component.grid.DataGrid;
 import io.jmix.flowui.component.validation.ValidationErrors;
 import io.jmix.flowui.component.valuepicker.EntityPicker;
+import io.jmix.flowui.model.CollectionContainer;
 import io.jmix.flowui.view.*;
 import it.ac.cargoflow.conf.Costants;
 import it.ac.cargoflow.entity.*;
@@ -21,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Route(value = "incarico-sede-mitt-dests/:id", layout = MainView.class)
@@ -109,8 +111,8 @@ public class IncaricoSedeMittDestDetailView extends StandardDetailView<IncaricoS
                 .parameter("id", entity.getIncarico().getId())
                 .optional().orElse(null);
 
-        IncaricoSedeMittDest ismddc = event.getDataContext().merge(ismd);
         if (ismd != null) {
+            IncaricoSedeMittDest ismddc = event.getDataContext().merge(ismd);
             ismddc.setAl(LocalDateTime.now());
         }
 
@@ -121,12 +123,14 @@ public class IncaricoSedeMittDestDetailView extends StandardDetailView<IncaricoS
             svsdc.setStato(Stato.valueOf(stato));
             svsdc.setIncarico(ismd.getIncarico());
             svsdc.setSedeMittDest(entity);
+            svsdc.setDataStato(LocalDateTime.now());
 
             if(entity.getStato()!=null) {
                 entity.getStato().add(svsdc);
             }else{
-                entity.setStato(List.of(svsdc));
+                entity.setStato(new ArrayList<>(List.of(svsdc)));
             }
+
         }
     }
 
