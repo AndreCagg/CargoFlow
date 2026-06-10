@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <view xmlns="http://jmix.io/schema/flowui/view"
-      title="msg://fasciaOrariaDetailView.title"
+      title="msg://incaricoFasciaOrariaDetailView.title"
       focusComponent="form">
     <data>
-        <instance id="fasciaOrariaDc"
-                  class="it.ac.cargoflow.entity.FasciaOraria">
+        <instance id="incaricoFasciaOrariaDc"
+                  class="it.ac.cargoflow.entity.IncaricoFasciaOraria">
             <fetchPlan extends="_base">
-                <property name="cliente" fetchPlan="_base"/>
+                <property name="incarico" fetchPlan="_base"/>
             </fetchPlan>
-            <loader id="fasciaOrariaDl"/>
+            <loader id="incaricoFasciaOrariaDl"/>
         </instance>
     </data>
     <facets>
@@ -19,23 +19,22 @@
         <action id="closeAction" type="detail_close"/>
     </actions>
     <layout>
-        <formLayout id="form" dataContainer="fasciaOrariaDc">
+        <formLayout id="form" dataContainer="incaricoFasciaOrariaDc">
             <responsiveSteps>
                 <responsiveStep minWidth="0" columns="1"/>
                 <responsiveStep minWidth="40em" columns="2"/>
             </responsiveSteps>
-            <checkbox id="ritiroField" property="ritiro"/>
-            <entityPicker id="clienteField" property="cliente">
+            <select id="giornoField" property="giorno"/>
+            <timePicker id="dalleField" property="dalle"/>
+            <timePicker id="alleField" property="alle"/>
+            <entityPicker id="incaricoField" property="incarico">
                 <actions>
                     <action id="entityLookupAction" type="entity_lookup"/>
                     <action id="entityClearAction" type="entity_clear"/>
                 </actions>
             </entityPicker>
-            <timePicker id="dalleField" property="dalle"/>
-            <timePicker id="alleField" property="alle"/>
-            <textField id="giornoField" property="giorno"/>
-            <checkbox id="solo_ritiroField" property="solo_ritiro"/>
-            <checkbox id="solo_consegnaField" property="solo_consegna"/>
+            <checkbox id="soloRitiroField" property="soloRitiro"/>
+            <checkbox id="soloConsegnaField" property="soloConsegna"/>
         </formLayout>
         <hbox id="detailActions">
             <button id="saveAndCloseButton" action="saveCloseAction"/>

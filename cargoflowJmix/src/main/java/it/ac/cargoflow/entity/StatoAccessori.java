@@ -1,13 +1,10 @@
 package it.ac.cargoflow.entity;
 
-import io.jmix.core.MetadataTools;
 import io.jmix.core.annotation.DeletedBy;
 import io.jmix.core.annotation.DeletedDate;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
-import io.jmix.core.metamodel.annotation.DependsOnProperties;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
-import io.jmix.core.metamodel.datatype.DatatypeFormatter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedBy;
@@ -15,40 +12,34 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @JmixEntity
-@Table(name = "FASCIA_ORARIA", indexes = {
-        @Index(name = "IDX_FASCIA_ORARIA_CLIENTE", columnList = "CLIENTE_ID")
+@Table(name = "STATO_ACCESSORI", indexes = {
+        @Index(name = "IDX_STATO_ACCESSORI_INCARICO", columnList = "INCARICO_ID"),
+        @Index(name = "IDX_STATO_ACCESSORI_SEDE_MITT_DEST", columnList = "SEDE_MITT_DEST_ID")
 })
 @Entity
-public class FasciaOraria {
+public class StatoAccessori {
     @JmixGeneratedValue
     @Column(name = "ID", nullable = false)
     @Id
     private UUID id;
 
-    @JoinColumn(name = "CLIENTE_ID", nullable = false)
     @NotNull
+    @JoinColumn(name = "INCARICO_ID", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private Cliente cliente;
+    private Incarico incarico;
 
-    @Column(name = "DALLE")
-    private LocalTime dalle;
+    @InstanceName
+    @NotNull
+    @Column(name = "STATO", nullable = false)
+    private Integer stato;
 
-    @Column(name = "ALLE")
-    private LocalTime alle;
-
-    @Column(name = "GIORNO", length = 10)
-    private String giorno;
-
-    @Column(name = "SOLO_RITIRO")
-    private Boolean solo_ritiro;
-
-    @Column(name = "SOLO_CONSEGNA")
-    private Boolean solo_consegna;
+    @Column(name = "NOTE")
+    @Lob
+    private String note;
 
     @Column(name = "VERSION", nullable = false)
     @Version
@@ -78,52 +69,28 @@ public class FasciaOraria {
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
 
-    public Boolean getSolo_consegna() {
-        return solo_consegna;
+    public String getNote() {
+        return note;
     }
 
-    public void setSolo_consegna(Boolean solo_consegna) {
-        this.solo_consegna = solo_consegna;
+    public void setNote(String note) {
+        this.note = note;
     }
 
-    public Boolean getSolo_ritiro() {
-        return solo_ritiro;
+    public Stato getStato() {
+        return stato == null ? null : Stato.fromId(stato);
     }
 
-    public void setSolo_ritiro(Boolean solo_ritiro) {
-        this.solo_ritiro = solo_ritiro;
+    public void setStato(Stato stato) {
+        this.stato = stato == null ? null : stato.getId();
     }
 
-    public Cliente getCliente() {
-        return cliente;
+    public Incarico getIncarico() {
+        return incarico;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public String getGiorno() {
-        return giorno;
-    }
-
-    public void setGiorno(String giorno) {
-        this.giorno = giorno;
-    }
-
-    public LocalTime getAlle() {
-        return alle;
-    }
-
-    public void setAlle(LocalTime alle) {
-        this.alle = alle;
-    }
-
-    public LocalTime getDalle() {
-        return dalle;
-    }
-
-    public void setDalle(LocalTime dalle) {
-        this.dalle = dalle;
+    public void setIncarico(Incarico incarico) {
+        this.incarico = incarico;
     }
 
     public OffsetDateTime getDeletedDate() {
@@ -190,12 +157,4 @@ public class FasciaOraria {
         this.id = id;
     }
 
-    @InstanceName
-    @DependsOnProperties({"giorno", "dalle", "alle"})
-    public String getInstanceName(MetadataTools metadataTools, DatatypeFormatter datatypeFormatter) {
-        return String.format("%s %s %s",
-                metadataTools.format(giorno),
-                datatypeFormatter.formatLocalTime(dalle),
-                datatypeFormatter.formatLocalTime(alle));
-    }
 }

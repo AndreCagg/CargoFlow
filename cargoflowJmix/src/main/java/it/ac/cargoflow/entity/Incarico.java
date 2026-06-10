@@ -5,8 +5,7 @@ import io.jmix.core.annotation.DeletedBy;
 import io.jmix.core.annotation.DeletedDate;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
 import io.jmix.core.entity.annotation.OnDelete;
-import io.jmix.core.metamodel.annotation.Composition;
-import io.jmix.core.metamodel.annotation.JmixEntity;
+import io.jmix.core.metamodel.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -35,6 +34,7 @@ public class Incarico {
     @Id
     private UUID id;
 
+    @InstanceName
     @Column(name = "LDV", nullable = false)
     @NotNull
     private String ldv;
@@ -66,6 +66,10 @@ public class Incarico {
     @JoinColumn(name = "DESTINATARIO_ID", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Cliente destinatario;
+
+    @OneToMany(mappedBy = "incarico")
+    @Composition
+    private List<IncaricoFasciaOraria> fasceOrarie;
 
     @OnDelete(DeletePolicy.CASCADE)
     @Composition
@@ -127,6 +131,14 @@ public class Incarico {
     @DeletedDate
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
+
+    public List<IncaricoFasciaOraria> getFasceOrarie() {
+        return fasceOrarie;
+    }
+
+    public void setFasceOrarie(List<IncaricoFasciaOraria> fasceOrarie) {
+        this.fasceOrarie = fasceOrarie;
+    }
 
     public List<IncaricoSedeMittDest> getSedi_mitt_dest() {
         return sedi_mitt_dest;

@@ -43,10 +43,12 @@
                     </property>
                 </property>
                 <property name="merce" fetchPlan="_base"/>
+                <property name="fasceOrarie" fetchPlan="_base"/>
             </fetchPlan>
             <loader id="incaricoDl"/>
             <collection id="sedi_mitt_destDc" property="sedi_mitt_dest"/>
             <collection id="merceDc" property="merce"/>
+            <collection id="fasceOrarieDc" property="fasceOrarie"/>
         </instance>
     </data>
     <facets>
@@ -62,7 +64,7 @@
                 <responsiveStep minWidth="0" columns="1"/>
                 <responsiveStep minWidth="40em" columns="2"/>
             </responsiveSteps>
-            <textField id="ldvField" property="ldv"/>
+            <textField id="ldvField" property="ldv" valueChangeMode="EAGER"/>
             <textField id="ddtField" property="ddt"/>
             <datePicker id="data_consegna_previstaField" property="data_consegna_prevista"/>
             <textField id="valore_doganaleField" property="valore_doganale"/>
@@ -81,7 +83,6 @@
             <textField id="contrassegno_valoreField" property="contrassegno_valore"/>
             <entityComboBox id="contrassegno_tipoField" property="contrassegno_tipo"/>
             <textArea id="noteField" height="9.5em" property="note"/>
-
             <hbox id="sedeMittDest">
                 <entityPicker id="sedeMitt" label="Sede mittente" metaClass="Cliente">
                     <actions>
@@ -126,9 +127,35 @@
                 <column property="id_epal"/>
             </columns>
         </dataGrid>
+
+        <hbox id="fasceOrarieButtonsPanel" classNames="buttons-panel">
+            <button action="fasceOrarieDataGrid.createAction"/>
+            <button action="fasceOrarieDataGrid.editAction"/>
+            <button action="fasceOrarieDataGrid.removeAction"/>
+        </hbox>
+        <dataGrid id="fasceOrarieDataGrid" dataContainer="fasceOrarieDc" width="100%" height="100%">
+            <actions>
+                <action id="createAction" type="list_create">
+                    <properties>
+                        <property name="openMode" value="DIALOG"/>
+                    </properties>
+                </action>
+                <action id="editAction" type="list_edit">
+                    <properties>
+                        <property name="openMode" value="DIALOG"/>
+                    </properties>
+                </action>
+                <action id="removeAction" type="list_remove"/>
+            </actions>
+            <columns>
+                <column property="giorno"/>
+                <column property="dalle"/>
+                <column property="alle"/>
+            </columns>
+        </dataGrid>
+
         <hbox id="sedi_mitt_destButtonsPanel" classNames="buttons-panel">
             <button action="sedi_mitt_destDataGrid.createAction"/>
-            <button action="sedi_mitt_destDataGrid.editAction"/>
             <button action="sedi_mitt_destDataGrid.removeAction"/>
         </hbox>
         <dataGrid id="sedi_mitt_destDataGrid" dataContainer="sedi_mitt_destDc" width="100%" height="100%"
@@ -156,6 +183,7 @@
                 <column property="sede_destinatario.ragioneSociale"/>
                 <column property="sede_destinatario.indirizzo"/>
                 <column property="sede_destinatario.cap"/>
+                <column property="ultimoStato"/>
             </columns>
         </dataGrid>
         <hbox id="detailActions">

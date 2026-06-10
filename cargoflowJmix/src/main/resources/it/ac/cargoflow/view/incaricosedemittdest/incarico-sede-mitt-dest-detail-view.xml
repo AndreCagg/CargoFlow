@@ -8,8 +8,14 @@
             <fetchPlan extends="_base">
                 <property name="sede_mittente" fetchPlan="_base"/>
                 <property name="sede_destinatario" fetchPlan="_base"/>
+                <property name="stato" fetchPlan="_base"/>
             </fetchPlan>
             <loader id="incaricoSedeMittDestDl"/>
+            <collection id="statoDc" property="stato"/>
+        </instance>
+        <instance id="clienteDc" class="it.ac.cargoflow.entity.Cliente">
+            <loader id="clienteDl"/>
+            <fetchPlan extends="_base"/>
         </instance>
     </data>
     <facets>
@@ -41,6 +47,32 @@
             <dateTimePicker id="alField" property="al"/>
             <textField id="autorizzazioneField" property="autorizzazione"/>
         </formLayout>
+        <comboBox id="statoComboBox" itemsEnum="it.ac.cargoflow.entity.Stato" width="50%"/>
+        <hbox id="statoButtonsPanel" classNames="buttons-panel">
+            <button action="statoDataGrid.createAction"/>
+            <button action="statoDataGrid.editAction"/>
+            <button action="statoDataGrid.removeAction"/>
+        </hbox>
+        <dataGrid id="statoDataGrid" dataContainer="statoDc" width="100%" height="100%" allRowsVisible="true">
+            <actions>
+                <action id="createAction" type="list_create">
+                    <properties>
+                        <property name="openMode" value="DIALOG"/>
+                    </properties>
+                </action>
+                <action id="editAction" type="list_edit">
+                    <properties>
+                        <property name="openMode" value="DIALOG"/>
+                    </properties>
+                </action>
+                <action id="removeAction" type="list_remove"/>
+            </actions>
+            <columns>
+                <column property="createdDate"/>
+                <column property="stato"/>
+                <column property="note"/>
+            </columns>
+        </dataGrid>
         <hbox id="detailActions">
             <button id="saveAndCloseButton" action="saveCloseAction"/>
             <button id="closeButton" action="closeAction"/>
