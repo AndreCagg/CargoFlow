@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <view xmlns="http://jmix.io/schema/flowui/view"
       xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
-      title="msg://aziendaListView.title"
-      focusComponent="aziendasDataGrid">
+      title="msg://sedeListView.title"
+      focusComponent="sedesDataGrid">
     <data>
-        <collection id="aziendasDc"
-                    class="it.ac.cargoflow.entity.Azienda">
-            <fetchPlan extends="_base"/>
-            <loader id="aziendasDl" readOnly="true">
+        <collection id="sedesDc"
+                    class="it.ac.cargoflow.entity.Sede">
+            <fetchPlan extends="_base">
+                <property name="azienda" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="sedesDl" readOnly="true">
                 <query>
-                    <![CDATA[select e from Azienda e]]>
+                    <![CDATA[select e from Sede e]]>
                 </query>
             </loader>
         </collection>
@@ -27,23 +29,23 @@
     </actions>
     <layout>
         <genericFilter id="genericFilter"
-                       dataLoader="aziendasDl">
+                       dataLoader="sedesDl">
             <properties include=".*"/>
         </genericFilter>
         <hbox id="buttonsPanel" classNames="buttons-panel">
             <startSlot>
-                <button id="createButton" action="aziendasDataGrid.createAction"/>
-                <button id="editButton" action="aziendasDataGrid.editAction"/>
-                <button id="removeButton" action="aziendasDataGrid.removeAction"/>
+                <button id="createButton" action="sedesDataGrid.createAction"/>
+                <button id="editButton" action="sedesDataGrid.editAction"/>
+                <button id="removeButton" action="sedesDataGrid.removeAction"/>
             </startSlot>
             <endSlot>
-                <simplePagination id="pagination" dataLoader="aziendasDl"/>
+                <simplePagination id="pagination" dataLoader="sedesDl"/>
             </endSlot>
         </hbox>
-        <dataGrid id="aziendasDataGrid"
+        <dataGrid id="sedesDataGrid"
                   width="100%"
                   minHeight="20em"
-                  dataContainer="aziendasDc"
+                  dataContainer="sedesDc"
                   columnReorderingAllowed="true">
             <actions>
                 <action id="createAction" type="list_create"/>
@@ -51,7 +53,8 @@
                 <action id="removeAction" type="list_remove"/>
             </actions>
             <columns resizable="true">
-                <column property="denominazione"/>
+                <column property="nome"/>
+                <column property="azienda"/>
             </columns>
         </dataGrid>
         <hbox id="lookupActions" visible="false">

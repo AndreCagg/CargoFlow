@@ -120,7 +120,7 @@ public class IncaricoSedeMittDestDetailView extends StandardDetailView<IncaricoS
             String stato = this.statoComboBox.getValue().toString();
             StatoVariazioneSedi svs = this.dm.create(StatoVariazioneSedi.class);
             StatoVariazioneSedi svsdc = event.getDataContext().merge(svs);
-            svsdc.setStato(Stato.valueOf(stato));
+            svsdc.setStato(StatoIntegrazione.valueOf(stato));
             svsdc.setIncarico(ismd.getIncarico());
             svsdc.setSedeMittDest(entity);
             svsdc.setDataStato(LocalDateTime.now());

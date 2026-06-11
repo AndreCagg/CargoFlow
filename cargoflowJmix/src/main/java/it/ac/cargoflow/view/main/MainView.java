@@ -1,5 +1,10 @@
 package it.ac.cargoflow.view.main;
 
+import io.jmix.core.session.SessionData;
+import io.jmix.flowui.view.*;
+import it.ac.cargoflow.conf.Costants;
+import it.ac.cargoflow.entity.Azienda;
+import it.ac.cargoflow.entity.Sede;
 import it.ac.cargoflow.entity.User;
 import com.google.common.base.Strings;
 import com.vaadin.flow.component.Component;
@@ -12,9 +17,6 @@ import io.jmix.core.Messages;
 import io.jmix.core.usersubstitution.CurrentUserSubstitution;
 import io.jmix.flowui.UiComponents;
 import io.jmix.flowui.app.main.StandardMainView;
-import io.jmix.flowui.view.Install;
-import io.jmix.flowui.view.ViewController;
-import io.jmix.flowui.view.ViewDescriptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -29,6 +31,24 @@ public class MainView extends StandardMainView {
     private UiComponents uiComponents;
     @Autowired
     private CurrentUserSubstitution currentUserSubstitution;
+
+    @ViewComponent
+    private Span aziendaSede;
+
+    @Autowired
+    private SessionData session;
+
+    public void setAziendaSede(Azienda a, Sede s){
+        this.aziendaSede.setText(a.getDenominazione().toUpperCase()+(s!=null ? " - "+s.getNome().toUpperCase() : ""));
+    }
+
+    @Subscribe
+    public void onBeforeShow(final BeforeShowEvent event) {
+        Azienda a = (Azienda) this.session.getAttribute(Costants.AZIENDA_KEY);
+        if(a!=null){
+            this.setAziendaSede(a, (Sede) this.session.getAttribute(Costants.SEDE_KEY));
+        }
+    }
 
     @Install(to = "userMenu", subject = "buttonRenderer")
     private Component userMenuButtonRenderer(final UserDetails userDetails) {

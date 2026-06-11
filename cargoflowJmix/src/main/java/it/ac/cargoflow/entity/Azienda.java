@@ -1,8 +1,11 @@
 package it.ac.cargoflow.entity;
 
+import io.jmix.core.DeletePolicy;
 import io.jmix.core.annotation.DeletedBy;
 import io.jmix.core.annotation.DeletedDate;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
+import io.jmix.core.entity.annotation.OnDelete;
+import io.jmix.core.metamodel.annotation.Composition;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
@@ -13,6 +16,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @JmixEntity
@@ -28,6 +32,11 @@ public class Azienda {
     @NotNull
     @InstanceName
     private String denominazione;
+
+    @OnDelete(DeletePolicy.CASCADE)
+    @Composition
+    @OneToMany(mappedBy = "azienda")
+    private List<Sede> sede;
 
     @Column(name = "VERSION", nullable = false)
     @Version
@@ -56,6 +65,14 @@ public class Azienda {
     @DeletedDate
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
+
+    public List<Sede> getSede() {
+        return sede;
+    }
+
+    public void setSede(List<Sede> sede) {
+        this.sede = sede;
+    }
 
     public String getDenominazione() {
         return denominazione;

@@ -12,6 +12,7 @@
                               themeNames="contrast"
                               ariaLabel="msg://drawerToggle.ariaLabel"/>
                 <h1 id="viewTitle" classNames="jmix-main-view-title"/>
+                <span id="aziendaSede" classNames="ms-s text-secondary"/>
 
                 <userMenu id="userMenu"
                           themeNames="tertiary" classNames="ms-auto me-m">

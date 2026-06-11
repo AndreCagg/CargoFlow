@@ -4,6 +4,24 @@
       title="msg://incaricoDetailView.title"
       focusComponent="form">
     <data>
+        <collection id="aziendasDc" class="it.ac.cargoflow.entity.Azienda">
+            <loader id="aziendasDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from Azienda e]]>
+                </query>
+            </loader>
+            <fetchPlan extends="_base">
+                <property name="sede" fetchPlan="_base"/>
+            </fetchPlan>
+        </collection>
+        <collection id="sedesDc" class="it.ac.cargoflow.entity.Sede">
+            <loader id="sediDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from Sede e where e.azienda.id = :idAzienda]]>
+                </query>
+            </loader>
+            <fetchPlan extends="_base"/>
+        </collection>
         <collection id="clientiDc" class="it.ac.cargoflow.entity.Cliente">
             <loader id="clientiDl" readOnly="true">
                 <query>
@@ -64,6 +82,10 @@
                 <responsiveStep minWidth="0" columns="1"/>
                 <responsiveStep minWidth="40em" columns="2"/>
             </responsiveSteps>
+            <hbox id="aziendaSede">
+                <entityComboBox id="azienda" itemsContainer="aziendasDc" metaClass="Azienda"/>
+                <entityComboBox id="sede" itemsContainer="sedesDc" metaClass="Sede"/>
+            </hbox>
             <textField id="ldvField" property="ldv" valueChangeMode="EAGER"/>
             <textField id="ddtField" property="ddt"/>
             <datePicker id="data_consegna_previstaField" property="data_consegna_prevista"/>

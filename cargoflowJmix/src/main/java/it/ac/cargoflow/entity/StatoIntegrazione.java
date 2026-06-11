@@ -5,7 +5,7 @@ import io.jmix.core.metamodel.datatype.EnumClass;
 import org.springframework.lang.Nullable;
 
 
-public enum Stato implements EnumClass<Integer> {
+public enum StatoIntegrazione implements EnumClass<Integer> {
 
     VALIDO(10),
     RICHIESTA_INTEGRAZIONE_MITT_INVIATA(20),
@@ -17,7 +17,7 @@ public enum Stato implements EnumClass<Integer> {
 
     private final Integer id;
 
-    Stato(Integer id) {
+    StatoIntegrazione(Integer id) {
         this.id = id;
     }
 
@@ -26,8 +26,8 @@ public enum Stato implements EnumClass<Integer> {
     }
 
     @Nullable
-    public static Stato fromId(Integer id) {
-        for (Stato at : Stato.values()) {
+    public static StatoIntegrazione fromId(Integer id) {
+        for (StatoIntegrazione at : StatoIntegrazione.values()) {
             if (at.getId().equals(id)) {
                 return at;
             }

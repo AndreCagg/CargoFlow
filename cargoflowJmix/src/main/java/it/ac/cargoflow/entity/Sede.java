@@ -16,30 +16,25 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @JmixEntity
-@Table(name = "STATO_ACCESSORI", indexes = {
-        @Index(name = "IDX_STATO_ACCESSORI_INCARICO", columnList = "INCARICO_ID"),
-        @Index(name = "IDX_STATO_ACCESSORI_SEDE_MITT_DEST", columnList = "SEDE_MITT_DEST_ID")
+@Table(name = "SEDE", indexes = {
+        @Index(name = "IDX_SEDE_AZIENDA", columnList = "AZIENDA_ID")
 })
 @Entity
-public class StatoAccessori {
+public class Sede {
     @JmixGeneratedValue
     @Column(name = "ID", nullable = false)
     @Id
     private UUID id;
 
-    @NotNull
-    @JoinColumn(name = "INCARICO_ID", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private Incarico incarico;
-
     @InstanceName
+    @Column(name = "NOME", nullable = false)
     @NotNull
-    @Column(name = "STATO", nullable = false)
-    private Integer stato;
+    private String nome;
 
-    @Column(name = "NOTE")
-    @Lob
-    private String note;
+    @JoinColumn(name = "AZIENDA_ID", nullable = false)
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private Azienda azienda;
 
     @Column(name = "VERSION", nullable = false)
     @Version
@@ -69,28 +64,20 @@ public class StatoAccessori {
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
 
-    public String getNote() {
-        return note;
+    public Azienda getAzienda() {
+        return azienda;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setAzienda(Azienda azienda) {
+        this.azienda = azienda;
     }
 
-    public StatoIntegrazione getStato() {
-        return stato == null ? null : StatoIntegrazione.fromId(stato);
+    public String getNome() {
+        return nome;
     }
 
-    public void setStato(StatoIntegrazione stato) {
-        this.stato = stato == null ? null : stato.getId();
-    }
-
-    public Incarico getIncarico() {
-        return incarico;
-    }
-
-    public void setIncarico(Incarico incarico) {
-        this.incarico = incarico;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public OffsetDateTime getDeletedDate() {

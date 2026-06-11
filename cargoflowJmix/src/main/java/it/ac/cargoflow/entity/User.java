@@ -8,9 +8,10 @@ import io.jmix.core.metamodel.annotation.DependsOnProperties;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import io.jmix.security.authentication.JmixUserDetails;
-import org.springframework.security.core.GrantedAuthority;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import org.springframework.security.core.GrantedAuthority;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
@@ -18,12 +19,14 @@ import java.util.UUID;
 @JmixEntity
 @Entity
 @Table(name = "USER_", indexes = {
-        @Index(name = "IDX_USER__ON_USERNAME", columnList = "USERNAME", unique = true)
+        @Index(name = "IDX_USER__ON_USERNAME", columnList = "USERNAME", unique = true),
+        @Index(name = "IDX_USER__SEDE", columnList = "SEDE_ID"),
+        @Index(name = "IDX_USER__AZIENDA", columnList = "AZIENDA_ID")
 })
 public class User implements JmixUserDetails, HasTimeZone {
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "ID", nullable = false)
     @JmixGeneratedValue
     private UUID id;
 
@@ -52,11 +55,46 @@ public class User implements JmixUserDetails, HasTimeZone {
     @Column(name = "ACTIVE")
     private Boolean active = true;
 
+    @JoinColumn(name = "AZIENDA_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Azienda azienda;
+
+    @JoinColumn(name = "SEDE_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Sede sede;
+
+    @Column(name = "RUOLO")
+    private String ruolo;
+
     @Column(name = "TIME_ZONE_ID")
     private String timeZoneId;
 
     @Transient
     private Collection<? extends GrantedAuthority> authorities;
+
+    public Azienda getAzienda() {
+        return azienda;
+    }
+
+    public void setAzienda(Azienda azienda) {
+        this.azienda = azienda;
+    }
+
+    public Ruoli getRuolo() {
+        return ruolo == null ? null : Ruoli.fromId(ruolo);
+    }
+
+    public void setRuolo(Ruoli ruolo) {
+        this.ruolo = ruolo == null ? null : ruolo.getId();
+    }
+
+    public Sede getSede() {
+        return sede;
+    }
+
+    public void setSede(Sede sede) {
+        this.sede = sede;
+    }
 
     public UUID getId() {
         return id;

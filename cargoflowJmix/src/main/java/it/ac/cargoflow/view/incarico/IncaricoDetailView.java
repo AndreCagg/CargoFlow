@@ -10,6 +10,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import io.jmix.core.DataManager;
 import io.jmix.core.EntityStates;
+import io.jmix.core.security.CurrentAuthentication;
 import io.jmix.flowui.DialogWindows;
 import io.jmix.flowui.component.checkbox.JmixCheckbox;
 import io.jmix.flowui.component.combobox.EntityComboBox;
@@ -32,8 +33,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Route(value = "incaricoes/:id", layout = MainView.class)
@@ -101,6 +100,18 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
     @Autowired
     private ViewValidation validation;
 
+    @ViewComponent
+    private EntityComboBox<Azienda> azienda;
+
+    @ViewComponent
+    private EntityComboBox<Sede> sede;
+
+    @ViewComponent
+    private CollectionLoader<Sede> sediDl;
+
+    @Autowired
+    private CurrentAuthentication auth;
+
     @Subscribe("ldvField")
     public void onLdvFieldValueChange(final AbstractField.ComponentValueChangeEvent<TypedTextField<String>, String> event) {
         if (this.ldvField.isInvalid() && this.existsLdv(event.getSource().getValue()) == null) {
@@ -139,11 +150,36 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
 
                     svsDC.setSedeMittDest(ismd);
                     svsDC.setIncarico(ismd.getIncarico());
-                    svsDC.setStato(Stato.VALIDO);
+                    svsDC.setStato(StatoIntegrazione.VALIDO);
+                    svsDC.setDataStato(LocalDateTime.now());
 
                     ismd.setStato(List.of(svsDC));
 
                     incarico.setSedi_mitt_dest(List.of(ismd));
+                }
+
+                Movimenti m = this.dm.create(Movimenti.class);
+                Movimenti mdc = this.dc.merge(m);
+
+                Sede s = null;
+                User u = (User) this.auth.getUser();
+
+                if(u.getSede()==null){
+                    //deve aver selezionato una sede
+                    if(this.sede.getValue()==null){
+                        errors.add(Costants.SEDE_NON_PRESENTE);
+                        this.sede.setInvalid(true);
+                        this.sede.setErrorMessage(Costants.SEDE_NON_PRESENTE);
+                    }else{
+                        s = this.sede.getValue();
+                    }
+                }else{
+                    s = u.getSede();
+                }
+
+                if(s!=null) {
+                    mdc.setDescrizione(StatoMovimenti.INSERITO);
+                    mdc.setSede(s);
                 }
             }
         }
@@ -370,6 +406,17 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
                     }
                 }
             }
+        }
+    }
+
+    @Subscribe("azienda")
+    public void onAziendaComponentValueChange(final AbstractField.ComponentValueChangeEvent<EntityComboBox<Azienda>, Azienda> event) {
+        Azienda a = this.azienda.getValue();
+        this.sede.setValue(null);
+
+        if (a != null){
+            this.sediDl.setParameter("idAzienda", a.getId());
+            this.sediDl.load();
         }
     }
 }
