@@ -56,7 +56,8 @@
                 <column property="giorno"/>
                 <column property="dalle"/>
                 <column property="alle"/>
-                <column property="ritiro"/>
+                <column property="solo_ritiro"/>
+                <column property="solo_consegna"/>
             </columns>
         </dataGrid>
         <hbox id="detailActions">

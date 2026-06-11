@@ -49,23 +49,26 @@ public class LoginBean {
             return;
         }
 
-        if (List.of(Ruoli.ADMIN_SAAS, Ruoli.ADMIN_AZIENDA).contains(user.getRuolo())) {
-            Azienda a = user.getAzienda();
-            Boolean isAdminAzienda = user.getRuolo().equals(Ruoli.ADMIN_AZIENDA);
-            if(isAdminAzienda && (a == null || (a!=null && a.getSede().size()>1))) {
-                ui.navigate(Selezionaaziendasede.class);
-            }else if(isAdminAzienda){
-                SessionData session = sessionDataProvider.getObject();
-                session.setAttribute(Costants.AZIENDA_KEY, user.getAzienda());
+        ui.access(() -> {
+            if (List.of(Ruoli.ADMIN_SAAS, Ruoli.ADMIN_AZIENDA).contains(user.getRuolo())) {
+                Azienda a = user.getAzienda();
+                Boolean isAdminAzienda = user.getRuolo().equals(Ruoli.ADMIN_AZIENDA);
 
-                List<Sede> sedi = user.getAzienda().getSede();
-                session.setAttribute(Costants.SEDE_KEY, (sedi !=null && sedi.size()>0) ? sedi.getFirst() : "");
+                if (isAdminAzienda && (a == null || (a.getSede().size() > 1))) {
+                    ui.navigate(Selezionaaziendasede.class);
+                } else if (isAdminAzienda) {
+                    SessionData session = sessionDataProvider.getObject();
+                    session.setAttribute(Costants.AZIENDA_KEY, user.getAzienda());
+
+                    List<Sede> sedi = user.getAzienda().getSede();
+                    session.setAttribute(Costants.SEDE_KEY, (sedi != null && !sedi.isEmpty()) ? sedi.getFirst() : "");
+                    ui.navigate(MainView.class);
+                } else {
+                    ui.navigate(Selezionaaziendasede.class);
+                }
+            } else {
                 ui.navigate(MainView.class);
-            }else{
-                ui.navigate(Selezionaaziendasede.class);
             }
-        } else {
-            ui.navigate(MainView.class);
-        }
+        });
     }
 }
