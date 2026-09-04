@@ -6,7 +6,5 @@ public class Costants {
     public static final String INTERVALLO_NON_VALIDO = "Intervallo non valido. Il campo 'dal' deve essere precedente al campo 'al'";
     public static final String STESSO_MITT_DEST = "Non è possibile inserire lo stesso mittente e destinatario";
     public static final String INTERVALLO_ORARIO_NON_VALIDO = "Intervallo non valido. Il campo 'dalle' deve essere precedente al campo 'alle'";
-    public static final String SEDE_NON_PRESENTE = "E' necessario selezionare la sede";
-    public static final String AZIENDA_KEY = "AZIENDA";
-    public static final String SEDE_KEY = "SEDE";
+    public static final String FASCIA_ORARIA_NON_VALIDA = "Eè necessario specificare dei valori";
 }

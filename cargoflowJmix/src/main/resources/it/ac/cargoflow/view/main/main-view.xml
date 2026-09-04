@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <mainView xmlns="http://jmix.io/schema/flowui/main-view"
           title="msg://MainView.title">
+    <data>
+        <collection id="aziendasDc" class="it.ac.cargoflow.entity.Azienda">
+            <loader id="aziendasDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from Azienda e]]>
+                </query>
+            </loader>
+            <fetchPlan extends="_base"/>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
     <actions>
         <action id="logoutAction" text="msg:///actions.logout.text" type="logout"/>
     </actions>
@@ -41,6 +54,21 @@
                 <nav id="navigation"
                      classNames="jmix-main-view-navigation"
                      ariaLabel="msg://navigation.ariaLabel">
+                    <fieldSet
+                            legendText="Informazioni richieste"
+                            classNames="border rounded-m text-secondary flex flex-col">
+                        <entityComboBox id="azienda" itemsContainer="aziendasDc" metaClass="Azienda" label="Azienda">
+                            <actions>
+                                <action id="entityClearAction" type="entity_clear"/>
+                            </actions>
+                        </entityComboBox>
+                        <entityComboBox id="sede" metaClass="Sede" label="Sede">
+                            <actions>
+                                <action id="entityClearAction" type="entity_clear"/>
+                            </actions>
+                        </entityComboBox>
+                        <button id="modifica" icon="EDIT_ACTION" visible="false"/>
+                    </fieldSet>
                     <listMenu id="menu"/>
                 </nav>
             </section>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS"
+        logicalFilePath="it/ac/cargoflow/liquibase/changelog/2026/09/04-101427-ed8687c7.xml">
+    <changeSet id="1" author="cargoflowJmix">
+        <addColumn tableName="FASCIA_ORARIA">
+            <column name="DOM" type="BOOLEAN"/>
+            <column name="GIO" type="BOOLEAN"/>
+            <column name="LUN" type="BOOLEAN"/>
+            <column name="MAR" type="BOOLEAN"/>
+            <column name="MER" type="BOOLEAN"/>
+            <column name="SAB" type="BOOLEAN"/>
+            <column name="VEN" type="BOOLEAN"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="2" author="cargoflowJmix">
+        <dropColumn columnName="giorno" tableName="fascia_oraria"/>
+    </changeSet>
+</databaseChangeLog>

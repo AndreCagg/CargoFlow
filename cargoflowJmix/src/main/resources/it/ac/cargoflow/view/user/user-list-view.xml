@@ -70,7 +70,6 @@
                 <column property="email"/>
                 <column property="timeZoneId"/>
                 <column property="active"/>
-                <column property="ruolo"/>
                 <column property="azienda"/>
             </columns>
         </dataGrid>

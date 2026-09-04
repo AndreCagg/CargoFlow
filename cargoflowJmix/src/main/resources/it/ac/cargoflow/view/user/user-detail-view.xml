@@ -34,7 +34,6 @@
             <textField id="emailField" property="email"/>
             <comboBox id="timeZoneField" property="timeZoneId" clearButtonVisible="true"/>
             <checkbox id="activeField" property="active"/>
-            <select id="ruoloField" property="ruolo"/>
             <entityPicker id="aziendaField" property="azienda">
                 <actions>
                     <action id="entityLookupAction" type="entity_lookup"/>

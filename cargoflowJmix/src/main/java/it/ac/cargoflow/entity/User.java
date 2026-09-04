@@ -55,16 +55,13 @@ public class User implements JmixUserDetails, HasTimeZone {
     @Column(name = "ACTIVE")
     private Boolean active = true;
 
-    @JoinColumn(name = "AZIENDA_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Azienda azienda;
-
     @JoinColumn(name = "SEDE_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Sede sede;
 
-    @Column(name = "RUOLO")
-    private String ruolo;
+    @JoinColumn(name = "AZIENDA_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Azienda azienda;
 
     @Column(name = "TIME_ZONE_ID")
     private String timeZoneId;
@@ -80,20 +77,12 @@ public class User implements JmixUserDetails, HasTimeZone {
         this.azienda = azienda;
     }
 
-    public Ruoli getRuolo() {
-        return ruolo == null ? null : Ruoli.fromId(ruolo);
-    }
-
-    public void setRuolo(Ruoli ruolo) {
-        this.ruolo = ruolo == null ? null : ruolo.getId();
+    public void setSede(Sede sede) {
+        this.sede = sede;
     }
 
     public Sede getSede() {
         return sede;
-    }
-
-    public void setSede(Sede sede) {
-        this.sede = sede;
     }
 
     public UUID getId() {

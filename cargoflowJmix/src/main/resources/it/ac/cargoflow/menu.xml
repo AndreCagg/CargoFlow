@@ -10,8 +10,6 @@
         <item view="FasciaOraria.list" title="msg://it.ac.cargoflow.view.fasciaoraria/fasciaOrariaListView.title"/>
         <item view="Azienda.list" title="msg://it.ac.cargoflow.view.azienda/aziendaListView.title"/>
         <item view="Sede.list" title="msg://it.ac.cargoflow.view.sede/sedeListView.title"/>
-        <item view="Selezionaaziendasede"
-              title="msg://it.ac.cargoflow.view.selezionaaziendasede/selezionaaziendasede.title"/>
     </menu>
 
 </menu-config>

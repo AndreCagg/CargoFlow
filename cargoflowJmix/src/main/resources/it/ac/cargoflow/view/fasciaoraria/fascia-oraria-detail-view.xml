@@ -24,8 +24,6 @@
                 <responsiveStep minWidth="0" columns="1"/>
                 <responsiveStep minWidth="40em" columns="2"/>
             </responsiveSteps>
-            <checkbox id="ritiroField" property="solo_ritiro"/>
-            <checkbox id="consegnaField" property="solo_consegna"/>
             <entityPicker id="clienteField" property="cliente">
                 <actions>
                     <action id="entityLookupAction" type="entity_lookup"/>
@@ -34,7 +32,6 @@
             </entityPicker>
             <timePicker id="dalleField" property="dalle"/>
             <timePicker id="alleField" property="alle"/>
-            <textField id="giornoField" property="giorno"/>
             <checkbox id="solo_ritiroField" property="solo_ritiro"/>
             <checkbox id="solo_consegnaField" property="solo_consegna"/>
         </formLayout>

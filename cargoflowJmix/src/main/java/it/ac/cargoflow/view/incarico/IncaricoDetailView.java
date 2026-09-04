@@ -23,6 +23,7 @@ import io.jmix.flowui.model.CollectionContainer;
 import io.jmix.flowui.model.CollectionLoader;
 import io.jmix.flowui.model.DataContext;
 import io.jmix.flowui.view.*;
+import it.ac.cargoflow.app.AziendaSedeContext;
 import it.ac.cargoflow.conf.Costants;
 import it.ac.cargoflow.entity.*;
 import it.ac.cargoflow.view.cliente.ClienteDetailView;
@@ -100,14 +101,8 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
     @Autowired
     private ViewValidation validation;
 
-    @ViewComponent
-    private EntityComboBox<Azienda> azienda;
-
-    @ViewComponent
-    private EntityComboBox<Sede> sede;
-
-    @ViewComponent
-    private CollectionLoader<Sede> sediDl;
+    @Autowired
+    private AziendaSedeContext asc;
 
     @Autowired
     private CurrentAuthentication auth;
@@ -160,27 +155,9 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
 
                 Movimenti m = this.dm.create(Movimenti.class);
                 Movimenti mdc = this.dc.merge(m);
-
-                Sede s = null;
-                User u = (User) this.auth.getUser();
-
-                if(u.getSede()==null){
-                    //deve aver selezionato una sede
-                    if(this.sede.getValue()==null){
-                        errors.add(Costants.SEDE_NON_PRESENTE);
-                        this.sede.setInvalid(true);
-                        this.sede.setErrorMessage(Costants.SEDE_NON_PRESENTE);
-                    }else{
-                        s = this.sede.getValue();
-                    }
-                }else{
-                    s = u.getSede();
-                }
-
-                if(s!=null) {
-                    mdc.setDescrizione(StatoMovimenti.INSERITO);
-                    mdc.setSede(s);
-                }
+                incarico.setAzienda(asc.getAzienda());
+                mdc.setSede(asc.getSede());
+                mdc.setDescrizione(StatoMovimenti.INSERITO);
             }
         }
 
@@ -406,17 +383,6 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
                     }
                 }
             }
-        }
-    }
-
-    @Subscribe("azienda")
-    public void onAziendaComponentValueChange(final AbstractField.ComponentValueChangeEvent<EntityComboBox<Azienda>, Azienda> event) {
-        Azienda a = this.azienda.getValue();
-        this.sede.setValue(null);
-
-        if (a != null){
-            this.sediDl.setParameter("idAzienda", a.getId());
-            this.sediDl.load();
         }
     }
 }

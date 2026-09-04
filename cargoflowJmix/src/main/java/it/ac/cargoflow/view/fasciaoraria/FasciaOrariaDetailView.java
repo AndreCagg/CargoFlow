@@ -31,8 +31,8 @@ public class FasciaOrariaDetailView extends StandardDetailView<FasciaOraria> {
     @Subscribe
     public void onBeforeSave(final BeforeSaveEvent event) {
         ValidationErrors errors = new ValidationErrors();
-        if(this.dalleField.getValue()!=null && this.alleField.getValue()!=null){
-            errors.add(Costants.INTERVALLO_ORARIO_NON_VALIDO);
+        if(this.dalleField.getValue()==null && this.alleField.getValue()==null){
+            errors.add(Costants.FASCIA_ORARIA_NON_VALIDA);
             this.setInvalidDalleAlle(true);
         }
 

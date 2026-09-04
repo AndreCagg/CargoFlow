@@ -41,8 +41,26 @@ public class FasciaOraria {
     @Column(name = "ALLE")
     private LocalTime alle;
 
-    @Column(name = "GIORNO", length = 10)
-    private String giorno;
+    @Column(name = "LUN")
+    private Boolean lun;
+
+    @Column(name = "MAR")
+    private Boolean mar;
+
+    @Column(name = "MER")
+    private Boolean mer;
+
+    @Column(name = "GIO")
+    private Boolean gio;
+
+    @Column(name = "VEN")
+    private Boolean ven;
+
+    @Column(name = "SAB")
+    private Boolean sab;
+
+    @Column(name = "DOM")
+    private Boolean dom;
 
     @Column(name = "SOLO_RITIRO")
     private Boolean solo_ritiro;
@@ -78,6 +96,62 @@ public class FasciaOraria {
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
 
+    public Boolean getDom() {
+        return dom;
+    }
+
+    public void setDom(Boolean dom) {
+        this.dom = dom;
+    }
+
+    public Boolean getSab() {
+        return sab;
+    }
+
+    public void setSab(Boolean sab) {
+        this.sab = sab;
+    }
+
+    public Boolean getVen() {
+        return ven;
+    }
+
+    public void setVen(Boolean ven) {
+        this.ven = ven;
+    }
+
+    public Boolean getGio() {
+        return gio;
+    }
+
+    public void setGio(Boolean gio) {
+        this.gio = gio;
+    }
+
+    public Boolean getMer() {
+        return mer;
+    }
+
+    public void setMer(Boolean mer) {
+        this.mer = mer;
+    }
+
+    public Boolean getMar() {
+        return mar;
+    }
+
+    public void setMar(Boolean mar) {
+        this.mar = mar;
+    }
+
+    public Boolean getLun() {
+        return lun;
+    }
+
+    public void setLun(Boolean lun) {
+        this.lun = lun;
+    }
+
     public Boolean getSolo_consegna() {
         return solo_consegna;
     }
@@ -100,14 +174,6 @@ public class FasciaOraria {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
-    }
-
-    public String getGiorno() {
-        return giorno;
-    }
-
-    public void setGiorno(String giorno) {
-        this.giorno = giorno;
     }
 
     public LocalTime getAlle() {
@@ -190,11 +256,18 @@ public class FasciaOraria {
         this.id = id;
     }
 
-    @InstanceName
+    /*@InstanceName
     @DependsOnProperties({"giorno", "dalle", "alle"})
     public String getInstanceName(MetadataTools metadataTools, DatatypeFormatter datatypeFormatter) {
         return String.format("%s %s %s",
                 metadataTools.format(giorno),
+                datatypeFormatter.formatLocalTime(dalle),
+                datatypeFormatter.formatLocalTime(alle));
+    }*/
+    @InstanceName
+    @DependsOnProperties({"dalle", "alle"})
+    public String getInstanceName(MetadataTools metadataTools, DatatypeFormatter datatypeFormatter) {
+        return String.format("%s %s %s",
                 datatypeFormatter.formatLocalTime(dalle),
                 datatypeFormatter.formatLocalTime(alle));
     }
