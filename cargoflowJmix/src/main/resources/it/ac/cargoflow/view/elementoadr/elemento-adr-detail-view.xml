@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://elementoADRDetailView.title"
+      focusComponent="form">
+    <data>
+        <collection id="imballaggioComunesDc" class="it.ac.cargoflow.entity.ImballaggioComune">
+            <loader id="imballaggioComunesDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from ImballaggioComune e]]>
+                </query>
+            </loader>
+            <fetchPlan extends="_base"/>
+        </collection>
+        <collection id="disposizioniCisternaADRsDc" class="it.ac.cargoflow.entity.DisposizioniCisternaADR">
+            <loader id="disposizioniCisternaADRsDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from DisposizioniCisternaADR e]]>
+                </query>
+            </loader>
+            <fetchPlan extends="_base"/>
+        </collection>
+        <collection id="trasportoCollisDc" class="it.ac.cargoflow.entity.TrasportoColli">
+            <loader id="trasportoCollisDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from TrasportoColli e]]>
+                </query>
+            </loader>
+            <fetchPlan extends="_base"/>
+        </collection>
+        <collection id="trasportoRinfusasDc" class="it.ac.cargoflow.entity.TrasportoRinfusa">
+            <loader id="trasportoRinfusasDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from TrasportoRinfusa e]]>
+                </query>
+            </loader>
+            <fetchPlan extends="_base"/>
+        </collection>
+        <instance id="elementoADRDc"
+                  class="it.ac.cargoflow.entity.ElementoADR">
+            <fetchPlan extends="_base">
+                <property name="classePericolo" fetchPlan="_base">
+                    <property name="parent" fetchPlan="_base"/>
+                </property>
+                <property name="etichette" fetchPlan="_base"/>
+                <property name="disposizioniSpeciali" fetchPlan="_base"/>
+                <property name="istruzioniImballaggio" fetchPlan="_base">
+                    <property name="variante" fetchPlan="_base"/>
+                </property>
+                <property name="disposizioniImballaggio" fetchPlan="_base"/>
+                <property name="imballaggioComune" fetchPlan="_base"/>
+                <property name="trasportoColli" fetchPlan="_base"/>
+                <property name="rinfusa" fetchPlan="_base"/>
+                <property name="caricoScaricoMovimentazione" fetchPlan="_base"/>
+                <property name="disposizioniCisterna" fetchPlan="_base"/>
+                <property name="esercizi" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="elementoADRDl"/>
+            <collection id="etichetteDc" property="etichette"/>
+            <collection id="disposizioniSpecialiDc" property="disposizioniSpeciali"/>
+            <collection id="istruzioniImballaggioDc" property="istruzioniImballaggio"/>
+            <collection id="disposizioniImballaggioDc" property="disposizioniImballaggio"/>
+            <collection id="caricoScaricoMovimentazioneDc" property="caricoScaricoMovimentazione"/>
+            <collection id="eserciziDc" property="esercizi"/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveCloseAction" type="detail_saveClose"/>
+        <action id="closeAction" type="detail_close"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="elementoADRDc">
+            <responsiveSteps>
+                <responsiveStep minWidth="0" columns="1"/>
+                <responsiveStep minWidth="40em" columns="2"/>
+            </responsiveSteps>
+            <textField id="onuField" property="onu" label="ONU" allowedCharPattern="^[0-9]+$">
+                <prefix>
+                    <span text="UN"/>
+                </prefix>
+            </textField>
+            <textField id="denominazioneField" property="denominazione" label="Denominazione Ufficiale"/>
+            <select id="gruppoImballaggioField" property="gruppoImballaggio">
+                <prefix>
+                    <span text="PG"/>
+                </prefix>
+            </select>
+            <!--<entityPicker id="classePericoloField" property="classePericolo">
+                <actions>
+                    <action id="entityLookupAction" type="entity_lookup"/>
+                    <action id="entityClearAction" type="entity_clear"/>
+                </actions>
+            </entityPicker>-->
+            <textField id="quantitaLimitateField" property="quantitaLimitate" allowedCharPattern="^[0-9]+$">
+                <prefix>
+                    <span text="LQ"/>
+                </prefix>
+            </textField>
+            <textField id="quantitaEsentiField" property="quantitaEsenti" allowedCharPattern="^[0-9]+$">
+                <prefix>
+                    <span text="E"/>
+                </prefix>
+            </textField>
+            <entityComboBox id="imballaggioComuneField" property="imballaggioComune" label="Imballaggio in comune"
+                            itemsContainer="imballaggioComunesDc">
+                <actions>
+                    <action id="entityLookupAction" type="entity_lookup"/>
+                    <action id="entityClearAction" type="entity_clear"/>
+                </actions>
+            </entityComboBox>
+            <select id="codiceCisternaField" property="codiceCisterna"/>
+            <entityComboBox id="disposizioniCisternaField" property="disposizioniCisterna" label="Disposizioni Cisterna"
+                            itemsContainer="disposizioniCisternaADRsDc">
+                <actions>
+                    <action id="entityLookupAction" type="entity_lookup"/>
+                    <action id="entityClearAction" type="entity_clear"/>
+                </actions>
+            </entityComboBox>
+            <textField id="categoriaTrasportoField" property="categoriaTrasporto" allowedCharPattern="^[0-4]$"
+                       maxLength="1"/>
+            <textField id="limiteGalleriaField" label="Restrizione Trasporto Galleria">
+                <validators>
+                    <regexp regexp="^[ABCDE][0-9]+[ABCDE]$"
+                            message="Formato restrizione galleria non valido (es. C5000D)"/>
+                </validators>
+            </textField>
+            <!--<textField id="limiteGalleriaField" property="limiteGalleria"/>
+            <textField id="codRestrizioneAField" property="codRestrizioneA"/>
+            <textField id="codRestrizioneBField" property="codRestrizioneB"/>-->
+            <entityComboBox id="trasportoColliField" property="trasportoColli" itemsContainer="trasportoCollisDc">
+                <actions>
+                    <action id="entityLookupAction" type="entity_lookup"/>
+                    <action id="entityClearAction" type="entity_clear"/>
+                </actions>
+            </entityComboBox>
+            <entityComboBox id="rinfusaField" property="rinfusa" itemsContainer="trasportoRinfusasDc">
+                <actions>
+                    <action id="entityLookupAction" type="entity_lookup"/>
+                    <action id="entityClearAction" type="entity_clear"/>
+                </actions>
+            </entityComboBox>
+            <textField id="codicePericoloField" property="codicePericolo" allowedCharPattern="^[0-9]{1, 3}"/>
+        </formLayout>
+        <h4 text="msg://it.ac.cargoflow.entity/ElementoADR.etichette"/>
+        <hbox id="etichetteButtonsPanel" classNames="buttons-panel">
+            <button action="etichetteDataGrid.addAction"/>
+            <button action="etichetteDataGrid.excludeAction"/>
+        </hbox>
+        <dataGrid id="etichetteDataGrid" dataContainer="etichetteDc" width="100%" minHeight="20em">
+            <actions>
+                <action id="addAction" type="list_add"/>
+                <action id="excludeAction" type="list_exclude"/>
+            </actions>
+            <columns>
+                <column property="num"/>
+                <column property="descrizione"/>
+            </columns>
+        </dataGrid>
+        <h4 text="msg://it.ac.cargoflow.entity/ElementoADR.disposizioniSpeciali"/>
+        <hbox id="disposizioniSpecialiButtonsPanel" classNames="buttons-panel">
+            <button action="disposizioniSpecialiDataGrid.addAction"/>
+            <button action="disposizioniSpecialiDataGrid.excludeAction"/>
+        </hbox>
+        <dataGrid id="disposizioniSpecialiDataGrid" dataContainer="disposizioniSpecialiDc" width="100%"
+                  minHeight="20em">
+            <actions>
+                <action id="addAction" type="list_add"/>
+                <action id="excludeAction" type="list_exclude"/>
+            </actions>
+            <columns>
+                <column property="descrizione"/>
+            </columns>
+        </dataGrid>
+        <h4 text="msg://it.ac.cargoflow.entity/ElementoADR.istruzioniImballaggio"/>
+        <hbox id="istruzioniImballaggioButtonsPanel" classNames="buttons-panel">
+            <button action="istruzioniImballaggioDataGrid.addAction"/>
+            <button action="istruzioniImballaggioDataGrid.excludeAction"/>
+        </hbox>
+        <dataGrid id="istruzioniImballaggioDataGrid" dataContainer="istruzioniImballaggioDc" width="100%"
+                  minHeight="20em">
+            <actions>
+                <action id="addAction" type="list_add"/>
+                <action id="excludeAction" type="list_exclude"/>
+            </actions>
+            <columns>
+                <column property="num"/>
+                <column property="codiceCisterna"/>
+                <column property="tipo"/>
+            </columns>
+        </dataGrid>
+        <h4 text="msg://it.ac.cargoflow.entity/ElementoADR.disposizioniImballaggio"/>
+        <hbox id="disposizioniImballaggioButtonsPanel" classNames="buttons-panel">
+            <button action="disposizioniImballaggioDataGrid.addAction"/>
+            <button action="disposizioniImballaggioDataGrid.excludeAction"/>
+        </hbox>
+        <dataGrid id="disposizioniImballaggioDataGrid" dataContainer="disposizioniImballaggioDc" width="100%"
+                  minHeight="20em">
+            <actions>
+                <action id="addAction" type="list_add"/>
+                <action id="excludeAction" type="list_exclude"/>
+            </actions>
+            <columns>
+                <column property="tipo"/>
+                <column property="num"/>
+            </columns>
+        </dataGrid>
+        <h4 text="msg://it.ac.cargoflow.entity/ElementoADR.caricoScaricoMovimentazione"/>
+        <hbox id="caricoScaricoMovimentazioneButtonsPanel" classNames="buttons-panel">
+            <button action="caricoScaricoMovimentazioneDataGrid.addAction"/>
+            <button action="caricoScaricoMovimentazioneDataGrid.excludeAction"/>
+        </hbox>
+        <dataGrid id="caricoScaricoMovimentazioneDataGrid" dataContainer="caricoScaricoMovimentazioneDc" width="100%"
+                  minHeight="20em">
+            <actions>
+                <action id="addAction" type="list_add"/>
+                <action id="excludeAction" type="list_exclude"/>
+            </actions>
+            <columns>
+                <column property="sigla"/>
+                <column property="emergenza"/>
+                <column property="azione"/>
+            </columns>
+        </dataGrid>
+        <h4 text="msg://h4.text"/>
+        <hbox id="eserciziButtonsPanel" classNames="buttons-panel">
+            <button action="eserciziDataGrid.addAction"/>
+            <button action="eserciziDataGrid.excludeAction"/>
+        </hbox>
+        <dataGrid id="eserciziDataGrid" dataContainer="eserciziDc" width="100%" height="100%">
+            <actions>
+                <action id="addAction" type="list_add">
+                    <properties>
+                        <property name="openMode" value="DIALOG"/>
+                    </properties>
+                </action>
+                <action id="excludeAction" type="list_exclude"/>
+            </actions>
+            <columns>
+                <column property="codice"/>
+            </columns>
+        </dataGrid>
+        <hbox id="detailActions">
+            <button id="saveAndCloseButton" action="saveCloseAction"/>
+            <button id="closeButton" action="closeAction"/>
+        </hbox>
+    </layout>
+</view>

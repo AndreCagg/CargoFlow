@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS"
+        logicalFilePath="it/ac/cargoflow/liquibase/changelog/2026/09/16-123052-ed8687c7.xml">
+    <changeSet id="1" author="cargoflowJmix">
+        <createTable tableName="CARICO_SCARICO_MOVIMENTAZIONE">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CARICO_SCARICO_MOVIMENTAZIONE"/>
+            </column>
+            <column name="SIGLA" type="VARCHAR(4)"/>
+            <column name="EMERGENZA" type="VARCHAR(100)"/>
+            <column name="AZIONE" type="CLOB"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+            <column name="ELEMENTO_ADR_ID" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="cargoflowJmix">
+        <createTable tableName="CLASSE_PERICOLO">
+            <column name="ID" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CLASSE_PERICOLO"/>
+            </column>
+            <column name="CLASSE" type="VARCHAR(6)"/>
+            <column name="PARENT_ID" type="INT"/>
+            <column name="DESCRIZIONE" type="VARCHAR(70)"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="cargoflowJmix">
+        <createTable tableName="DISPOSIZIONI_SPECIALI_ADR">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_DISPOSIZIONI_SPECIALI_ADR"/>
+            </column>
+            <column name="DESCRIZIONE" type="CLOB"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+            <column name="ELEMENTO_ADR_ID" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="4" author="cargoflowJmix">
+        <createTable tableName="DISPOSIZIONI_SPECIALI_IMBALL_ADR">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_DISPOSIZIONI_SPECIALI_IMBALL_ADR"/>
+            </column>
+            <column name="TIPO" type="INT"/>
+            <column name="NUM" type="VARCHAR(3)"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+            <column name="ELEMENTO_ADR_ID" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="5" author="cargoflowJmix">
+        <createTable tableName="ELEMENTO_ADR">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ELEMENTO_ADR"/>
+            </column>
+            <column name="ONU" type="VARCHAR(4)"/>
+            <column name="DENOMINAZIONE" type="VARCHAR(100)"/>
+            <column name="GRUPPO_IMBALLAGGIO" type="INT"/>
+            <column name="CLASSE_PERICOLO_ID" type="INT"/>
+            <column name="QUANTITA_LIMITATE" type="INT"/>
+            <column name="QUANTITA_ESENTI" type="INT"/>
+            <column name="IMBALLAGGIO_COMUNE_ID" type="UUID"/>
+            <column name="CODICE_CISTERNA" type="INT"/>
+            <column name="DISPOSIZIONI_CISTERNA" type="INT"/>
+            <column name="CATEGORIA_TRASPORTO" type="INT"/>
+            <column name="LIMITE_GALLERIA" type="INT"/>
+            <column name="COD_RESTRIZIONE_A" type="CHAR"/>
+            <column name="COD_RESTRIZIONE_B" type="CHAR"/>
+            <column name="TRASPORTO_COLLI_ID" type="INT"/>
+            <column name="RINFUSA_ID" type="INT"/>
+            <column name="ESERCIZIO" type="CHAR"/>
+            <column name="CODICE_PERICOLO" type="VARCHAR(5)"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="6" author="cargoflowJmix">
+        <createTable tableName="ELEMENTO_ADR_CARICO_SCARICO_MOVIMENTAZIONE_LINK">
+            <column name="CARICO_SCARICO_MOVIMENTAZIONE_ID" type="UUID">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="PK_ELEMENTO_ADR_CARICO_SCARICO_MOVIMENTAZIONE_LINK"/>
+            </column>
+            <column name="ELEMENTO_A_D_R_ID" type="UUID">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="PK_ELEMENTO_ADR_CARICO_SCARICO_MOVIMENTAZIONE_LINK"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="7" author="cargoflowJmix">
+        <createTable tableName="ELEMENTO_ADR_DISPOSIZIONI_SPECIALI_ADR_LINK">
+            <column name="DISPOSIZIONI_SPECIALI_A_D_R_ID" type="UUID">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="PK_ELEMENTO_ADR_DISPOSIZIONI_SPECIALI_ADR_LINK"/>
+            </column>
+            <column name="ELEMENTO_A_D_R_ID" type="UUID">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="PK_ELEMENTO_ADR_DISPOSIZIONI_SPECIALI_ADR_LINK"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="8" author="cargoflowJmix">
+        <createTable tableName="ELEMENTO_ADR_DISPOSIZIONI_SPECIALI_IMBALL_ADR_LINK">
+            <column name="DISPOSIZIONI_SPECIALI_IMBALL_A_D_R_ID" type="UUID">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="PK_ELEMENTO_ADR_DISPOSIZIONI_SPECIALI_IMBALL_ADR_LINK"/>
+            </column>
+            <column name="ELEMENTO_A_D_R_ID" type="UUID">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="PK_ELEMENTO_ADR_DISPOSIZIONI_SPECIALI_IMBALL_ADR_LINK"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="9" author="cargoflowJmix">
+        <createTable tableName="ELEMENTO_ADR_ETICHETTE_ADR_LINK">
+            <column name="ELEMENTO_A_D_R_ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ELEMENTO_ADR_ETICHETTE_ADR_LINK"/>
+            </column>
+            <column name="ETICHETTE_A_D_R_ID" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ELEMENTO_ADR_ETICHETTE_ADR_LINK"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="10" author="cargoflowJmix">
+        <createTable tableName="ELEMENTO_ADR_ISTRUZIONI_IMBALLAGGIO_ADR_LINK">
+            <column name="ELEMENTO_A_D_R_ID" type="UUID">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="PK_ELEMENTO_ADR_ISTRUZIONI_IMBALLAGGIO_ADR_LINK"/>
+            </column>
+            <column name="ISTRUZIONI_IMBALLAGGIO_A_D_R_ID" type="UUID">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="PK_ELEMENTO_ADR_ISTRUZIONI_IMBALLAGGIO_ADR_LINK"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="11" author="cargoflowJmix">
+        <createTable tableName="ETICHETTE_ADR">
+            <column name="ID" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ETICHETTE_ADR"/>
+            </column>
+            <column name="NUM" type="DOUBLE"/>
+            <column name="DESCRIZIONE" type="VARCHAR(100)"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+            <column name="ELEMENTO_ADR_ID" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="12" author="cargoflowJmix">
+        <createTable tableName="IMBALLAGGIO_COMUNE">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_IMBALLAGGIO_COMUNE"/>
+            </column>
+            <column name="NUM" type="VARCHAR(3)"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="13" author="cargoflowJmix">
+        <createTable tableName="ISTRUZIONI_IMBALLAGGIO_ADR">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ISTRUZIONI_IMBALLAGGIO_ADR"/>
+            </column>
+            <column name="NUM" type="VARCHAR(3)"/>
+            <column name="CODICE_CISTERNA" type="VARCHAR(4)"/>
+            <column name="TIPO" type="INT"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+            <column name="ELEMENTO_ADR_ID" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="14" author="cargoflowJmix">
+        <createTable tableName="TRASPORTO_COLLI">
+            <column name="ID" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_TRASPORTO_COLLI"/>
+            </column>
+            <column name="NUM" type="INT"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="15" author="cargoflowJmix">
+        <createTable tableName="T_RASPORTO_RINFUSA">
+            <column name="ID" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_T_RASPORTO_RINFUSA"/>
+            </column>
+            <column name="NUM" type="INT"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="16" author="cargoflowJmix">
+        <createTable tableName="VARIANTI_IMBALLAGGIO">
+            <column name="ID" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_VARIANTI_IMBALLAGGIO"/>
+            </column>
+            <column name="VARIANTE" type="VARCHAR(1)"/>
+            <column name="DESCRIZIONE" type="VARCHAR(255)"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+            <column name="ISTRUZIONI_IMBALLAGGIO_ADR_ID" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="17" author="cargoflowJmix">
+        <createTable tableName="VEICOLO_TRASPORTO_ADR_GERARCHIA">
+            <column name="ID" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_VEICOLO_TRASPORTO_ADR_GERARCHIA"/>
+            </column>
+            <column name="TIPO_VEICOLO" type="VARCHAR(6)"/>
+            <column name="PARENT_ID" type="INT"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="18" author="cargoflowJmix">
+        <createIndex indexName="IDX_CARICO_SCARICO_MOVIMENTAZIONE_ELEMENTO_ADR"
+                     tableName="CARICO_SCARICO_MOVIMENTAZIONE">
+            <column name="ELEMENTO_ADR_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="ELEMENTO_ADR_ID" baseTableName="CARICO_SCARICO_MOVIMENTAZIONE"
+                                 constraintName="FK_CARICO_SCARICO_MOVIMENTAZIONE_ON_ELEMENTO_ADR"
+                                 referencedColumnNames="ID" referencedTableName="ELEMENTO_ADR"/>
+    </changeSet>
+    <changeSet id="19" author="cargoflowJmix">
+        <createIndex indexName="IDX_CLASSE_PERICOLO_PARENT" tableName="CLASSE_PERICOLO">
+            <column name="PARENT_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="PARENT_ID" baseTableName="CLASSE_PERICOLO"
+                                 constraintName="FK_CLASSE_PERICOLO_ON_PARENT" referencedColumnNames="ID"
+                                 referencedTableName="CLASSE_PERICOLO"/>
+    </changeSet>
+    <changeSet id="20" author="cargoflowJmix">
+        <createIndex indexName="IDX_DISPOSIZIONI_SPECIALI_ADR_ELEMENTO_ADR" tableName="DISPOSIZIONI_SPECIALI_ADR">
+            <column name="ELEMENTO_ADR_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="ELEMENTO_ADR_ID" baseTableName="DISPOSIZIONI_SPECIALI_ADR"
+                                 constraintName="FK_DISPOSIZIONI_SPECIALI_ADR_ON_ELEMENTO_ADR"
+                                 referencedColumnNames="ID" referencedTableName="ELEMENTO_ADR"/>
+    </changeSet>
+    <changeSet id="21" author="cargoflowJmix">
+        <createIndex indexName="IDX_DISPOSIZIONI_SPECIALI_IMBALL_ADR_ELEMENTO_ADR"
+                     tableName="DISPOSIZIONI_SPECIALI_IMBALL_ADR">
+            <column name="ELEMENTO_ADR_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="ELEMENTO_ADR_ID" baseTableName="DISPOSIZIONI_SPECIALI_IMBALL_ADR"
+                                 constraintName="FK_DISPOSIZIONI_SPECIALI_IMBALL_ADR_ON_ELEMENTO_ADR"
+                                 referencedColumnNames="ID" referencedTableName="ELEMENTO_ADR"/>
+    </changeSet>
+    <changeSet id="22" author="cargoflowJmix">
+        <createIndex indexName="IDX_ELEMENTO_ADR_CLASSE_PERICOLO" tableName="ELEMENTO_ADR">
+            <column name="CLASSE_PERICOLO_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="CLASSE_PERICOLO_ID" baseTableName="ELEMENTO_ADR"
+                                 constraintName="FK_ELEMENTO_ADR_ON_CLASSE_PERICOLO" referencedColumnNames="ID"
+                                 referencedTableName="CLASSE_PERICOLO"/>
+    </changeSet>
+    <changeSet id="23" author="cargoflowJmix">
+        <createIndex indexName="IDX_ELEMENTO_ADR_IMBALLAGGIO_COMUNE" tableName="ELEMENTO_ADR">
+            <column name="IMBALLAGGIO_COMUNE_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="IMBALLAGGIO_COMUNE_ID" baseTableName="ELEMENTO_ADR"
+                                 constraintName="FK_ELEMENTO_ADR_ON_IMBALLAGGIO_COMUNE" referencedColumnNames="ID"
+                                 referencedTableName="IMBALLAGGIO_COMUNE"/>
+    </changeSet>
+    <changeSet id="24" author="cargoflowJmix">
+        <createIndex indexName="IDX_ETICHETTE_ADR_ELEMENTO_ADR" tableName="ETICHETTE_ADR">
+            <column name="ELEMENTO_ADR_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="ELEMENTO_ADR_ID" baseTableName="ETICHETTE_ADR"
+                                 constraintName="FK_ETICHETTE_ADR_ON_ELEMENTO_ADR" referencedColumnNames="ID"
+                                 referencedTableName="ELEMENTO_ADR"/>
+    </changeSet>
+    <changeSet id="25" author="cargoflowJmix">
+        <createIndex indexName="IDX_ISTRUZIONI_IMBALLAGGIO_ADR_ELEMENTO_ADR" tableName="ISTRUZIONI_IMBALLAGGIO_ADR">
+            <column name="ELEMENTO_ADR_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="ELEMENTO_ADR_ID" baseTableName="ISTRUZIONI_IMBALLAGGIO_ADR"
+                                 constraintName="FK_ISTRUZIONI_IMBALLAGGIO_ADR_ON_ELEMENTO_ADR"
+                                 referencedColumnNames="ID" referencedTableName="ELEMENTO_ADR"/>
+    </changeSet>
+    <changeSet id="26" author="cargoflowJmix">
+        <createIndex indexName="IDX_VARIANTI_IMBALLAGGIO_ISTRUZIONI_IMBALLAGGIO_ADR" tableName="VARIANTI_IMBALLAGGIO">
+            <column name="ISTRUZIONI_IMBALLAGGIO_ADR_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="ISTRUZIONI_IMBALLAGGIO_ADR_ID" baseTableName="VARIANTI_IMBALLAGGIO"
+                                 constraintName="FK_VARIANTI_IMBALLAGGIO_ON_ISTRUZIONI_IMBALLAGGIO_ADR"
+                                 referencedColumnNames="ID" referencedTableName="ISTRUZIONI_IMBALLAGGIO_ADR"/>
+    </changeSet>
+    <changeSet id="27" author="cargoflowJmix">
+        <createIndex indexName="IDX_VEICOLO_TRASPORTO_ADR_GERARCHIA_PARENT" tableName="VEICOLO_TRASPORTO_ADR_GERARCHIA">
+            <column name="PARENT_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="PARENT_ID" baseTableName="VEICOLO_TRASPORTO_ADR_GERARCHIA"
+                                 constraintName="FK_VEICOLO_TRASPORTO_ADR_GERARCHIA_ON_PARENT"
+                                 referencedColumnNames="ID" referencedTableName="VEICOLO_TRASPORTO_ADR_GERARCHIA"/>
+    </changeSet>
+    <changeSet id="28" author="cargoflowJmix">
+        <addForeignKeyConstraint baseColumnNames="CARICO_SCARICO_MOVIMENTAZIONE_ID"
+                                 baseTableName="ELEMENTO_ADR_CARICO_SCARICO_MOVIMENTAZIONE_LINK"
+                                 constraintName="FK_ELEADRCARSCAMOV_ON_CARICO_SCARICO_MOVIMENTAZIONE"
+                                 referencedColumnNames="ID" referencedTableName="CARICO_SCARICO_MOVIMENTAZIONE"/>
+    </changeSet>
+    <changeSet id="29" author="cargoflowJmix">
+        <addForeignKeyConstraint baseColumnNames="ELEMENTO_A_D_R_ID"
+                                 baseTableName="ELEMENTO_ADR_CARICO_SCARICO_MOVIMENTAZIONE_LINK"
+                                 constraintName="FK_ELEADRCARSCAMOV_ON_ELEMENTO_A_D_R" referencedColumnNames="ID"
+                                 referencedTableName="ELEMENTO_ADR"/>
+    </changeSet>
+    <changeSet id="30" author="cargoflowJmix">
+        <addForeignKeyConstraint baseColumnNames="DISPOSIZIONI_SPECIALI_A_D_R_ID"
+                                 baseTableName="ELEMENTO_ADR_DISPOSIZIONI_SPECIALI_ADR_LINK"
+                                 constraintName="FK_ELEADRDISSPEADR_ON_DISPOSIZIONI_SPECIALI_A_D_R"
+                                 referencedColumnNames="ID" referencedTableName="DISPOSIZIONI_SPECIALI_ADR"/>
+    </changeSet>
+    <changeSet id="31" author="cargoflowJmix">
+        <addForeignKeyConstraint baseColumnNames="ELEMENTO_A_D_R_ID"
+                                 baseTableName="ELEMENTO_ADR_DISPOSIZIONI_SPECIALI_ADR_LINK"
+                                 constraintName="FK_ELEADRDISSPEADR_ON_ELEMENTO_A_D_R" referencedColumnNames="ID"
+                                 referencedTableName="ELEMENTO_ADR"/>
+    </changeSet>
+    <changeSet id="32" author="cargoflowJmix">
+        <addForeignKeyConstraint baseColumnNames="DISPOSIZIONI_SPECIALI_IMBALL_A_D_R_ID"
+                                 baseTableName="ELEMENTO_ADR_DISPOSIZIONI_SPECIALI_IMBALL_ADR_LINK"
+                                 constraintName="FK_ELEADRDISSPEIMBADR_ON_DISPOSIZIONI_SPECIALI_IMBALL_A_D_R"
+                                 referencedColumnNames="ID" referencedTableName="DISPOSIZIONI_SPECIALI_IMBALL_ADR"/>
+    </changeSet>
+    <changeSet id="33" author="cargoflowJmix">
+        <addForeignKeyConstraint baseColumnNames="ELEMENTO_A_D_R_ID"
+                                 baseTableName="ELEMENTO_ADR_DISPOSIZIONI_SPECIALI_IMBALL_ADR_LINK"
+                                 constraintName="FK_ELEADRDISSPEIMBADR_ON_ELEMENTO_A_D_R" referencedColumnNames="ID"
+                                 referencedTableName="ELEMENTO_ADR"/>
+    </changeSet>
+    <changeSet id="34" author="cargoflowJmix">
+        <addForeignKeyConstraint baseColumnNames="ELEMENTO_A_D_R_ID" baseTableName="ELEMENTO_ADR_ETICHETTE_ADR_LINK"
+                                 constraintName="FK_ELEADRETIADR_ON_ELEMENTO_A_D_R" referencedColumnNames="ID"
+                                 referencedTableName="ELEMENTO_ADR"/>
+    </changeSet>
+    <changeSet id="35" author="cargoflowJmix">
+        <addForeignKeyConstraint baseColumnNames="ETICHETTE_A_D_R_ID" baseTableName="ELEMENTO_ADR_ETICHETTE_ADR_LINK"
+                                 constraintName="FK_ELEADRETIADR_ON_ETICHETTE_A_D_R" referencedColumnNames="ID"
+                                 referencedTableName="ETICHETTE_ADR"/>
+    </changeSet>
+    <changeSet id="36" author="cargoflowJmix">
+        <addForeignKeyConstraint baseColumnNames="ELEMENTO_A_D_R_ID"
+                                 baseTableName="ELEMENTO_ADR_ISTRUZIONI_IMBALLAGGIO_ADR_LINK"
+                                 constraintName="FK_ELEADRISTIMBADR_ON_ELEMENTO_A_D_R" referencedColumnNames="ID"
+                                 referencedTableName="ELEMENTO_ADR"/>
+    </changeSet>
+    <changeSet id="37" author="cargoflowJmix">
+        <addForeignKeyConstraint baseColumnNames="ISTRUZIONI_IMBALLAGGIO_A_D_R_ID"
+                                 baseTableName="ELEMENTO_ADR_ISTRUZIONI_IMBALLAGGIO_ADR_LINK"
+                                 constraintName="FK_ELEADRISTIMBADR_ON_ISTRUZIONI_IMBALLAGGIO_A_D_R"
+                                 referencedColumnNames="ID" referencedTableName="ISTRUZIONI_IMBALLAGGIO_ADR"/>
+    </changeSet>
+    <changeSet id="38" author="cargoflowJmix">
+        <addForeignKeyConstraint baseColumnNames="RINFUSA_ID" baseTableName="ELEMENTO_ADR"
+                                 constraintName="FK_ELEMENTO_ADR_ON_RINFUSA" referencedColumnNames="ID"
+                                 referencedTableName="T_RASPORTO_RINFUSA"/>
+    </changeSet>
+    <changeSet id="39" author="cargoflowJmix">
+        <addForeignKeyConstraint baseColumnNames="TRASPORTO_COLLI_ID" baseTableName="ELEMENTO_ADR"
+                                 constraintName="FK_ELEMENTO_ADR_ON_TRASPORTO_COLLI" referencedColumnNames="ID"
+                                 referencedTableName="TRASPORTO_COLLI"/>
+    </changeSet>
+</databaseChangeLog>

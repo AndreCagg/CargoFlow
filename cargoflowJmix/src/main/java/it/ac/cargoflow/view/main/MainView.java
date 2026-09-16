@@ -32,6 +32,10 @@ import io.jmix.core.Messages;
 import io.jmix.core.usersubstitution.CurrentUserSubstitution;
 import io.jmix.flowui.UiComponents;
 import io.jmix.flowui.app.main.StandardMainView;
+import it.ac.cargoflow.view.azienda.AziendaDetailView;
+import it.ac.cargoflow.view.azienda.AziendaListView;
+import it.ac.cargoflow.view.sede.SedeDetailView;
+import it.ac.cargoflow.view.sede.SedeListView;
 import it.ac.cargoflow.view.user.UserDetailView;
 import it.ac.cargoflow.view.user.UserListView;
 import org.slf4j.Logger;
@@ -46,7 +50,7 @@ import java.util.Set;
 @Route("")
 @ViewController(id = "MainView")
 @ViewDescriptor(path = "main-view.xml")
-public class MainView extends StandardMainView {
+public class MainView extends StandardMainView implements BeforeEnterObserver{
     @Autowired
     private Messages messages;
     @Autowired
@@ -106,7 +110,6 @@ public class MainView extends StandardMainView {
         }
 
         aggiornaMenu();
-        UI.getCurrent().addBeforeEnterListener(this::handleBeforeEnter);
     }
 
     @Subscribe
@@ -286,25 +289,6 @@ public class MainView extends StandardMainView {
         asc.setAziendaSedeCtx(a, s);
     }
 
-    /*private void aggiornaMenu() {
-        //menu.setVisible(sceltaConfermata);
-        ListMenu.MenuItem users = menu.getMenuItem("User.list");
-        ListMenu.MenuItem az = menu.getMenuItem("Azienda.list");
-        ListMenu.MenuItem se = menu.getMenuItem("Sede.list");
-
-        ListMenu.MenuItem applicationMenu = menu.getMenuItem("application");
-
-        if (applicationMenu instanceof ListMenu.MenuBarItem parent) {
-            for (ListMenu.MenuItem child : parent.getChildren()) {
-                if (!child.equals(users) && !child.equals(az) && !child.equals(se)) {
-                    child.setVisible(sceltaConfermata);
-                    log.warn("{}, {}, isVisible-dopo={}, class={}",
-                            child.getId(), sceltaConfermata, child.isVisible(), child.getClass());
-                }
-            }
-        }
-    }*/
-
     private void aggiornaMenu() {
         ListMenu.MenuItem users = menu.getMenuItem("User.list");
         ListMenu.MenuItem az = menu.getMenuItem("Azienda.list");
@@ -327,35 +311,27 @@ public class MainView extends StandardMainView {
         }
     }
 
-    private void handleBeforeEnter(BeforeEnterEvent event) {
-        Class<?> targetView = event.getNavigationTarget(); //da escludere quelli attivi
-
-        if (!MainView.class.isAssignableFrom(targetView) && !UserListView.class.isAssignableFrom(targetView) && !sceltaConfermata) {
-            event.forwardTo(MainView.class);
-        }
-    }
-
-    /*@Override
+    @Override
     public void beforeEnter(BeforeEnterEvent event) {
+        super.beforeEnter(event);
         Class<?> targetView = event.getNavigationTarget();
 
-        // 1. Viste sempre permesse
-        boolean isAllowedView = MainView.class.isAssignableFrom(targetView)
-                || UserListView.class.isAssignableFrom(targetView);
-
-        if (isAllowedView) {
+        if (MainView.class.isAssignableFrom(targetView)
+                || UserListView.class.isAssignableFrom(targetView)
+                || UserDetailView.class.isAssignableFrom(targetView)
+                || AziendaListView.class.isAssignableFrom(targetView)
+                || AziendaDetailView.class.isAssignableFrom(targetView)
+                || SedeListView.class.isAssignableFrom(targetView)
+                || SedeDetailView.class.isAssignableFrom(targetView)) {
             return;
         }
 
-        // 2. Controllo rapido sullo stato salvato in sessione (senza toccare la UI)
         Azienda a = asc.getAzienda();
         Sede s = asc.getSede();
-        boolean datiInSessioneMancanti = (a == null || s == null);
+        boolean confermata = a != null && s != null;
 
-        // 3. Se mancano i dati in sessione e l'utente non ha ancora confermato la scelta
-        if (datiInSessioneMancanti && !Boolean.TRUE.equals(sceltaConfermata)) {
-            log.warn("Navigazione bloccata verso {}: Azienda/Sede non selezionate.", targetView.getCanonicalName());
+        if (!confermata) {
             event.forwardTo(MainView.class);
         }
-    }*/
+    }
 }

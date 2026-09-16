@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS"
+        logicalFilePath="it/ac/cargoflow/liquibase/changelog/2026/09/16-161652-ed8687c7.xml">
+    <changeSet id="1" author="cargoflowJmix">
+        <addColumn tableName="DISPOSIZIONI_SPECIALI_ADR">
+            <column name="NUM" type="INT"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="2" author="cargoflowJmix">
+        <dropColumn columnName="codice_cisterna" tableName="istruzioni_imballaggio_adr"/>
+    </changeSet>
+    <changeSet id="3" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="INT" columnName="CATEGORIA_TRASPORTO" tableName="ELEMENTO_ADR"
+                              validate="true"/>
+    </changeSet>
+    <changeSet id="4" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="VARCHAR(100)" columnName="DENOMINAZIONE" tableName="ELEMENTO_ADR"
+                              validate="true"/>
+    </changeSet>
+    <changeSet id="5" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="VARCHAR(4)" columnName="ONU" tableName="ELEMENTO_ADR" validate="true"/>
+    </changeSet>
+    <changeSet id="6" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="INT" columnName="QUANTITA_ESENTI" tableName="ELEMENTO_ADR"
+                              validate="true"/>
+    </changeSet>
+    <changeSet id="7" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="INT" columnName="QUANTITA_LIMITATE" tableName="ELEMENTO_ADR"
+                              validate="true"/>
+    </changeSet>
+</databaseChangeLog>

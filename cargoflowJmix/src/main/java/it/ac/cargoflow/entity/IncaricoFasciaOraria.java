@@ -18,8 +18,26 @@ public class IncaricoFasciaOraria {
     @Id
     private UUID id;
 
-    @Column(name = "GIORNO")
-    private Integer giorno;
+    @Column(name = "LUN")
+    private Boolean lun;
+
+    @Column(name = "MAR")
+    private Boolean mar;
+
+    @Column(name = "MER")
+    private Boolean mer;
+
+    @Column(name = "GIO")
+    private Boolean gio;
+
+    @Column(name = "VEN")
+    private Boolean ven;
+
+    @Column(name = "SAB")
+    private Boolean sab;
+
+    @Column(name = "DOM")
+    private Boolean dom;
 
     @Column(name = "DALLE")
     private LocalTime dalle;
@@ -31,26 +49,82 @@ public class IncaricoFasciaOraria {
     @ManyToOne(fetch = FetchType.LAZY)
     private Incarico incarico;
 
-    @Column(name = "SOLO_RITIRO")
-    private Boolean soloRitiro;
+    @Column(name = "RITIRO")
+    private Boolean ritiro;
 
-    @Column(name = "SOLO_CONSEGNA")
-    private Boolean soloConsegna;
+    @Column(name = "CONSEGNA")
+    private Boolean consegna;
 
-    public Boolean getSoloConsegna() {
-        return soloConsegna;
+    public Boolean getConsegna() {
+        return consegna;
     }
 
-    public void setSoloConsegna(Boolean soloConsegna) {
-        this.soloConsegna = soloConsegna;
+    public void setConsegna(Boolean consegna) {
+        this.consegna = consegna;
     }
 
-    public Boolean getSoloRitiro() {
-        return soloRitiro;
+    public Boolean getRitiro() {
+        return ritiro;
     }
 
-    public void setSoloRitiro(Boolean soloRitiro) {
-        this.soloRitiro = soloRitiro;
+    public void setRitiro(Boolean ritiro) {
+        this.ritiro = ritiro;
+    }
+
+    public Boolean getDom() {
+        return dom;
+    }
+
+    public void setDom(Boolean dom) {
+        this.dom = dom;
+    }
+
+    public Boolean getSab() {
+        return sab;
+    }
+
+    public void setSab(Boolean sab) {
+        this.sab = sab;
+    }
+
+    public Boolean getVen() {
+        return ven;
+    }
+
+    public void setVen(Boolean ven) {
+        this.ven = ven;
+    }
+
+    public Boolean getGio() {
+        return gio;
+    }
+
+    public void setGio(Boolean gio) {
+        this.gio = gio;
+    }
+
+    public Boolean getMer() {
+        return mer;
+    }
+
+    public void setMer(Boolean mer) {
+        this.mer = mer;
+    }
+
+    public Boolean getMar() {
+        return mar;
+    }
+
+    public void setMar(Boolean mar) {
+        this.mar = mar;
+    }
+
+    public Boolean getLun() {
+        return lun;
+    }
+
+    public void setLun(Boolean lun) {
+        this.lun = lun;
     }
 
     public Incarico getIncarico() {
@@ -75,14 +149,6 @@ public class IncaricoFasciaOraria {
 
     public void setDalle(LocalTime dalle) {
         this.dalle = dalle;
-    }
-
-    public Giorno getGiorno() {
-        return giorno == null ? null : Giorno.fromId(giorno);
-    }
-
-    public void setGiorno(Giorno giorno) {
-        this.giorno = giorno == null ? null : giorno.getId();
     }
 
     public UUID getId() {

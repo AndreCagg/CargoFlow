@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://classePericoloDetailView.title"
+      focusComponent="form">
+    <data>
+        <collection id="classePericoloesDc" class="it.ac.cargoflow.entity.ClassePericolo">
+            <loader id="classePericoloesDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from ClassePericolo e]]>
+                </query>
+            </loader>
+            <fetchPlan extends="_base"/>
+        </collection>
+        <instance id="classePericoloDc"
+                  class="it.ac.cargoflow.entity.ClassePericolo">
+            <fetchPlan extends="_base">
+                <property name="parent" fetchPlan="_base">
+                    <property name="parent" fetchPlan="_base"/>
+                </property>
+            </fetchPlan>
+            <loader id="classePericoloDl"/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveCloseAction" type="detail_saveClose"/>
+        <action id="closeAction" type="detail_close"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="classePericoloDc">
+            <responsiveSteps>
+                <responsiveStep minWidth="0" columns="1"/>
+                <responsiveStep minWidth="40em" columns="2"/>
+            </responsiveSteps>
+            <entityComboBox id="parentField" property="parent" itemsContainer="classePericoloesDc" label="Classe">
+                <actions>
+                    <action id="entityLookupAction" type="entity_lookup"/>
+                    <action id="entityClearAction" type="entity_clear"/>
+                </actions>
+            </entityComboBox>
+            <textField id="classeField" label="Classe/Sottoclasse" property="classe"/>
+            <textField id="descrizioneField" label="Denominazione Ufficiale" property="descrizione"/>
+        </formLayout>
+        <hbox id="detailActions">
+            <button id="saveAndCloseButton" action="saveCloseAction"/>
+            <button id="closeButton" action="closeAction"/>
+        </hbox>
+    </layout>
+</view>

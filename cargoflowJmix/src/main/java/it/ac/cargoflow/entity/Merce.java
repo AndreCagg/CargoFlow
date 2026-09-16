@@ -6,7 +6,6 @@ import io.jmix.core.annotation.DeletedDate;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
 import io.jmix.core.entity.annotation.OnDelete;
 import io.jmix.core.metamodel.annotation.JmixEntity;
-import io.jmix.datatoolsflowui.view.entityinspector.ShowMode;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedBy;
@@ -19,7 +18,8 @@ import java.util.UUID;
 
 @JmixEntity
 @Table(name = "MERCE", indexes = {
-        @Index(name = "IDX_MERCE_INCARICO", columnList = "INCARICO_ID")
+        @Index(name = "IDX_MERCE_INCARICO", columnList = "INCARICO_ID"),
+        @Index(name = "IDX_MERCE_ELEMENTO_ADR", columnList = "ELEMENTO_ADR_ID")
 })
 @Entity
 public class Merce {
@@ -39,7 +39,7 @@ public class Merce {
     private Incarico incarico;
 
     @Column(name = "MERCE_TIPO")
-    private String merce_tipo;
+    private Integer merce_tipo;
 
     @Column(name = "PESO_KG")
     private Double peso_kg;
@@ -47,16 +47,18 @@ public class Merce {
     @Column(name = "VOLUME_M3")
     private Double volume_m3;
 
-    @Column(name = "FRAGILE", nullable = false)
-    @NotNull
+    @Column(name = "FRAGILE")
     private Boolean fragile = false;
 
-    @Column(name = "EPAL", nullable = false)
-    @NotNull
+    @Column(name = "EPAL")
     private Boolean epal = false;
 
     @Column(name = "ID_EPAL", length = 50)
     private String id_epal;
+
+    @JoinColumn(name = "ELEMENTO_ADR_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ElementoADR elementoAdr;
 
     @Column(name = "VERSION", nullable = false)
     @Version
@@ -85,6 +87,22 @@ public class Merce {
     @DeletedDate
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
+
+    public void setMerce_tipo(TipoMerce merce_tipo) {
+        this.merce_tipo = merce_tipo == null ? null : merce_tipo.getId();
+    }
+
+    public TipoMerce getMerce_tipo() {
+        return merce_tipo == null ? null : TipoMerce.fromId(merce_tipo);
+    }
+
+    public ElementoADR getElementoAdr() {
+        return elementoAdr;
+    }
+
+    public void setElementoAdr(ElementoADR elementoAdr) {
+        this.elementoAdr = elementoAdr;
+    }
 
     public String getId_epal() {
         return id_epal;
@@ -124,14 +142,6 @@ public class Merce {
 
     public void setPeso_kg(Double peso_kg) {
         this.peso_kg = peso_kg;
-    }
-
-    public ShowMode getMerce_tipo() {
-        return merce_tipo == null ? null : ShowMode.fromId(merce_tipo);
-    }
-
-    public void setMerce_tipo(ShowMode merce_tipo) {
-        this.merce_tipo = merce_tipo == null ? null : merce_tipo.getId();
     }
 
     public Incarico getIncarico() {

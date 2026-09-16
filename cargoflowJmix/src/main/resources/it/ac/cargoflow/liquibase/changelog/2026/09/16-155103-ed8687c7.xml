@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS"
+        logicalFilePath="it/ac/cargoflow/liquibase/changelog/2026/09/16-155103-ed8687c7.xml">
+    <changeSet id="1" author="cargoflowJmix">
+        <createTable tableName="ELEMENTO_ADR_ESERCIZI_LINK">
+            <column name="ELEMENTO_A_D_R_ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ELEMENTO_ADR_ESERCIZI_LINK"/>
+            </column>
+            <column name="ESERCIZI_ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ELEMENTO_ADR_ESERCIZI_LINK"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="cargoflowJmix">
+        <createTable tableName="ESERCIZI">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ESERCIZI"/>
+            </column>
+            <column name="CODICE" type="CHAR"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="cargoflowJmix">
+        <addForeignKeyConstraint baseColumnNames="ELEMENTO_A_D_R_ID" baseTableName="ELEMENTO_ADR_ESERCIZI_LINK"
+                                 constraintName="FK_ELEADRESE_ON_ELEMENTO_A_D_R" referencedColumnNames="ID"
+                                 referencedTableName="ELEMENTO_ADR"/>
+    </changeSet>
+    <changeSet id="4" author="cargoflowJmix">
+        <addForeignKeyConstraint baseColumnNames="ESERCIZI_ID" baseTableName="ELEMENTO_ADR_ESERCIZI_LINK"
+                                 constraintName="FK_ELEADRESE_ON_ESERCIZI" referencedColumnNames="ID"
+                                 referencedTableName="ESERCIZI"/>
+    </changeSet>
+    <changeSet id="5" author="cargoflowJmix">
+        <dropColumn columnName="esercizio" tableName="elemento_adr"/>
+    </changeSet>
+</databaseChangeLog>

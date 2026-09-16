@@ -12,4 +12,28 @@
         <item view="Sede.list" title="msg://it.ac.cargoflow.view.sede/sedeListView.title"/>
     </menu>
 
+    <menu id="ADR" title="msg:///adrmenu" opened="true">
+        <item view="ElementoADR.list" title="msg://it.ac.cargoflow.view.elementoadr/elementoADRListView.title"/>
+        <item view="ClassePericolo.list"
+              title="msg://it.ac.cargoflow.view.classepericolo/classePericoloListView.title"/>
+        <item view="ImballaggioComune.list"
+              title="msg://it.ac.cargoflow.view.imballaggiocomune/imballaggioComuneListView.title"/>
+        <item view="DisposizioniCisternaADR.list"
+              title="msg://it.ac.cargoflow.view.disposizionicisternaadr/disposizioniCisternaADRListView.title"/>
+        <item view="TrasportoRinfusa.list"
+              title="msg://it.ac.cargoflow.view.trasportorinfusa/trasportoRinfusaListView.title"/>
+        <item view="TrasportoColli.list"
+              title="msg://it.ac.cargoflow.view.trasportocolli/trasportoColliListView.title"/>
+        <item view="EtichetteADR.list" title="msg://it.ac.cargoflow.view.etichetteadr/etichetteADRListView.title"/>
+        <item view="DisposizioniSpecialiADR.list"
+              title="msg://it.ac.cargoflow.view.disposizionispecialiadr/disposizioniSpecialiADRListView.title"/>
+        <item view="IstruzioniImballaggioADR.list"
+              title="msg://it.ac.cargoflow.view.istruzioniimballaggioadr/istruzioniImballaggioADRListView.title"/>
+        <item view="DisposizioniSpecialiImballADR.list"
+              title="msg://it.ac.cargoflow.view.disposizionispecialiimballadr/disposizioniSpecialiImballADRListView.title"/>
+        <item view="CaricoScaricoMovimentazione.list"
+              title="msg://it.ac.cargoflow.view.caricoscaricomovimentazione/caricoScaricoMovimentazioneListView.title"/>
+        <item view="Esercizi.list" title="msg://it.ac.cargoflow.view.esercizi/eserciziListView.title"/>
+    </menu>
+
 </menu-config>

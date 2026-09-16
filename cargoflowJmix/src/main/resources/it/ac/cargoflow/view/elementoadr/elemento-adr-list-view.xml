@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
+      title="msg://elementoADRListView.title"
+      focusComponent="elementoADRsDataGrid">
+    <data>
+        <collection id="elementoADRsDc"
+                    class="it.ac.cargoflow.entity.ElementoADR">
+            <fetchPlan extends="_base"/>
+            <loader id="elementoADRsDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from ElementoADR e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <genericFilter component="genericFilter"/>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <actions>
+        <action id="selectAction" type="lookup_select"/>
+        <action id="discardAction" type="lookup_discard"/>
+    </actions>
+    <layout>
+        <genericFilter id="genericFilter"
+                       dataLoader="elementoADRsDl">
+            <properties include=".*"/>
+        </genericFilter>
+        <hbox id="buttonsPanel" classNames="buttons-panel">
+            <startSlot>
+                <button id="createButton" action="elementoADRsDataGrid.createAction"/>
+                <button id="editButton" action="elementoADRsDataGrid.editAction"/>
+                <button id="removeButton" action="elementoADRsDataGrid.removeAction"/>
+            </startSlot>
+            <endSlot>
+                <simplePagination id="pagination" dataLoader="elementoADRsDl"/>
+            </endSlot>
+        </hbox>
+        <dataGrid id="elementoADRsDataGrid"
+                  width="100%"
+                  minHeight="20em"
+                  dataContainer="elementoADRsDc"
+                  columnReorderingAllowed="true">
+            <actions>
+                <action id="createAction" type="list_create"/>
+                <action id="editAction" type="list_edit"/>
+                <action id="removeAction" type="list_remove"/>
+            </actions>
+            <columns resizable="true">
+                <column property="onu"/>
+                <column property="denominazione"/>
+                <column property="gruppoImballaggio"/>
+                <column property="quantitaLimitate"/>
+                <column property="quantitaEsenti"/>
+                <column property="codiceCisterna"/>
+                <column property="disposizioniCisterna"/>
+                <column property="categoriaTrasporto"/>
+                <column property="limiteGalleria"/>
+                <column property="codRestrizioneA"/>
+                <column property="codRestrizioneB"/>
+                <column property="esercizi"/>
+                <column property="codicePericolo"/>
+            </columns>
+        </dataGrid>
+        <hbox id="lookupActions" visible="false">
+            <button id="selectButton" action="selectAction"/>
+            <button id="discardButton" action="discardAction"/>
+        </hbox>
+    </layout>
+</view>

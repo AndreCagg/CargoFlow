@@ -4,6 +4,14 @@
       title="msg://incaricoDetailView.title"
       focusComponent="form">
     <data>
+        <collection id="contrassegnoTipoesDc" class="it.ac.cargoflow.entity.ContrassegnoTipo">
+            <loader id="contrassegnoTipoesDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from ContrassegnoTipo e]]>
+                </query>
+            </loader>
+            <fetchPlan extends="_base"/>
+        </collection>
         <collection id="clientiDc" class="it.ac.cargoflow.entity.Cliente">
             <loader id="clientiDl" readOnly="true">
                 <query>
@@ -68,36 +76,38 @@
             <textField id="ddtField" property="ddt"/>
             <datePicker id="data_consegna_previstaField" property="data_consegna_prevista"/>
             <textField id="valore_doganaleField" property="valore_doganale"/>
-            <checkbox id="ritiroField" property="ritiro"/>
             <textField id="valore_assicurazioneField" property="valore_assicurazione"/>
             <entityComboBox id="mittenteField" property="mittente" itemsContainer="clientiDc" allowCustomValue="true"/>
             <entityComboBox id="destinatarioField" property="destinatario" itemsContainer="clientiDc"
                             allowCustomValue="true"/>
-            <entityPicker id="aziendaField" property="azienda">
-                <actions>
-                    <action id="entityLookupAction" type="entity_lookup"/>
-                    <action id="entityClearAction" type="entity_clear"/>
-                </actions>
-            </entityPicker>
-            <checkbox id="contrassegnoField" property="contrassegno"/>
             <textField id="contrassegno_valoreField" property="contrassegno_valore"/>
-            <entityComboBox id="contrassegno_tipoField" property="contrassegno_tipo"/>
-            <textArea id="noteField" height="9.5em" property="note"/>
+            <entityComboBox id="contrassegno_tipoField" property="contrassegno_tipo"
+                            itemsContainer="contrassegnoTipoesDc"/>
             <hbox id="sedeMittDest">
-                <entityPicker id="sedeMitt" label="Sede mittente" metaClass="Cliente">
+                <entityComboBox id="sedeMitt" label="Sede mittente" metaClass="Cliente" itemsContainer="clientiDc">
                     <actions>
-                        <action id="entityLookupAction" type="entity_lookup"/>
                         <action id="entityClearAction" type="entity_clear"/>
                     </actions>
-                </entityPicker>
-                <entityPicker id="sedeDest" label="Sede destinatario" metaClass="Cliente">
+                </entityComboBox>
+                <entityComboBox id="sedeDest" label="Sede destinatario" metaClass="Cliente" itemsContainer="clientiDc">
                     <actions>
-                        <action id="entityLookupAction" type="entity_lookup"/>
                         <action id="entityClearAction" type="entity_clear"/>
                     </actions>
-                </entityPicker>
+                </entityComboBox>
             </hbox>
+            <textArea id="noteField" height="9.5em" property="note"/>
+        <vbox>
+            <hbox>
+                <checkbox id="contrassegnoField" property="contrassegno" dataContainer="incaricoDc"
+                          label="Contrassegno"/>
+                <checkbox id="ritiroField" property="ritiro" dataContainer="incaricoDc" label="Ritiro"/>
+            </hbox>
+            <checkbox id="nonConsegnare" label="Non effettuare la consegna dopo il ritiro"/>
+        </vbox>
+
         </formLayout>
+
+        <h3 text="Merce"/>
         <hbox id="merceButtonsPanel" classNames="buttons-panel">
             <button action="merceDataGrid.createAction"/>
             <button action="merceDataGrid.editAction"/>
@@ -128,12 +138,14 @@
             </columns>
         </dataGrid>
 
+        <h3 text="Fasce Orarie"/>
         <hbox id="fasceOrarieButtonsPanel" classNames="buttons-panel">
             <button action="fasceOrarieDataGrid.createAction"/>
             <button action="fasceOrarieDataGrid.editAction"/>
             <button action="fasceOrarieDataGrid.removeAction"/>
         </hbox>
-        <dataGrid id="fasceOrarieDataGrid" dataContainer="fasceOrarieDc" width="100%" height="100%">
+        <dataGrid id="fasceOrarieDataGrid" dataContainer="fasceOrarieDc" width="100%" height="100%"
+                  allRowsVisible="true">
             <actions>
                 <action id="createAction" type="list_create">
                     <properties>
@@ -148,12 +160,14 @@
                 <action id="removeAction" type="list_remove"/>
             </actions>
             <columns>
-                <column property="giorno"/>
+                <column key="tipo" header="Tipologia" visible="false"/>
+                <column key="giorni" header="Giorni"/>
                 <column property="dalle"/>
                 <column property="alle"/>
             </columns>
         </dataGrid>
 
+        <h3 id="txtSediConsegna" text="Sedi di consegna/ritiro"/>
         <hbox id="sedi_mitt_destButtonsPanel" classNames="buttons-panel">
             <button action="sedi_mitt_destDataGrid.createAction"/>
             <button action="sedi_mitt_destDataGrid.removeAction"/>
@@ -183,7 +197,7 @@
                 <column property="sede_destinatario.ragioneSociale"/>
                 <column property="sede_destinatario.indirizzo"/>
                 <column property="sede_destinatario.cap"/>
-                <column property="ultimoStato"/>
+                <column property="ultimoStato" header="Stato"/>
             </columns>
         </dataGrid>
         <hbox id="detailActions">

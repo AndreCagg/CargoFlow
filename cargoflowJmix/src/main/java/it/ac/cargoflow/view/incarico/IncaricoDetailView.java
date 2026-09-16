@@ -5,8 +5,11 @@ import com.vaadin.flow.component.BlurNotifier;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.combobox.ComboBoxBase;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.renderer.TextRenderer;
 import com.vaadin.flow.router.Route;
 import io.jmix.core.DataManager;
 import io.jmix.core.EntityStates;
@@ -15,13 +18,11 @@ import io.jmix.flowui.DialogWindows;
 import io.jmix.flowui.component.checkbox.JmixCheckbox;
 import io.jmix.flowui.component.combobox.EntityComboBox;
 import io.jmix.flowui.component.grid.DataGrid;
+import io.jmix.flowui.component.grid.DataGridColumn;
 import io.jmix.flowui.component.textfield.TypedTextField;
 import io.jmix.flowui.component.validation.ValidationErrors;
 import io.jmix.flowui.component.valuepicker.EntityPicker;
-import io.jmix.flowui.model.CollectionChangeType;
-import io.jmix.flowui.model.CollectionContainer;
-import io.jmix.flowui.model.CollectionLoader;
-import io.jmix.flowui.model.DataContext;
+import io.jmix.flowui.model.*;
 import io.jmix.flowui.view.*;
 import it.ac.cargoflow.app.AziendaSedeContext;
 import it.ac.cargoflow.conf.Costants;
@@ -34,7 +35,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Route(value = "incaricoes/:id", layout = MainView.class)
 @ViewController(id = "Incarico.detail")
@@ -79,10 +82,10 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
     private TextField contrassegno_valoreField;
 
     @ViewComponent
-    private EntityPicker sedeMitt;
+    private EntityComboBox<Cliente> sedeMitt;
 
     @ViewComponent
-    private EntityPicker sedeDest;
+    private EntityComboBox<Cliente> sedeDest;
 
     @ViewComponent
     private HorizontalLayout sedeMittDest;
@@ -106,6 +109,16 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
 
     @Autowired
     private CurrentAuthentication auth;
+    @ViewComponent
+    private CollectionPropertyContainer<IncaricoFasciaOraria> fasceOrarieDc;
+    @ViewComponent
+    private DataGrid<IncaricoFasciaOraria> fasceOrarieDataGrid;
+    @ViewComponent
+    private JmixCheckbox ritiroField;
+    @ViewComponent
+    private H3 txtSediConsegna;
+    @ViewComponent
+    private JmixCheckbox nonConsegnare;
 
     @Subscribe("ldvField")
     public void onLdvFieldValueChange(final AbstractField.ComponentValueChangeEvent<TypedTextField<String>, String> event) {
@@ -168,27 +181,35 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
     }
 
     @Subscribe("sedeMitt")
-    public void onSedeMittComponentValueChange(final AbstractField.ComponentValueChangeEvent<EntityPicker<Cliente>, Cliente> event) {
+    public void onSedeMittComponentValueChange(final AbstractField.ComponentValueChangeEvent<EntityComboBox<Cliente>, Cliente> event) {
         Cliente mitt = event.getSource().getValue();
         Cliente dest = (Cliente) this.sedeDest.getValue();
 
-        if(mitt!=null && dest!=null && mitt.equals(dest)){
-            this.setInvalidSedeMittDest(true);
-        }else{
-            this.setInvalidSedeMittDest(false);
+        boolean b = mitt!=null && dest!=null && mitt.equals(dest);
+
+        this.setInvalidSedeMittDest(b);
+
+        if (ritiroField.getValue()){
+            eliminaFasceOrarie(false);
+            aggiornaFasceOrarie(mitt != null ? mitt : mittenteField.getValue(), false);
         }
     }
 
     @Subscribe("sedeDest")
-    public void onSedeDestComponentValueChange(final AbstractField.ComponentValueChangeEvent<EntityPicker<Cliente>, Cliente> event) {
+    public void onSedeDestComponentValueChange(final AbstractField.ComponentValueChangeEvent<EntityComboBox<Cliente>, Cliente> event) {
         Cliente dest = event.getSource().getValue();
         Cliente mitt = (Cliente) this.sedeMitt.getValue();
 
-        if(mitt!=null && dest!=null && mitt.equals(dest)){
-            this.setInvalidSedeMittDest(true);
-        }else{
-            this.setInvalidSedeMittDest(false);
+        boolean b = mitt!=null && dest!=null && mitt.equals(dest);
+
+        this.setInvalidSedeMittDest(b);
+
+        if (!b){
+            eliminaFasceOrarie(true);
         }
+
+        aggiornaFasceOrarie(dest != null ? dest : destinatarioField.getValue(), true);
+
     }
 
     private void setInvalidSedeMittDest(Boolean invalid){
@@ -327,9 +348,30 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
             this.sedeMittDest.setVisible(true);
             this.sedi_mitt_destDataGrid.setVisible(false);
             this.sedi_mitt_destButtonsPanel.setVisible(false);
+            txtSediConsegna.setVisible(false);
         } else {
             this.sedeMittDest.setVisible(false);
         }
+
+        nonConsegnare.setVisible(ritiroField.getValue());
+
+        DataGridColumn<IncaricoFasciaOraria> fo = fasceOrarieDataGrid.getColumnByKey("giorni");
+        fo.setRenderer(new TextRenderer<>(item -> {
+            List<String> giorni = new ArrayList<>();
+            if (Boolean.TRUE.equals(item.getLun())) giorni.add("Lun");
+            if (Boolean.TRUE.equals(item.getMar())) giorni.add("Mar");
+            if (Boolean.TRUE.equals(item.getMer())) giorni.add("Mer");
+            if (Boolean.TRUE.equals(item.getGio())) giorni.add("Gio");
+            if (Boolean.TRUE.equals(item.getVen())) giorni.add("Ven");
+            if (Boolean.TRUE.equals(item.getSab())) giorni.add("Sab");
+            if (Boolean.TRUE.equals(item.getDom())) giorni.add("Dom");
+
+            return giorni.stream().collect(Collectors.joining(", "));
+        }));
+
+        DataGridColumn<IncaricoFasciaOraria> tipo = fasceOrarieDataGrid.getColumnByKey("tipo");
+
+        tipo.setRenderer(new TextRenderer<>(item -> Boolean.TRUE.equals(item.getConsegna()) ? "CONSEGNA" : "RITIRO"));
     }
 
     private void enableContrassegno(Boolean en) {
@@ -383,6 +425,101 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
                     }
                 }
             }
+        }
+    }
+
+    @Subscribe("destinatarioField")
+    public void onDestinatarioFieldComponentValueChange1(final AbstractField.ComponentValueChangeEvent<EntityComboBox<Cliente>, Cliente> event) {
+        Cliente c = event.getValue();
+        eliminaFasceOrarie(true);
+        aggiornaFasceOrarie(c, true);
+    }
+
+    private void aggiornaFasceOrarie(Cliente c, boolean consegna){
+        if(c!=null){
+            List<FasciaOraria> lst = c.getFasceOrarie();
+            if(!lst.isEmpty()){
+                List<IncaricoFasciaOraria> ifolst = new ArrayList<>();
+
+                for(FasciaOraria fo : lst){
+                    if(consegna && Boolean.TRUE.equals(fo.getSolo_ritiro())) continue;
+
+                    if(!consegna && Boolean.TRUE.equals(fo.getSolo_consegna())) continue;
+
+                    IncaricoFasciaOraria ifo = dm.create(IncaricoFasciaOraria.class);
+                    ifo = dc.merge(ifo);
+
+                    ifo.setLun(fo.getLun());
+                    ifo.setLun(fo.getLun());
+                    ifo.setMar(fo.getMar());
+                    ifo.setMer(fo.getMer());
+                    ifo.setGio(fo.getGio());
+                    ifo.setVen(fo.getVen());
+                    ifo.setSab(fo.getSab());
+                    ifo.setDom(fo.getDom());
+                    ifo.setDalle(fo.getDalle());
+                    ifo.setAlle(fo.getAlle());
+                    ifo.setIncarico(this.getEditedEntity());
+                    ifo.setConsegna(consegna);
+                    ifo.setRitiro(!consegna);
+                    ifolst.add(ifo);
+                }
+
+                fasceOrarieDc.getMutableItems().addAll(ifolst);
+            }
+        }
+    }
+
+    @Subscribe(id = "ritiroField", subject = "clickListener")
+    public void onRitiroFieldClick(final ClickEvent<JmixCheckbox> event) {
+        boolean b = event.getSource().getValue();
+        DataGrid.Column<IncaricoFasciaOraria> ifo = fasceOrarieDataGrid.getColumnByKey("tipo");
+        ifo.setVisible(b);
+
+        Cliente sedeMitt = (Cliente) this.sedeMitt.getValue();
+        if(b)
+            aggiornaFasceOrarie(sedeMitt != null ? sedeMitt : mittenteField.getValue(), false);
+        else{
+            eliminaFasceOrarie(false);
+            nonConsegnare.setValue(b);
+        }
+
+        nonConsegnare.setVisible(b);
+    }
+
+    @Subscribe("nonConsegnare")
+    public void onNonConsegnareComponentValueChange(final AbstractField.ComponentValueChangeEvent<JmixCheckbox, Boolean> event) {
+        Cliente sedeDest = this.sedeDest.getValue();
+
+        eliminaFasceOrarie(true);
+
+        if(!event.getValue()) {
+            aggiornaFasceOrarie(sedeDest != null ? sedeDest : destinatarioField.getValue(), true);
+        }
+    }
+
+    private void eliminaFasceOrarie(boolean consegna){
+        List<IncaricoFasciaOraria> lst = fasceOrarieDc.getItems();
+        List<IncaricoFasciaOraria> rimuovere = new ArrayList<>();
+
+        for(IncaricoFasciaOraria f : lst){
+            if(!consegna && f.getRitiro()){
+                rimuovere.add(f);
+            }
+
+            if(consegna && f.getConsegna()){
+                rimuovere.add(f);
+            }
+        }
+
+        fasceOrarieDc.getMutableItems().removeAll(rimuovere);
+    }
+
+    @Subscribe("mittenteField")
+    public void onMittenteFieldComponentValueChange1(final AbstractField.ComponentValueChangeEvent<EntityComboBox<Cliente>, Cliente> event) {
+        if(ritiroField.getValue()){
+            eliminaFasceOrarie(false);
+            aggiornaFasceOrarie(event.getValue(), false);
         }
     }
 }

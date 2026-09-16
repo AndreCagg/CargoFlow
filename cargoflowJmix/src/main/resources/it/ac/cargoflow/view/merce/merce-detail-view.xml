@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://merceDetailView.title"
+      focusComponent="form">
+    <data>
+        <collection id="elementoADRsDc" class="it.ac.cargoflow.entity.ElementoADR">
+            <loader id="elementoADRsDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from ElementoADR e]]>
+                </query>
+            </loader>
+            <fetchPlan extends="_base"/>
+        </collection>
+        <instance id="merceDc"
+                  class="it.ac.cargoflow.entity.Merce">
+            <fetchPlan extends="_base">
+                <property name="elementoAdr" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="merceDl"/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveCloseAction" type="detail_saveClose"/>
+        <action id="closeAction" type="detail_close"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="merceDc">
+            <responsiveSteps>
+                <responsiveStep minWidth="0" columns="1"/>
+                <responsiveStep minWidth="40em" columns="2"/>
+            </responsiveSteps>
+            <textField id="segnacolloField" property="segnacollo"/>
+            <select id="merce_tipoField" property="merce_tipo"/>
+            <textField id="peso_kgField" property="peso_kg"/>
+            <textField id="volume_m3Field" property="volume_m3"/>
+            <vbox padding="false">
+                <checkbox id="fragileField" property="fragile" dataContainer="merceDc"
+                          label="msg://fragileField.label" width="100%"/>
+                <checkbox id="epalField" property="epal" dataContainer="merceDc" label="msg://epalField.label"
+                          width="100%"/>
+                <checkbox id="adr" label="msg://adr.label" width="100%"/>
+            </vbox>
+
+            <vbox padding="false">
+                <textField id="id_epalField" property="id_epal" dataContainer="merceDc"
+                           label="msg://id_epalField.label" width="100%"/>
+                <entityComboBox id="elementoAdrField" property="elementoAdr" dataContainer="merceDc"
+                                label="msg://elementoAdrField.label" width="100%" itemsContainer="elementoADRsDc">
+                    <actions>
+                        <action id="entityLookupAction" type="entity_lookup"/>
+                        <action id="entityClearAction" type="entity_clear"/>
+                    </actions>
+                </entityComboBox>
+            </vbox>
+        </formLayout>
+        <hbox id="detailActions">
+            <button id="saveAndCloseButton" action="saveCloseAction"/>
+            <button id="closeButton" action="closeAction"/>
+        </hbox>
+    </layout>
+</view>

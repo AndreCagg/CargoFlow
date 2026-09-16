@@ -24,17 +24,33 @@
                 <responsiveStep minWidth="0" columns="1"/>
                 <responsiveStep minWidth="40em" columns="2"/>
             </responsiveSteps>
-            <select id="giornoField" property="giorno"/>
             <timePicker id="dalleField" property="dalle"/>
             <timePicker id="alleField" property="alle"/>
-            <entityPicker id="incaricoField" property="incarico">
+            <entityPicker id="incaricoField" property="incarico" visible="false">
                 <actions>
                     <action id="entityLookupAction" type="entity_lookup"/>
                     <action id="entityClearAction" type="entity_clear"/>
                 </actions>
             </entityPicker>
-            <checkbox id="soloRitiroField" property="soloRitiro"/>
-            <checkbox id="soloConsegnaField" property="soloConsegna"/>
+            <vbox padding="false">
+                <hbox>
+                    <checkbox id="solo_ritiroField" property="ritiro" dataContainer="incaricoFasciaOrariaDc" label="Solo ritiro"/>
+                    <checkbox id="solo_consegnaField" property="consegna" dataContainer="incaricoFasciaOrariaDc" label="Solo consegna"/>
+                </hbox>
+                <hbox>
+                    <checkbox id="sempre" label="Tutti i giorni" css="background-color: #F2F2F2; border-radius: 15px; padding: 5px"/>
+                    <checkbox id="lunven" label="Lun - Ven" css="background-color: #F2F2F2; border-radius: 15px; padding: 5px"/>
+                </hbox>
+                <hbox>
+                    <checkbox id="lun" property="lun" dataContainer="incaricoFasciaOrariaDc" label="Lunedì"/>
+                    <checkbox id="mar" property="mar" dataContainer="incaricoFasciaOrariaDc" label="Martedì"/>
+                    <checkbox id="mer" property="mer" dataContainer="incaricoFasciaOrariaDc" label="Mercoledì"/>
+                    <checkbox id="gio" property="gio" dataContainer="incaricoFasciaOrariaDc" label="Giovedì"/>
+                    <checkbox id="ven" property="ven" dataContainer="incaricoFasciaOrariaDc" label="Venerdì"/>
+                    <checkbox id="sab" property="sab" dataContainer="incaricoFasciaOrariaDc" label="Sabato"/>
+                    <checkbox id="dom" property="dom" dataContainer="incaricoFasciaOrariaDc" label="Domenica"/>
+                </hbox>
+            </vbox>
         </formLayout>
         <hbox id="detailActions">
             <button id="saveAndCloseButton" action="saveCloseAction"/>

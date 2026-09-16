@@ -5,7 +5,10 @@ import io.jmix.core.annotation.DeletedBy;
 import io.jmix.core.annotation.DeletedDate;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
 import io.jmix.core.entity.annotation.OnDelete;
-import io.jmix.core.metamodel.annotation.*;
+import io.jmix.core.entity.annotation.OnDeleteInverse;
+import io.jmix.core.metamodel.annotation.Composition;
+import io.jmix.core.metamodel.annotation.InstanceName;
+import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -57,20 +60,24 @@ public class Incarico {
     @Column(name = "VALORE_ASSICURAZIONE")
     private Double valore_assicurazione;
 
+    @OnDeleteInverse(DeletePolicy.DENY)
     @NotNull
     @JoinColumn(name = "MITTENTE_ID", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Cliente mittente;
 
+    @OnDeleteInverse(DeletePolicy.DENY)
     @NotNull
     @JoinColumn(name = "DESTINATARIO_ID", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Cliente destinatario;
 
+    @OnDelete(DeletePolicy.DENY)
     @OneToMany(mappedBy = "incarico")
     @Composition
     private List<IncaricoFasciaOraria> fasceOrarie;
 
+    @OnDeleteInverse(DeletePolicy.DENY)
     @OnDelete(DeletePolicy.CASCADE)
     @Composition
     @OneToMany(mappedBy = "incarico")
@@ -86,6 +93,7 @@ public class Incarico {
     @OneToOne(fetch = FetchType.LAZY)
     private Incarico child;
 
+    @OnDeleteInverse(DeletePolicy.DENY)
     @JoinColumn(name = "AZIENDA_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Azienda azienda;
@@ -96,6 +104,7 @@ public class Incarico {
     @Column(name = "CONTRASSEGNO_VALORE")
     private Double contrassegno_valore;
 
+    @OnDeleteInverse(DeletePolicy.DENY)
     @JoinColumn(name = "CONTRASSEGNO_TIPO_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private ContrassegnoTipo contrassegno_tipo;
