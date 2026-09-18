@@ -26,9 +26,12 @@
                 <responsiveStep minWidth="40em" columns="2"/>
             </responsiveSteps>
             <textField id="targaField" property="targa"/>
-            <checkbox id="adrField" property="adr" label="msg://adrField.label"/>
-            <checkbox id="cisternaAdrField" property="cisternaAdr" label="msg://cisternaAdrField.label"
-                      visible="false"/>
+
+            <hbox>
+                <checkbox id="adrField" property="adr" label="msg://adrField.label" dataContainer="veicoliTrasportoDc"/>
+                <checkbox id="cisternaAdrField" property="cisternaAdr" label="msg://cisternaAdrField.label"
+                          visible="false" dataContainer="veicoliTrasportoDc"/>
+            </hbox>
             <textField id="codCisterna" label="msg://codCisterna.label" visible="false"/>
         </formLayout>
         <vbox id="caratteristiche" padding="false">

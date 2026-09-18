@@ -13,7 +13,9 @@ import io.jmix.flowui.component.grid.DataGrid;
 import io.jmix.flowui.component.textfield.TypedTextField;
 import io.jmix.flowui.kit.component.button.JmixButton;
 import io.jmix.flowui.model.CollectionPropertyContainer;
+import io.jmix.flowui.model.DataContext;
 import io.jmix.flowui.view.*;
+import it.ac.cargoflow.app.AziendaSedeContext;
 import it.ac.cargoflow.entity.*;
 import it.ac.cargoflow.view.disposizionicisternaadr.DisposizioniCisternaADRListView;
 import it.ac.cargoflow.view.main.MainView;
@@ -55,6 +57,10 @@ public class VeicoliTrasportoDetailView extends StandardDetailView<VeicoliTraspo
     private JmixButton addColli;
     @ViewComponent
     private JmixButton addRinfusa;
+    @ViewComponent
+    private DataContext dc;
+    @Autowired
+    private AziendaSedeContext asc;
 
     @Subscribe
     public void onInit(final InitEvent event) {
@@ -66,7 +72,9 @@ public class VeicoliTrasportoDetailView extends StandardDetailView<VeicoliTraspo
 
                 selezionati.forEach(item -> {
                     TrasportoColli entita = (TrasportoColli) item;
-                    entita.setTipoRequisito(TipoRequisitiVeicolo.TRASPORTO_COLLI);
+                    TrasportoColli merged = dc.merge(entita);
+                    merged.setTipoRequisito(TipoRequisitiVeicolo.TRASPORTO_COLLI);
+                    caratteristicheAdrDc.getMutableItems().add(merged);
                 });
             }
         });
@@ -79,7 +87,9 @@ public class VeicoliTrasportoDetailView extends StandardDetailView<VeicoliTraspo
 
                 selezionati.forEach(item -> {
                     TrasportoRinfusa entita = (TrasportoRinfusa) item;
-                    entita.setTipoRequisito(TipoRequisitiVeicolo.TRASPORTO_RINFUSA);
+                    TrasportoRinfusa merged = dc.merge(entita);
+                    merged.setTipoRequisito(TipoRequisitiVeicolo.TRASPORTO_RINFUSA);
+                    caratteristicheAdrDc.getMutableItems().add(merged);
                 });
             }
         });
@@ -92,17 +102,19 @@ public class VeicoliTrasportoDetailView extends StandardDetailView<VeicoliTraspo
 
                 selezionati.forEach(item -> {
                     DisposizioniCisternaADR entita = (DisposizioniCisternaADR) item;
-                    entita.setTipoRequisito(TipoRequisitiVeicolo.DISPOSIZIONI_CISTERNA);
+                    DisposizioniCisternaADR merged = dc.merge(entita);
+                    merged.setTipoRequisito(TipoRequisitiVeicolo.DISPOSIZIONI_CISTERNA);
+                    caratteristicheAdrDc.getMutableItems().add(merged);
                 });
             }
         });
 
         caratteristicheAdrDataGrid.getColumnByKey("tipo")
                 .setRenderer(new TextRenderer<>(obj -> {
-                    return switch(obj){
-                        case TrasportoColli a-> "Trasporto Colli";
-                        case TrasportoRinfusa a-> "Trasporto Rinfusa";
-                        case DisposizioniCisternaADR a-> "Disposizioni Cisterna";
+                    return switch(obj.getTipoRequisito()){
+                        case TRASPORTO_COLLI -> "Trasporto Colli";
+                        case TRASPORTO_RINFUSA -> "Trasporto Rinfusa";
+                        case DISPOSIZIONI_CISTERNA -> "Disposizioni Cisterna";
                         default -> "";
                     };
                 }));
@@ -129,6 +141,10 @@ public class VeicoliTrasportoDetailView extends StandardDetailView<VeicoliTraspo
         cisternaAdrField.setVisible(b);
         caratteristiche.setVisible(b);
 
+        if(event.isFromClient()){
+            caratteristicheAdrDc.setItems(List.of());
+        }
+
         if(!b){
             cisternaAdrField.setValue(b);
             caratteristicheAdrDc.setItems(List.of());
@@ -143,10 +159,20 @@ public class VeicoliTrasportoDetailView extends StandardDetailView<VeicoliTraspo
         disposizioniCisterna.setVisible(b);
         addColli.setVisible(!b);
         addRinfusa.setVisible(!b);
+
+        if(event.isFromClient()){
+            caratteristicheAdrDc.setItems(List.of());
+        }
+
         if(!b){
             codCisterna.setValue("");
 
 
         }
+    }
+
+    @Subscribe
+    public void onBeforeSave(final BeforeSaveEvent event) {
+        getEditedEntity().setSede(asc.getSede());
     }
 }

@@ -10,6 +10,7 @@
         <item view="FasciaOraria.list" title="msg://it.ac.cargoflow.view.fasciaoraria/fasciaOrariaListView.title"/>
         <item view="Azienda.list" title="msg://it.ac.cargoflow.view.azienda/aziendaListView.title"/>
         <item view="Sede.list" title="msg://it.ac.cargoflow.view.sede/sedeListView.title"/>
+        <item view="LQ.list" title="msg://it.ac.cargoflow.view.lq/LQListView.title"/>
     </menu>
 
     <menu id="ADR" title="msg:///adrmenu" opened="true">

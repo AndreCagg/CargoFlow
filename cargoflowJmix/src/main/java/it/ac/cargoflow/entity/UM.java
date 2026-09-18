@@ -7,7 +7,8 @@ import org.springframework.lang.Nullable;
 public enum UM implements EnumClass<Integer> {
 
     L(10),
-    KG(20);
+    KG(20),
+    ML(30);
 
     private final Integer id;
 

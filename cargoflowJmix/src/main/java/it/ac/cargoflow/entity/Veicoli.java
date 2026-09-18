@@ -1,8 +1,10 @@
 package it.ac.cargoflow.entity;
 
+import io.jmix.core.DeletePolicy;
 import io.jmix.core.annotation.DeletedBy;
 import io.jmix.core.annotation.DeletedDate;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
+import io.jmix.core.entity.annotation.OnDeleteInverse;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedBy;
@@ -15,7 +17,8 @@ import java.util.UUID;
 
 @JmixEntity
 @Table(name = "VEICOLI", indexes = {
-        @Index(name = "IDX_VEICOLI_AZIENDA", columnList = "AZIENDA_ID")
+        @Index(name = "IDX_VEICOLI_AZIENDA", columnList = "AZIENDA_ID"),
+        @Index(name = "IDX_VEICOLI_SEDE", columnList = "SEDE_ID")
 })
 @Entity
 public class Veicoli {
@@ -23,6 +26,11 @@ public class Veicoli {
     @Column(name = "ID", nullable = false)
     @Id
     private UUID id;
+
+    @OnDeleteInverse(DeletePolicy.DENY)
+    @JoinColumn(name = "SEDE_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Sede sede;
 
     @Column(name = "VERSION", nullable = false)
     @Version
@@ -51,6 +59,14 @@ public class Veicoli {
     @DeletedDate
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
+
+    public Sede getSede() {
+        return sede;
+    }
+
+    public void setSede(Sede sede) {
+        this.sede = sede;
+    }
 
     public OffsetDateTime getDeletedDate() {
         return deletedDate;

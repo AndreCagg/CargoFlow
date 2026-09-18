@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://LQDetailView.title"
+      focusComponent="form">
+    <data>
+        <instance id="lQDc"
+                  class="it.ac.cargoflow.entity.LQ">
+            <fetchPlan extends="_base"/>
+            <loader id="lQDl"/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveCloseAction" type="detail_saveClose"/>
+        <action id="closeAction" type="detail_close"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="lQDc">
+            <responsiveSteps>
+                <responsiveStep minWidth="0" columns="1"/>
+                <responsiveStep minWidth="40em" columns="2"/>
+            </responsiveSteps>
+            <fieldSet legendText="msg://fieldSet.legendText"
+                      classNames="border rounded-m text-secondary flex flex-col">
+                <!-- Blocco 1: Combinati Interno -->
+                <vbox padding="false" spacing="false" width="100%">
+                    <textField id="valoreCombinatiInternoField"
+                               dataContainer="lQDc"
+                               property="valoreCombinatiInterno"
+                               label="msg://it.ac.cargoflow.entity/LQ.valoreCombinatiInterno"
+                               width="100%"/>
+                    <hbox padding="false" width="100%">
+                        <checkbox id="combinatoInternoNonAutorizzatoField"
+                                  dataContainer="lQDc"
+                                  property="combinatoInternoNonAutorizzato"
+                                  label="Non Autorizzato"/>
+                        <checkbox id="combinatoInternoIllimitatoField"
+                                  dataContainer="lQDc"
+                                  property="combinatoInternoIllimitato"
+                                  label="Illimitato"/>
+                        <checkbox id="combinatoInternoRiservatoField"
+                                  dataContainer="lQDc"
+                                  property="combinatoInternoRiservato"
+                                  label="Riservato"/>
+                    </hbox>
+                </vbox>
+                <!-- Blocco 2: Combinati Collo -->
+                <vbox padding="false" spacing="false" width="100%">
+                    <textField id="valoreCombinatiColloField"
+                               dataContainer="lQDc"
+                               property="valoreCombinatiCollo"
+                               label="msg://it.ac.cargoflow.entity/LQ.valoreCombinatiCollo"
+                               width="100%"/>
+                    <hbox padding="false" width="100%">
+                        <checkbox id="combinatoColloNonAutorizzatoField"
+                                  dataContainer="lQDc"
+                                  property="combinatoColloNonAutorizzato"
+                                  label="Non Autorizzato"/>
+                        <checkbox id="combinatoColloIllimitatoField"
+                                  dataContainer="lQDc"
+                                  property="combinatoColloIllimitato"
+                                  label="Illimitato"/>
+                        <checkbox id="combinatoColloRiservatoField"
+                                  dataContainer="lQDc"
+                                  property="combinatoColloRiservato"
+                                  label="Riservato"/>
+                    </hbox>
+                </vbox>
+            </fieldSet>
+            <fieldSet legendText="msg://fieldSet1.legendText"
+                      classNames="border rounded-m text-secondary flex flex-col">
+                <!-- Blocco 3: Pellicola Interno -->
+                <vbox padding="false" spacing="false" width="100%">
+                    <textField id="valorePellicolaInternoField"
+                               dataContainer="lQDc"
+                               property="valorePellicolaInterno"
+                               label="msg://it.ac.cargoflow.entity/LQ.valorePellicolaInterno"
+                               width="100%"/>
+                    <hbox padding="false" width="100%">
+                        <checkbox id="pellicolaInternoNonAutorizzatoField"
+                                  dataContainer="lQDc"
+                                  property="pellicolaInternoNonAutorizzato"
+                                  label="Non Autorizzato"/>
+                        <checkbox id="pellicolaInternoIllimitatoField"
+                                  dataContainer="lQDc"
+                                  property="pellicolaInternoIllimitato"
+                                  label="Illimitato"/>
+                        <checkbox id="pellicolaInternoRiservatoField"
+                                  dataContainer="lQDc"
+                                  property="pellicolaInternoRiservato"
+                                  label="Riservato"/>
+                    </hbox>
+                </vbox>
+                <!-- Blocco 4: Pellicola Collo -->
+                <vbox padding="false" spacing="false" width="100%">
+                    <textField id="valorePellicolaColloField"
+                               dataContainer="lQDc"
+                               property="valorePellicolaCollo"
+                               label="msg://it.ac.cargoflow.entity/LQ.valorePellicolaCollo"
+                               width="100%"/>
+                    <hbox padding="false" width="100%">
+                        <checkbox id="pellicolaColloNonAutorizzatoField"
+                                  dataContainer="lQDc"
+                                  property="pellicolaColloNonAutorizzato"
+                                  label="Non Autorizzato"/>
+                        <checkbox id="pellicolaColloIllimitatoField"
+                                  dataContainer="lQDc"
+                                  property="pellicolaColloIllimitato"
+                                  label="Illimitato"/>
+                        <checkbox id="pellicolaColloRiservatoField"
+                                  dataContainer="lQDc"
+                                  property="pellicolaColloRiservato"
+                                  label="Riservato"/>
+                    </hbox>
+                </vbox>
+            </fieldSet>
+            <!-- Altri campi -->
+            <select id="umField"
+                    dataContainer="lQDc"
+                    property="um"
+                    label="msg://it.ac.cargoflow.entity/LQ.um"
+                    width="100%"/>
+            <textField id="lqField" property="lq"/>
+        </formLayout>
+        <hbox id="detailActions">
+            <button id="saveAndCloseButton" action="saveCloseAction"/>
+            <button id="closeButton" action="closeAction"/>
+        </hbox>
+    </layout>
+</view>

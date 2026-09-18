@@ -95,7 +95,7 @@ public class ElementoADRDetailView extends StandardDetailView<ElementoADR> {
         String reg = limiteGalleriaField.getValue();
         boolean invalid = limiteGalleriaField.isInvalid();
 
-        if(!invalid){
+        if(limiteGalleriaField.getValue()!=null && !invalid){
             char sup = 'A', inf = 'A';
             String peso = "";
             int limiteInf = reg.length()-1;

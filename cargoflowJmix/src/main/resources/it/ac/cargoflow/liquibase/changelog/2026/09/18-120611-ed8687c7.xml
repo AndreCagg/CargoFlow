@@ -11,7 +11,7 @@
             <column name="TIPO" type="INT"/>
         </addColumn>
     </changeSet>
-    <changeSet id="2" author="cargoflowJmix">
+    <!--<changeSet id="2" author="cargoflowJmix">
         <createIndex indexName="IDX_VEICOLI_AZIENDA" tableName="VEICOLI">
             <column name="AZIENDA_ID"/>
         </createIndex>
@@ -19,7 +19,7 @@
         <addForeignKeyConstraint baseColumnNames="AZIENDA_ID" baseTableName="VEICOLI"
                                  constraintName="FK_VEICOLI_ON_AZIENDA" referencedColumnNames="ID"
                                  referencedTableName="SEDE"/>
-    </changeSet>
+    </changeSet>-->
     <changeSet id="3" author="cargoflowJmix">
         <dropColumn columnName="created_by" tableName="codice_cisterna"/>
 

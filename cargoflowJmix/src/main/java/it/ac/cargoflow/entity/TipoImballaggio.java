@@ -1,45 +1,34 @@
 package it.ac.cargoflow.entity;
 
-import io.jmix.core.DeletePolicy;
 import io.jmix.core.annotation.DeletedBy;
 import io.jmix.core.annotation.DeletedDate;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
-import io.jmix.core.entity.annotation.OnDelete;
-import io.jmix.core.metamodel.annotation.DependsOnProperties;
-import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
-import io.jmix.core.metamodel.datatype.DatatypeFormatter;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 
 @JmixEntity
-@Table(name = "REQUISITO_VEICOLO")
+@Table(name = "TIPO_IMBALLAGGIO")
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-public class RequisitoVeicolo {
+public class TipoImballaggio {
     @JmixGeneratedValue
     @Column(name = "ID", nullable = false)
     @Id
-    private Long id;
+    private Integer id;
 
-    @Column(name = "TIPO_REQUISITO")
-    private Integer tipoRequisito;
+    @Column(name = "CODICE", length = 3)
+    private String codice;
 
-    @NotNull
-    @Column(name = "DESCRIZIONE", nullable = false)
-    @Lob
+    @Column(name = "DESCRIZIONE", length = 50)
     private String descrizione;
 
-    @NotNull
-    @Column(name = "NUM", nullable = false)
-    private Integer num;
+    @Column(name = "NOTE")
+    private String note;
 
     @Column(name = "VERSION", nullable = false)
     @Version
@@ -69,27 +58,28 @@ public class RequisitoVeicolo {
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
 
-    @OnDelete(DeletePolicy.DENY)
-    @JoinTable(name = "VEICOLI_TRASPORTO_REQUISITO_VEICOLO_LINK",
-            joinColumns = @JoinColumn(name = "REQUISITO_VEICOLO_ID", referencedColumnName = "ID"),
-            inverseJoinColumns = @JoinColumn(name = "VEICOLI_TRASPORTO_ID", referencedColumnName = "ID"))
-    @ManyToMany
-    private List<VeicoliTrasporto> veicoliTrasportoes;
-
-    public TipoRequisitiVeicolo getTipoRequisito() {
-        return tipoRequisito == null ? null : TipoRequisitiVeicolo.fromId(tipoRequisito);
+    public String getNote() {
+        return note;
     }
 
-    public void setTipoRequisito(TipoRequisitiVeicolo tipoRequisito) {
-        this.tipoRequisito = tipoRequisito == null ? null : tipoRequisito.getId();
+    public void setNote(String note) {
+        this.note = note;
     }
 
-    public List<VeicoliTrasporto> getVeicoliTrasportoes() {
-        return veicoliTrasportoes;
+    public String getDescrizione() {
+        return descrizione;
     }
 
-    public void setVeicoliTrasportoes(List<VeicoliTrasporto> veicoliTrasportoes) {
-        this.veicoliTrasportoes = veicoliTrasportoes;
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
+    }
+
+    public String getCodice() {
+        return codice;
+    }
+
+    public void setCodice(String codice) {
+        this.codice = codice;
     }
 
     public OffsetDateTime getDeletedDate() {
@@ -148,33 +138,12 @@ public class RequisitoVeicolo {
         this.version = version;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public String getDescrizione() {
-        return descrizione;
-    }
-
-    public void setDescrizione(String descrizione) {
-        this.descrizione = descrizione;
-    }
-
-    public Integer getNum() {
-        return num;
-    }
-
-    public void setNum(Integer num) {
-        this.num = num;
-    }
-
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    @InstanceName
-    @DependsOnProperties({"id"})
-    public String getInstanceName(DatatypeFormatter datatypeFormatter) {
-        return datatypeFormatter.formatLong(id);
-    }
 }

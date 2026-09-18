@@ -113,6 +113,6 @@ public class MerceDetailView extends StandardDetailView<Merce> {
     }
 
     private boolean adrOk(){
-        return !(adr.getValue() && (elementoAdrField.getValue()==null || qtaAdr.isInvalid()));
+        return !(adr.getValue() && (elementoAdrField.getValue()==null || qtaAdr.isInvalid() || qtaAdr.getValue()==null || qtaAdr.getValue()==0.0));
     }
 }
