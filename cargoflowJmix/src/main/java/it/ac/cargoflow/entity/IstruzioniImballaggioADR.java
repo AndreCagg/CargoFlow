@@ -1,13 +1,17 @@
 package it.ac.cargoflow.entity;
 
 import io.jmix.core.DeletePolicy;
+import io.jmix.core.MetadataTools;
 import io.jmix.core.annotation.DeletedBy;
 import io.jmix.core.annotation.DeletedDate;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
 import io.jmix.core.entity.annotation.OnDelete;
 import io.jmix.core.entity.annotation.OnDeleteInverse;
+import io.jmix.core.metamodel.annotation.DependsOnProperties;
+import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -28,15 +32,22 @@ public class IstruzioniImballaggioADR {
     @Id
     private UUID id;
 
-    @Column(name = "NUM", length = 3)
+    @NotNull
+    @Column(name = "NUM", nullable = false, length = 3)
     private String num;
 
     @OnDeleteInverse(DeletePolicy.DENY)
     @OneToMany(mappedBy = "istruzioniImballaggioADR")
     private List<VariantiImballaggio> variante;
 
-    @Column(name = "TIPO")
+    @NotNull
+    @Column(name = "TIPO", nullable = false)
     private Integer tipo;
+
+    @NotNull
+    @Column(name = "DESCRIZIONE", nullable = false)
+    @Lob
+    private String descrizione;
 
     @Column(name = "VERSION", nullable = false)
     @Version
@@ -77,6 +88,14 @@ public class IstruzioniImballaggioADR {
             inverseJoinColumns = @JoinColumn(name = "ELEMENTO_A_D_R_ID", referencedColumnName = "ID"))
     @ManyToMany
     private List<ElementoADR> elementoADRs;
+
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
+    }
 
     public List<ElementoADR> getElementoADRs() {
         return elementoADRs;
@@ -182,4 +201,15 @@ public class IstruzioniImballaggioADR {
         this.id = id;
     }
 
+    @InstanceName
+    @DependsOnProperties({"tipo", "num"})
+    public String getInstanceName(MetadataTools metadataTools) {
+        return String.format("%s%s",
+                metadataTools.format(getTipo()),
+                metadataTools.format(num));
+    }
+
+    public String getCodice(){
+        return getTipo()+getNum();
+    }
 }

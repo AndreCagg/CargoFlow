@@ -7,6 +7,7 @@ import com.vaadin.flow.component.combobox.ComboBoxBase;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.TextRenderer;
@@ -116,7 +117,7 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
     @ViewComponent
     private JmixCheckbox ritiroField;
     @ViewComponent
-    private H3 txtSediConsegna;
+    private H4 txtSediConsegna;
     @ViewComponent
     private JmixCheckbox nonConsegnare;
 

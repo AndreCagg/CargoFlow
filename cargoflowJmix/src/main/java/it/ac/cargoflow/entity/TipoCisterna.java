@@ -8,7 +8,8 @@ public enum TipoCisterna implements EnumClass<Integer> {
 
     LGBF(10),
     L4BH(20),
-    SGAH(30);
+    SGAH(30),
+    CXBN(40);
 
     private final Integer id;
 

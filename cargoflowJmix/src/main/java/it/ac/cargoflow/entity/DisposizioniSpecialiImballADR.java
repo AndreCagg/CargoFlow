@@ -1,13 +1,16 @@
 package it.ac.cargoflow.entity;
 
 import io.jmix.core.DeletePolicy;
+import io.jmix.core.MetadataTools;
 import io.jmix.core.annotation.DeletedBy;
 import io.jmix.core.annotation.DeletedDate;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
 import io.jmix.core.entity.annotation.OnDelete;
-import io.jmix.core.entity.annotation.OnDeleteInverse;
+import io.jmix.core.metamodel.annotation.DependsOnProperties;
+import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -18,9 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 @JmixEntity
-@Table(name = "DISPOSIZIONI_SPECIALI_IMBALL_ADR", indexes = {
-        @Index(name = "IDX_DISPOSIZIONI_SPECIALI_IMBALL_ADR_ELEMENTO_ADR", columnList = "ELEMENTO_ADR_ID")
-})
+@Table(name = "DISPOSIZIONI_SPECIALI_IMBALL_ADR")
 @Entity
 public class DisposizioniSpecialiImballADR {
     @JmixGeneratedValue
@@ -28,10 +29,17 @@ public class DisposizioniSpecialiImballADR {
     @Id
     private UUID id;
 
-    @Column(name = "TIPO")
+    @NotNull
+    @Column(name = "TIPO", nullable = false)
     private Integer tipo;
 
-    @Column(name = "NUM", length = 3)
+    @NotNull
+    @Column(name = "DESCRIZIONE", nullable = false)
+    @Lob
+    private String descrizione;
+
+    @NotNull
+    @Column(name = "NUM", nullable = false, length = 3)
     private String num;
 
     @Column(name = "VERSION", nullable = false)
@@ -62,17 +70,20 @@ public class DisposizioniSpecialiImballADR {
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
 
-    @OnDeleteInverse(DeletePolicy.DENY)
-    @JoinColumn(name = "ELEMENTO_ADR_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private ElementoADR elementoADR;
-
     @OnDelete(DeletePolicy.DENY)
     @JoinTable(name = "ELEMENTO_ADR_DISPOSIZIONI_SPECIALI_IMBALL_ADR_LINK",
-            joinColumns = @JoinColumn(name = "DISPOSIZIONI_SPECIALI_IMBALL_A_D_R_ID"),
-            inverseJoinColumns = @JoinColumn(name = "ELEMENTO_A_D_R_ID"))
+            joinColumns = @JoinColumn(name = "DISPOSIZIONI_SPECIALI_IMBALL_A_D_R_ID", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "ELEMENTO_A_D_R_ID", referencedColumnName = "ID"))
     @ManyToMany
     private List<ElementoADR> elementoADRs;
+
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
+    }
 
     public List<ElementoADR> getElementoADRs() {
         return elementoADRs;
@@ -80,14 +91,6 @@ public class DisposizioniSpecialiImballADR {
 
     public void setElementoADRs(List<ElementoADR> elementoADRs) {
         this.elementoADRs = elementoADRs;
-    }
-
-    public ElementoADR getElementoADR() {
-        return elementoADR;
-    }
-
-    public void setElementoADR(ElementoADR elementoADR) {
-        this.elementoADR = elementoADR;
     }
 
     public String getNum() {
@@ -170,4 +173,15 @@ public class DisposizioniSpecialiImballADR {
         this.id = id;
     }
 
+    @InstanceName
+    @DependsOnProperties({"tipo", "num"})
+    public String getInstanceName(MetadataTools metadataTools) {
+        return String.format("%s %s",
+                metadataTools.format(getTipo()),
+                metadataTools.format(num));
+    }
+
+    public String getCodice(){
+        return getTipo()+getNum();
+    }
 }

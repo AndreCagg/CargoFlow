@@ -22,8 +22,13 @@
                 <responsiveStep minWidth="0" columns="1"/>
                 <responsiveStep minWidth="40em" columns="2"/>
             </responsiveSteps>
-            <select id="tipoField" property="tipo"/>
-            <textField id="numField" property="num"/>
+            <hbox>
+                <select id="tipoField" property="tipo" dataContainer="disposizioniCisternaADRDc" width="30%"
+                        label="msg://tipoField.label"/>
+                <textField id="numField" property="num" dataContainer="disposizioniCisternaADRDc" width="100%"
+                           label="msg://numField.label"/>
+            </hbox>
+            <textArea id="descrizioneField" property="descrizione"/>
         </formLayout>
         <hbox id="detailActions">
             <button id="saveAndCloseButton" action="saveCloseAction"/>

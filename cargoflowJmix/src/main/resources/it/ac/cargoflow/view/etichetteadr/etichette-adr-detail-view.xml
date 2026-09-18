@@ -22,7 +22,7 @@
                 <responsiveStep minWidth="0" columns="1"/>
                 <responsiveStep minWidth="40em" columns="2"/>
             </responsiveSteps>
-            <textField id="numField" property="num"/>
+            <textField id="numField" property="num" label="msg://numField.label"/>
             <textField id="descrizioneField" property="descrizione"/>
         </formLayout>
         <hbox id="detailActions">

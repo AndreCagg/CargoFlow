@@ -82,7 +82,15 @@
                 </prefix>
             </textField>
             <textField id="denominazioneField" property="denominazione" label="Denominazione Ufficiale"/>
-            <select id="gruppoImballaggioField" property="gruppoImballaggio">
+
+            <hbox>
+                <checkbox id="colli" label="msg://colli.label" property="colli" dataContainer="elementoADRDc"/>
+                <checkbox id="rinfusa" label="msg://rinfusa.label" dataContainer="elementoADRDc" property="tRinfusa"/>
+                <checkbox id="cisterna" label="msg://cisterna.label" dataContainer="elementoADRDc" property="cisterna"/>
+            </hbox>
+
+            <select id="gruppoImballaggioField" property="gruppoImballaggio" visible="false"
+                    emptySelectionAllowed="true">
                 <prefix>
                     <span text="PG"/>
                 </prefix>
@@ -93,26 +101,27 @@
                     <action id="entityClearAction" type="entity_clear"/>
                 </actions>
             </entityPicker>-->
-            <textField id="quantitaLimitateField" property="quantitaLimitate" allowedCharPattern="^[0-9]+$">
+            <textField id="quantitaLimitateField" property="quantitaLimitate" allowedCharPattern="^[0-9]+$"
+                       visible="false">
                 <prefix>
                     <span text="LQ"/>
                 </prefix>
             </textField>
-            <textField id="quantitaEsentiField" property="quantitaEsenti" allowedCharPattern="^[0-9]+$">
+            <textField id="quantitaEsentiField" property="quantitaEsenti" allowedCharPattern="^[0-9]+$" visible="false">
                 <prefix>
                     <span text="E"/>
                 </prefix>
             </textField>
             <entityComboBox id="imballaggioComuneField" property="imballaggioComune" label="Imballaggio in comune"
-                            itemsContainer="imballaggioComunesDc">
+                            itemsContainer="imballaggioComunesDc" visible="false">
                 <actions>
                     <action id="entityLookupAction" type="entity_lookup"/>
                     <action id="entityClearAction" type="entity_clear"/>
                 </actions>
             </entityComboBox>
-            <select id="codiceCisternaField" property="codiceCisterna"/>
+            <select id="codiceCisternaField" property="codiceCisterna" visible="false"/>
             <entityComboBox id="disposizioniCisternaField" property="disposizioniCisterna" label="Disposizioni Cisterna"
-                            itemsContainer="disposizioniCisternaADRsDc">
+                            itemsContainer="disposizioniCisternaADRsDc" visible="false">
                 <actions>
                     <action id="entityLookupAction" type="entity_lookup"/>
                     <action id="entityClearAction" type="entity_clear"/>
@@ -129,35 +138,42 @@
             <!--<textField id="limiteGalleriaField" property="limiteGalleria"/>
             <textField id="codRestrizioneAField" property="codRestrizioneA"/>
             <textField id="codRestrizioneBField" property="codRestrizioneB"/>-->
-            <entityComboBox id="trasportoColliField" property="trasportoColli" itemsContainer="trasportoCollisDc">
+            <entityComboBox id="trasportoColliField" property="trasportoColli" itemsContainer="trasportoCollisDc"
+                            visible="false">
                 <actions>
                     <action id="entityLookupAction" type="entity_lookup"/>
                     <action id="entityClearAction" type="entity_clear"/>
                 </actions>
             </entityComboBox>
-            <entityComboBox id="rinfusaField" property="rinfusa" itemsContainer="trasportoRinfusasDc">
+            <entityComboBox id="rinfusaField" property="rinfusa" itemsContainer="trasportoRinfusasDc" visible="false">
                 <actions>
                     <action id="entityLookupAction" type="entity_lookup"/>
                     <action id="entityClearAction" type="entity_clear"/>
                 </actions>
             </entityComboBox>
-            <textField id="codicePericoloField" property="codicePericolo" allowedCharPattern="^[0-9]{1, 3}"/>
+            <textField id="codicePericoloField" property="codicePericolo">
+                <validators>
+                    <regexp regexp="^X?[0-9]{2,3}$"/>
+                </validators>
+            </textField>
         </formLayout>
-        <h4 text="msg://it.ac.cargoflow.entity/ElementoADR.etichette"/>
-        <hbox id="etichetteButtonsPanel" classNames="buttons-panel">
-            <button action="etichetteDataGrid.addAction"/>
-            <button action="etichetteDataGrid.excludeAction"/>
-        </hbox>
-        <dataGrid id="etichetteDataGrid" dataContainer="etichetteDc" width="100%" minHeight="20em">
-            <actions>
-                <action id="addAction" type="list_add"/>
-                <action id="excludeAction" type="list_exclude"/>
-            </actions>
-            <columns>
-                <column property="num"/>
-                <column property="descrizione"/>
-            </columns>
-        </dataGrid>
+        <vbox id="etichette" visible="false" padding="false">
+            <h4 text="msg://it.ac.cargoflow.entity/ElementoADR.etichette"/>
+            <hbox id="etichetteButtonsPanel" classNames="buttons-panel">
+                <button action="etichetteDataGrid.addAction"/>
+                <button action="etichetteDataGrid.excludeAction"/>
+            </hbox>
+            <dataGrid id="etichetteDataGrid" dataContainer="etichetteDc" width="100%" minHeight="20em">
+                <actions>
+                    <action id="addAction" type="list_add"/>
+                    <action id="excludeAction" type="list_exclude"/>
+                </actions>
+                <columns>
+                    <column property="num" header="msg://column2.header"/>
+                    <column property="descrizione"/>
+                </columns>
+            </dataGrid>
+        </vbox>
         <h4 text="msg://it.ac.cargoflow.entity/ElementoADR.disposizioniSpeciali"/>
         <hbox id="disposizioniSpecialiButtonsPanel" classNames="buttons-panel">
             <button action="disposizioniSpecialiDataGrid.addAction"/>
@@ -170,42 +186,47 @@
                 <action id="excludeAction" type="list_exclude"/>
             </actions>
             <columns>
+                <column property="num" header="msg://column.header"/>
                 <column property="descrizione"/>
             </columns>
         </dataGrid>
-        <h4 text="msg://it.ac.cargoflow.entity/ElementoADR.istruzioniImballaggio"/>
-        <hbox id="istruzioniImballaggioButtonsPanel" classNames="buttons-panel">
-            <button action="istruzioniImballaggioDataGrid.addAction"/>
-            <button action="istruzioniImballaggioDataGrid.excludeAction"/>
-        </hbox>
-        <dataGrid id="istruzioniImballaggioDataGrid" dataContainer="istruzioniImballaggioDc" width="100%"
-                  minHeight="20em">
-            <actions>
-                <action id="addAction" type="list_add"/>
-                <action id="excludeAction" type="list_exclude"/>
-            </actions>
-            <columns>
-                <column property="num"/>
-                <column property="codiceCisterna"/>
-                <column property="tipo"/>
-            </columns>
-        </dataGrid>
-        <h4 text="msg://it.ac.cargoflow.entity/ElementoADR.disposizioniImballaggio"/>
-        <hbox id="disposizioniImballaggioButtonsPanel" classNames="buttons-panel">
-            <button action="disposizioniImballaggioDataGrid.addAction"/>
-            <button action="disposizioniImballaggioDataGrid.excludeAction"/>
-        </hbox>
-        <dataGrid id="disposizioniImballaggioDataGrid" dataContainer="disposizioniImballaggioDc" width="100%"
-                  minHeight="20em">
-            <actions>
-                <action id="addAction" type="list_add"/>
-                <action id="excludeAction" type="list_exclude"/>
-            </actions>
-            <columns>
-                <column property="tipo"/>
-                <column property="num"/>
-            </columns>
-        </dataGrid>
+        <vbox id="imballaggio" visible="false" padding="false">
+            <h4 text="msg://it.ac.cargoflow.entity/ElementoADR.istruzioniImballaggio"/>
+            <hbox id="istruzioniImballaggioButtonsPanel" classNames="buttons-panel">
+                <button action="istruzioniImballaggioDataGrid.addAction"/>
+                <button action="istruzioniImballaggioDataGrid.excludeAction"/>
+            </hbox>
+            <dataGrid id="istruzioniImballaggioDataGrid" dataContainer="istruzioniImballaggioDc" width="100%"
+                      minHeight="20em">
+                <actions>
+                    <action id="addAction" type="list_add"/>
+                    <action id="excludeAction" type="list_exclude"/>
+                </actions>
+                <columns>
+                    <column key="codice" header="msg://column1.header"/>
+                    <column property="descrizione"/>
+                </columns>
+            </dataGrid>
+        </vbox>
+
+        <vbox id="disposizioniImballaggio" visible="false" padding="false">
+            <h4 text="msg://it.ac.cargoflow.entity/ElementoADR.disposizioniImballaggio"/>
+            <hbox id="disposizioniImballaggioButtonsPanel" classNames="buttons-panel">
+                <button action="disposizioniImballaggioDataGrid.addAction"/>
+                <button action="disposizioniImballaggioDataGrid.excludeAction"/>
+            </hbox>
+            <dataGrid id="disposizioniImballaggioDataGrid" dataContainer="disposizioniImballaggioDc" width="100%"
+                      minHeight="20em">
+                <actions>
+                    <action id="addAction" type="list_add"/>
+                    <action id="excludeAction" type="list_exclude"/>
+                </actions>
+                <columns>
+                    <column key="codice" header="msg://column3.header"/>
+                    <column property="descrizione"/>
+                </columns>
+            </dataGrid>
+        </vbox>
         <h4 text="msg://it.ac.cargoflow.entity/ElementoADR.caricoScaricoMovimentazione"/>
         <hbox id="caricoScaricoMovimentazioneButtonsPanel" classNames="buttons-panel">
             <button action="caricoScaricoMovimentazioneDataGrid.addAction"/>
@@ -218,7 +239,7 @@
                 <action id="excludeAction" type="list_exclude"/>
             </actions>
             <columns>
-                <column property="sigla"/>
+                <column property="sigla" key="sigla"/>
                 <column property="emergenza"/>
                 <column property="azione"/>
             </columns>
@@ -238,7 +259,8 @@
                 <action id="excludeAction" type="list_exclude"/>
             </actions>
             <columns>
-                <column property="codice"/>
+                <column property="codice" key="codice"/>
+                <column property="descrizione"/>
             </columns>
         </dataGrid>
         <hbox id="detailActions">

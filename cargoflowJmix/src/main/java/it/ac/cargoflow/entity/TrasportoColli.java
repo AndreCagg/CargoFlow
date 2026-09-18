@@ -6,8 +6,8 @@ import io.jmix.core.entity.annotation.JmixGeneratedValue;
 import io.jmix.core.metamodel.annotation.DependsOnProperties;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
-import io.jmix.core.metamodel.datatype.DatatypeFormatter;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -18,118 +18,120 @@ import java.time.OffsetDateTime;
 @JmixEntity
 @Table(name = "TRASPORTO_COLLI")
 @Entity
-public class TrasportoColli {
-    @JmixGeneratedValue
-    @Column(name = "ID", nullable = false)
-    @Id
-    private Integer id;
+public class TrasportoColli extends RequisitoVeicolo{
+//    @JmixGeneratedValue
+//    @Column(name = "ID", nullable = false)
+//    @Id
+//    private Integer id;
 
-    @Column(name = "NUM")
-    private Integer num;
+//    @NotNull
+//    @Column(name = "DESCRIZIONE", nullable = false)
+//    @Lob
+//    private String descrizione;
+//
+//    @NotNull
+//    @Column(name = "NUM", nullable = false)
+//    private Integer num;
 
-    @Column(name = "VERSION", nullable = false)
-    @Version
-    private Integer version;
+//    @CreatedBy
+//    @Column(namea = "CREATED_BY")
+//    private String createdBy;
+//
+//    @CreatedDate
+//    @Column(name = "CREATED_DATE")
+//    private OffsetDateTime createdDate;
+//
+//    @LastModifiedBy
+//    @Column(name = "LAST_MODIFIED_BY")
+//    private String lastModifiedBy;
+//
+//    @LastModifiedDate
+//    @Column(name = "LAST_MODIFIED_DATE")
+//    private OffsetDateTime lastModifiedDate;
+//
+//    @DeletedBy
+//    @Column(name = "DELETED_BY")
+//    private String deletedBy;
+//
+//    @DeletedDate
+//    @Column(name = "DELETED_DATE")
+//    private OffsetDateTime deletedDate;
 
-    @CreatedBy
-    @Column(name = "CREATED_BY")
-    private String createdBy;
+//    public String getDescrizione() {
+//        return descrizione;
+//    }
+//
+//    public void setDescrizione(String descrizione) {
+//        this.descrizione = descrizione;
+//    }
+//
+//    public Integer getNum() {
+//        return num;
+//    }
+//
+//    public void setNum(Integer num) {
+//        this.num = num;
+//    }
 
-    @CreatedDate
-    @Column(name = "CREATED_DATE")
-    private OffsetDateTime createdDate;
+//    public OffsetDateTime getDeletedDate() {
+//        return deletedDate;
+//    }
+//
+//    public void setDeletedDate(OffsetDateTime deletedDate) {
+//        this.deletedDate = deletedDate;
+//    }
+//
+//    public String getDeletedBy() {
+//        return deletedBy;
+//    }
+//
+//    public void setDeletedBy(String deletedBy) {
+//        this.deletedBy = deletedBy;
+//    }
+//
+//    public OffsetDateTime getLastModifiedDate() {
+//        return lastModifiedDate;
+//    }
+//
+//    public void setLastModifiedDate(OffsetDateTime lastModifiedDate) {
+//        this.lastModifiedDate = lastModifiedDate;
+//    }
+//
+//    public String getLastModifiedBy() {
+//        return lastModifiedBy;
+//    }
+//
+//    public void setLastModifiedBy(String lastModifiedBy) {
+//        this.lastModifiedBy = lastModifiedBy;
+//    }
+//
+//    public OffsetDateTime getCreatedDate() {
+//        return createdDate;
+//    }
+//
+//    public void setCreatedDate(OffsetDateTime createdDate) {
+//        this.createdDate = createdDate;
+//    }
+//
+//    public String getCreatedBy() {
+//        return createdBy;
+//    }
+//
+//    public void setCreatedBy(String createdBy) {
+//        this.createdBy = createdBy;
+//    }
 
-    @LastModifiedBy
-    @Column(name = "LAST_MODIFIED_BY")
-    private String lastModifiedBy;
-
-    @LastModifiedDate
-    @Column(name = "LAST_MODIFIED_DATE")
-    private OffsetDateTime lastModifiedDate;
-
-    @DeletedBy
-    @Column(name = "DELETED_BY")
-    private String deletedBy;
-
-    @DeletedDate
-    @Column(name = "DELETED_DATE")
-    private OffsetDateTime deletedDate;
-
-    public Integer getNum() {
-        return num;
-    }
-
-    public void setNum(Integer num) {
-        this.num = num;
-    }
-
-    public OffsetDateTime getDeletedDate() {
-        return deletedDate;
-    }
-
-    public void setDeletedDate(OffsetDateTime deletedDate) {
-        this.deletedDate = deletedDate;
-    }
-
-    public String getDeletedBy() {
-        return deletedBy;
-    }
-
-    public void setDeletedBy(String deletedBy) {
-        this.deletedBy = deletedBy;
-    }
-
-    public OffsetDateTime getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(OffsetDateTime lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
-    public String getLastModifiedBy() {
-        return lastModifiedBy;
-    }
-
-    public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
-
-    public OffsetDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(OffsetDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
+//    public Integer getId() {
+//        return id;
+//    }
+//
+//    public void setId(Integer id) {
+//        this.id = id;
+//    }
 
     @InstanceName
     @DependsOnProperties({"num"})
-    public String getInstanceName(DatatypeFormatter datatypeFormatter) {
-        return "V"+datatypeFormatter.formatInteger(num);
+    public String getInstanceName() {
+        return "V"+super.getNum();
     }
 }

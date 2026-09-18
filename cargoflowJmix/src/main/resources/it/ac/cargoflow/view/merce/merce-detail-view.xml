@@ -47,13 +47,17 @@
             <vbox padding="false">
                 <textField id="id_epalField" property="id_epal" dataContainer="merceDc"
                            label="msg://id_epalField.label" width="100%"/>
-                <entityComboBox id="elementoAdrField" property="elementoAdr" dataContainer="merceDc"
-                                label="msg://elementoAdrField.label" width="100%" itemsContainer="elementoADRsDc">
-                    <actions>
-                        <action id="entityLookupAction" type="entity_lookup"/>
-                        <action id="entityClearAction" type="entity_clear"/>
-                    </actions>
-                </entityComboBox>
+
+                <vbox id="adrBox" padding="false">
+                    <entityComboBox id="elementoAdrField" property="elementoAdr" dataContainer="merceDc"
+                                    label="msg://elementoAdrField.label" width="100%" itemsContainer="elementoADRsDc">
+                        <actions>
+                            <action id="entityLookupAction" type="entity_lookup"/>
+                            <action id="entityClearAction" type="entity_clear"/>
+                        </actions>
+                    </entityComboBox>
+                    <numberField id="qtaAdr" label="msg://numberField.label" width="100%"/>
+                </vbox>
             </vbox>
         </formLayout>
         <hbox id="detailActions">

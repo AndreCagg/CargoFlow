@@ -51,6 +51,7 @@
                 <action id="removeAction" type="list_remove"/>
             </actions>
             <columns resizable="true">
+                <column property="num" header="Codice"/>
                 <column property="descrizione"/>
             </columns>
         </dataGrid>

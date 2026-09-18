@@ -36,4 +36,9 @@
         <item view="Esercizi.list" title="msg://it.ac.cargoflow.view.esercizi/eserciziListView.title"/>
     </menu>
 
+    <menu id="veicoli" title="msg:///veicoliMenu" opened="true">
+        <item view="VeicoliTrasporto.list"
+              title="msg://it.ac.cargoflow.view.veicolitrasporto/veicoliTrasportoListView.title"/>
+    </menu>
+
 </menu-config>

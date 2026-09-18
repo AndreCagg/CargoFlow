@@ -27,6 +27,7 @@
                     <span text="VC"/>
                 </prefix>
             </textField>
+            <textArea id="descrizioneField" property="descrizione"/>
         </formLayout>
         <hbox id="detailActions">
             <button id="saveAndCloseButton" action="saveCloseAction"/>

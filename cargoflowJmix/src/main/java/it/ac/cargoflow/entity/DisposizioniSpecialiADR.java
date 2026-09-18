@@ -8,6 +8,7 @@ import io.jmix.core.entity.annotation.OnDelete;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -18,9 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 @JmixEntity
-@Table(name = "DISPOSIZIONI_SPECIALI_ADR", indexes = {
-        @Index(name = "IDX_DISPOSIZIONI_SPECIALI_ADR_ELEMENTO_ADR", columnList = "ELEMENTO_ADR_ID")
-})
+@Table(name = "DISPOSIZIONI_SPECIALI_ADR")
 @Entity
 public class DisposizioniSpecialiADR {
     @JmixGeneratedValue
@@ -28,11 +27,13 @@ public class DisposizioniSpecialiADR {
     @Id
     private UUID id;
 
+    @NotNull
     @InstanceName
-    @Column(name = "NUM")
+    @Column(name = "NUM", nullable = false)
     private Integer num;
 
-    @Column(name = "DESCRIZIONE")
+    @NotNull
+    @Column(name = "DESCRIZIONE", nullable = false)
     @Lob
     private String descrizione;
 
@@ -65,11 +66,6 @@ public class DisposizioniSpecialiADR {
     private OffsetDateTime deletedDate;
 
     @OnDelete(DeletePolicy.DENY)
-    @JoinColumn(name = "ELEMENTO_ADR_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private ElementoADR elementoADR;
-
-    @OnDelete(DeletePolicy.DENY)
     @JoinTable(name = "ELEMENTO_ADR_DISPOSIZIONI_SPECIALI_ADR_LINK",
             joinColumns = @JoinColumn(name = "DISPOSIZIONI_SPECIALI_A_D_R_ID", referencedColumnName = "ID"),
             inverseJoinColumns = @JoinColumn(name = "ELEMENTO_A_D_R_ID", referencedColumnName = "ID"))
@@ -90,14 +86,6 @@ public class DisposizioniSpecialiADR {
 
     public void setElementoADRs(List<ElementoADR> elementoADRs) {
         this.elementoADRs = elementoADRs;
-    }
-
-    public ElementoADR getElementoADR() {
-        return elementoADR;
-    }
-
-    public void setElementoADR(ElementoADR elementoADR) {
-        this.elementoADR = elementoADR;
     }
 
     public String getDescrizione() {

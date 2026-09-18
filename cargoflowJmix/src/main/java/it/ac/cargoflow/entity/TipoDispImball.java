@@ -8,7 +8,9 @@ public enum TipoDispImball implements EnumClass<Integer> {
 
     PP(10),
     B(20),
-    L(30);
+    L(30),
+    RR(40),
+    BB(50);
 
     private final Integer id;
 

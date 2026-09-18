@@ -28,6 +28,9 @@ public class Merce {
     @Id
     private UUID id;
 
+    @Column(name = "QUANTITA_ADR")
+    private Double quantitaAdr;
+
     @Column(name = "SEGNACOLLO", nullable = false)
     @NotNull
     private String segnacollo;
@@ -38,7 +41,8 @@ public class Merce {
     @JoinColumn(name = "INCARICO_ID", nullable = false)
     private Incarico incarico;
 
-    @Column(name = "MERCE_TIPO")
+    @NotNull
+    @Column(name = "MERCE_TIPO", nullable = false)
     private Integer merce_tipo;
 
     @Column(name = "PESO_KG")
@@ -87,6 +91,14 @@ public class Merce {
     @DeletedDate
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
+
+    public Double getQuantitaAdr() {
+        return quantitaAdr;
+    }
+
+    public void setQuantitaAdr(Double quantitaAdr) {
+        this.quantitaAdr = quantitaAdr;
+    }
 
     public void setMerce_tipo(TipoMerce merce_tipo) {
         this.merce_tipo = merce_tipo == null ? null : merce_tipo.getId();

@@ -96,7 +96,7 @@
                 </entityComboBox>
             </hbox>
             <textArea id="noteField" height="9.5em" property="note"/>
-        <vbox>
+        <vbox padding="false">
             <hbox>
                 <checkbox id="contrassegnoField" property="contrassegno" dataContainer="incaricoDc"
                           label="Contrassegno"/>
@@ -107,7 +107,7 @@
 
         </formLayout>
 
-        <h3 text="Merce"/>
+        <h4 text="Merce"/>
         <hbox id="merceButtonsPanel" classNames="buttons-panel">
             <button action="merceDataGrid.createAction"/>
             <button action="merceDataGrid.editAction"/>
@@ -138,7 +138,7 @@
             </columns>
         </dataGrid>
 
-        <h3 text="Fasce Orarie"/>
+        <h4 text="Fasce Orarie"/>
         <hbox id="fasceOrarieButtonsPanel" classNames="buttons-panel">
             <button action="fasceOrarieDataGrid.createAction"/>
             <button action="fasceOrarieDataGrid.editAction"/>
@@ -167,7 +167,7 @@
             </columns>
         </dataGrid>
 
-        <h3 id="txtSediConsegna" text="Sedi di consegna/ritiro"/>
+        <h4 id="txtSediConsegna" text="Sedi di consegna/ritiro"/>
         <hbox id="sedi_mitt_destButtonsPanel" classNames="buttons-panel">
             <button action="sedi_mitt_destDataGrid.createAction"/>
             <button action="sedi_mitt_destDataGrid.removeAction"/>

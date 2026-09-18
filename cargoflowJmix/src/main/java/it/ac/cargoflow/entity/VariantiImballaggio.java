@@ -5,8 +5,10 @@ import io.jmix.core.annotation.DeletedBy;
 import io.jmix.core.annotation.DeletedDate;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
 import io.jmix.core.entity.annotation.OnDelete;
+import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -25,10 +27,13 @@ public class VariantiImballaggio {
     @Id
     private Integer id;
 
-    @Column(name = "VARIANTE", length = 1)
+    @InstanceName
+    @NotNull
+    @Column(name = "VARIANTE", nullable = false, length = 1)
     private String variante;
 
-    @Column(name = "DESCRIZIONE")
+    @NotNull
+    @Column(name = "DESCRIZIONE", nullable = false)
     private String descrizione;
 
     @Column(name = "VERSION", nullable = false)

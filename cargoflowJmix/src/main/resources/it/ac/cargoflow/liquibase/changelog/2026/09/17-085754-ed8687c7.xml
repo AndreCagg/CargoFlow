@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS"
+        logicalFilePath="it/ac/cargoflow/liquibase/changelog/2026/09/17-085754-ed8687c7.xml">
+    <changeSet id="1" author="cargoflowJmix">
+        <addColumn tableName="CODICE_CISTERNA">
+            <column name="DESCRIZIONE" type="CLOB"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="2" author="cargoflowJmix">
+        <addColumn tableName="DISPOSIZIONI_SPECIALI_IMBALL_ADR">
+            <column name="DESCRIZIONE" type="CLOB"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="3" author="cargoflowJmix">
+        <addColumn tableName="ESERCIZI">
+            <column name="DESCRIZIONE" type="CLOB"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="4" author="cargoflowJmix">
+        <addColumn tableName="IMBALLAGGIO_COMUNE">
+            <column name="DESCRIZIONE" type="CLOB"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="5" author="cargoflowJmix">
+        <addColumn tableName="ISTRUZIONI_IMBALLAGGIO_ADR">
+            <column name="DESCRIZIONE" type="CLOB"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="6" author="cargoflowJmix">
+        <addColumn tableName="TRASPORTO_COLLI">
+            <column name="DESCRIZIONE" type="CLOB"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="7" author="cargoflowJmix">
+        <addColumn tableName="T_RASPORTO_RINFUSA">
+            <column name="DESCRIZIONE" type="CLOB"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

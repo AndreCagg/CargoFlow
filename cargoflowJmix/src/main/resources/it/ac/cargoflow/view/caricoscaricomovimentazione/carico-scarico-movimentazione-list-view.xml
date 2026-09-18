@@ -51,7 +51,7 @@
                 <action id="removeAction" type="list_remove"/>
             </actions>
             <columns resizable="true">
-                <column property="sigla"/>
+                <column property="sigla" key="sigla"/>
                 <column property="emergenza"/>
                 <column property="azione"/>
             </columns>

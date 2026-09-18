@@ -8,6 +8,7 @@ import io.jmix.core.entity.annotation.OnDelete;
 import io.jmix.core.entity.annotation.OnDeleteInverse;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -28,13 +29,16 @@ public class CaricoScaricoMovimentazione {
     @Id
     private UUID id;
 
-    @Column(name = "SIGLA", length = 4)
+    @NotNull
+    @Column(name = "SIGLA", nullable = false, length = 4)
     private String sigla;
 
-    @Column(name = "EMERGENZA", length = 100)
+    @NotNull
+    @Column(name = "EMERGENZA", nullable = false)
     private String emergenza;
 
-    @Column(name = "AZIONE")
+    @NotNull
+    @Column(name = "AZIONE", nullable = false)
     @Lob
     private String azione;
 
@@ -73,8 +77,8 @@ public class CaricoScaricoMovimentazione {
 
     @OnDelete(DeletePolicy.DENY)
     @JoinTable(name = "ELEMENTO_ADR_CARICO_SCARICO_MOVIMENTAZIONE_LINK",
-            joinColumns = @JoinColumn(name = "CARICO_SCARICO_MOVIMENTAZIONE_ID"),
-            inverseJoinColumns = @JoinColumn(name = "ELEMENTO_A_D_R_ID"))
+            joinColumns = @JoinColumn(name = "CARICO_SCARICO_MOVIMENTAZIONE_ID", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "ELEMENTO_A_D_R_ID", referencedColumnName = "ID"))
     @ManyToMany
     private List<ElementoADR> elementoADRs;
 

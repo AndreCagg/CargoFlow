@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS"
+        logicalFilePath="it/ac/cargoflow/liquibase/changelog/2026/09/17-163359-ed8687c7.xml">
+    <changeSet id="1" author="cargoflowJmix">
+        <createTable tableName="REQUISITO_VEICOLO">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_REQUISITO_VEICOLO"/>
+            </column>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="CLOB" columnName="AZIONE" tableName="CARICO_SCARICO_MOVIMENTAZIONE"
+                              validate="true"/>
+    </changeSet>
+    <changeSet id="3" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="CHAR" columnName="CODICE" tableName="ESERCIZI" validate="true"/>
+    </changeSet>
+    <changeSet id="4" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="CLOB" columnName="DESCRIZIONE" tableName="CODICE_CISTERNA"
+                              validate="true"/>
+    </changeSet>
+    <changeSet id="5" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="CLOB" columnName="DESCRIZIONE" tableName="DISPOSIZIONI_SPECIALI_ADR"
+                              validate="true"/>
+    </changeSet>
+    <changeSet id="6" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="CLOB" columnName="DESCRIZIONE"
+                              tableName="DISPOSIZIONI_SPECIALI_IMBALL_ADR" validate="true"/>
+    </changeSet>
+    <changeSet id="7" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="CLOB" columnName="DESCRIZIONE" tableName="ESERCIZI" validate="true"/>
+    </changeSet>
+    <changeSet id="8" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="VARCHAR(100)" columnName="DESCRIZIONE" tableName="ETICHETTE_ADR"
+                              validate="true"/>
+    </changeSet>
+    <changeSet id="9" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="CLOB" columnName="DESCRIZIONE" tableName="IMBALLAGGIO_COMUNE"
+                              validate="true"/>
+    </changeSet>
+    <changeSet id="10" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="CLOB" columnName="DESCRIZIONE" tableName="ISTRUZIONI_IMBALLAGGIO_ADR"
+                              validate="true"/>
+    </changeSet>
+    <changeSet id="11" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="CLOB" columnName="DESCRIZIONE" tableName="TRASPORTO_COLLI"
+                              validate="true"/>
+    </changeSet>
+    <changeSet id="12" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="CLOB" columnName="DESCRIZIONE" tableName="T_RASPORTO_RINFUSA"
+                              validate="true"/>
+    </changeSet>
+    <changeSet id="13" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="VARCHAR(255)" columnName="DESCRIZIONE" tableName="VARIANTI_IMBALLAGGIO"
+                              validate="true"/>
+    </changeSet>
+    <changeSet id="14" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="VARCHAR(255)" columnName="EMERGENZA"
+                              tableName="CARICO_SCARICO_MOVIMENTAZIONE" validate="true"/>
+    </changeSet>
+    <changeSet id="15" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="VARCHAR(255)" columnName="NUM" tableName="CODICE_CISTERNA"
+                              validate="true"/>
+    </changeSet>
+    <changeSet id="16" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="INT" columnName="NUM" tableName="DISPOSIZIONI_SPECIALI_ADR"
+                              validate="true"/>
+    </changeSet>
+    <changeSet id="17" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="VARCHAR(3)" columnName="NUM" tableName="DISPOSIZIONI_SPECIALI_IMBALL_ADR"
+                              validate="true"/>
+    </changeSet>
+    <changeSet id="18" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="DOUBLE" columnName="NUM" tableName="ETICHETTE_ADR" validate="true"/>
+    </changeSet>
+    <changeSet id="19" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="VARCHAR(3)" columnName="NUM" tableName="IMBALLAGGIO_COMUNE"
+                              validate="true"/>
+    </changeSet>
+    <changeSet id="20" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="VARCHAR(3)" columnName="NUM" tableName="ISTRUZIONI_IMBALLAGGIO_ADR"
+                              validate="true"/>
+    </changeSet>
+    <changeSet id="21" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="INT" columnName="NUM" tableName="TRASPORTO_COLLI" validate="true"/>
+    </changeSet>
+    <changeSet id="22" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="INT" columnName="NUM" tableName="T_RASPORTO_RINFUSA" validate="true"/>
+    </changeSet>
+    <changeSet id="23" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="VARCHAR(4)" columnName="SIGLA" tableName="CARICO_SCARICO_MOVIMENTAZIONE"
+                              validate="true"/>
+    </changeSet>
+    <changeSet id="24" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="INT" columnName="TIPO" tableName="CODICE_CISTERNA" validate="true"/>
+    </changeSet>
+    <changeSet id="25" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="INT" columnName="TIPO" tableName="DISPOSIZIONI_SPECIALI_IMBALL_ADR"
+                              validate="true"/>
+    </changeSet>
+    <changeSet id="26" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="INT" columnName="TIPO" tableName="ISTRUZIONI_IMBALLAGGIO_ADR"
+                              validate="true"/>
+    </changeSet>
+    <changeSet id="27" author="cargoflowJmix">
+        <addNotNullConstraint columnDataType="VARCHAR(1)" columnName="VARIANTE" tableName="VARIANTI_IMBALLAGGIO"
+                              validate="true"/>
+    </changeSet>
+</databaseChangeLog>

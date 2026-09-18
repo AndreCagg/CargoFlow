@@ -8,7 +8,8 @@ public enum TipoIstrImballaggio implements EnumClass<Integer> {
 
     P(10),
     IBC(20),
-    LP(30);
+    LP(30),
+    R(40);
 
     private final Integer id;
 

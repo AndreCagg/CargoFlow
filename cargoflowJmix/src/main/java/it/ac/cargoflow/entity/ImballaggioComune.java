@@ -8,6 +8,7 @@ import io.jmix.core.metamodel.annotation.DependsOnProperties;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -25,8 +26,14 @@ public class ImballaggioComune {
     @Id
     private UUID id;
 
-    @Column(name = "NUM", length = 3)
+    @NotNull
+    @Column(name = "NUM", nullable = false, length = 3)
     private String num;
+
+    @NotNull
+    @Column(name = "DESCRIZIONE", nullable = false)
+    @Lob
+    private String descrizione;
 
     @Column(name = "VERSION", nullable = false)
     @Version
@@ -55,6 +62,14 @@ public class ImballaggioComune {
     @DeletedDate
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
+
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
+    }
 
     public String getNum() {
         return num;

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://veicoliTrasportoDetailView.title"
+      focusComponent="form">
+    <data>
+        <instance id="veicoliTrasportoDc"
+                  class="it.ac.cargoflow.entity.VeicoliTrasporto">
+            <fetchPlan extends="_base">
+                <property name="caratteristicheAdr" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="veicoliTrasportoDl"/>
+            <collection id="caratteristicheAdrDc" property="caratteristicheAdr"/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveCloseAction" type="detail_saveClose"/>
+        <action id="closeAction" type="detail_close"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="veicoliTrasportoDc">
+            <responsiveSteps>
+                <responsiveStep minWidth="0" columns="1"/>
+                <responsiveStep minWidth="40em" columns="2"/>
+            </responsiveSteps>
+            <textField id="targaField" property="targa"/>
+            <checkbox id="adrField" property="adr" label="msg://adrField.label"/>
+            <checkbox id="cisternaAdrField" property="cisternaAdr" label="msg://cisternaAdrField.label"
+                      visible="false"/>
+            <textField id="codCisterna" label="msg://codCisterna.label" visible="false"/>
+        </formLayout>
+        <vbox id="caratteristiche" padding="false">
+            <h4 text="msg://it.ac.cargoflow.entity/VeicoliTrasporto.caratteristicheAdr"/>
+            <hbox id="caratteristicheAdrButtonsPanel" classNames="buttons-panel">
+                <button id="addColli" action="caratteristicheAdrDataGrid.addColliAction" text="msg://button.text"/>
+                <button id="addRinfusa" action="caratteristicheAdrDataGrid.addRinfusaAction" text="msg://button1.text"/>
+                <button
+                        id="disposizioniCisterna" action="caratteristicheAdrDataGrid.addCisternaAction"
+                        text="msg://button2.text" visible="false"/>
+                <button action="caratteristicheAdrDataGrid.excludeAction"/>
+            </hbox>
+            <dataGrid id="caratteristicheAdrDataGrid" dataContainer="caratteristicheAdrDc" width="100%" minHeight="20em">
+                <actions>
+                    <action id="addColliAction" type="list_add"/>
+                    <action id="addRinfusaAction" type="list_add"/>
+                    <action id="addCisternaAction" type="list_add"/>
+                    <action id="excludeAction" type="list_exclude"/>
+                </actions>
+                <columns>
+                    <column key="tipo" header="msg://column1.header"/>
+                    <column key="instanceName" header="msg://veicoliTrasportoDetailView.caratteristicheAdrColumn"/>
+                    <column property="descrizione" header="msg://column.header"/>
+                </columns>
+            </dataGrid>
+        </vbox>
+        <hbox id="detailActions">
+            <button id="saveAndCloseButton" action="saveCloseAction"/>
+            <button id="closeButton" action="closeAction"/>
+        </hbox>
+    </layout>
+</view>

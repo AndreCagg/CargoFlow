@@ -8,6 +8,7 @@ import io.jmix.core.entity.annotation.OnDelete;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -17,9 +18,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @JmixEntity
-@Table(name = "ETICHETTE_ADR", indexes = {
-        @Index(name = "IDX_ETICHETTE_ADR_ELEMENTO_ADR", columnList = "ELEMENTO_ADR_ID")
-})
+@Table(name = "ETICHETTE_ADR")
 @Entity
 public class EtichetteADR {
     @JmixGeneratedValue
@@ -27,11 +26,13 @@ public class EtichetteADR {
     @Id
     private Integer id;
 
+    @NotNull
     @InstanceName
-    @Column(name = "NUM")
+    @Column(name = "NUM", nullable = false)
     private Double num;
 
-    @Column(name = "DESCRIZIONE", length = 100)
+    @NotNull
+    @Column(name = "DESCRIZIONE", nullable = false, length = 100)
     private String descrizione;
 
     @Column(name = "VERSION", nullable = false)
@@ -62,10 +63,6 @@ public class EtichetteADR {
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
 
-    @JoinColumn(name = "ELEMENTO_ADR_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private ElementoADR elementoADR;
-
     @OnDelete(DeletePolicy.DENY)
     @JoinTable(name = "ELEMENTO_ADR_ETICHETTE_ADR_LINK",
             joinColumns = @JoinColumn(name = "ETICHETTE_A_D_R_ID", referencedColumnName = "ID"),
@@ -87,14 +84,6 @@ public class EtichetteADR {
 
     public Double getNum() {
         return num;
-    }
-
-    public ElementoADR getElementoADR() {
-        return elementoADR;
-    }
-
-    public void setElementoADR(ElementoADR elementoADR) {
-        this.elementoADR = elementoADR;
     }
 
     public String getDescrizione() {

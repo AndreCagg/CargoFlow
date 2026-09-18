@@ -10,6 +10,7 @@ import io.jmix.core.metamodel.annotation.DependsOnProperties;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -28,8 +29,14 @@ public class Esercizi {
     @Id
     private UUID id;
 
-    @Column(name = "CODICE")
+    @NotNull
+    @Column(name = "CODICE", nullable = false)
     private Character codice;
+
+    @NotNull
+    @Column(name = "DESCRIZIONE", nullable = false)
+    @Lob
+    private String descrizione;
 
     @Column(name = "VERSION", nullable = false)
     @Version
@@ -61,10 +68,18 @@ public class Esercizi {
 
     @OnDelete(DeletePolicy.DENY)
     @JoinTable(name = "ELEMENTO_ADR_ESERCIZI_LINK",
-            joinColumns = @JoinColumn(name = "ESERCIZI_ID"),
-            inverseJoinColumns = @JoinColumn(name = "ELEMENTO_A_D_R_ID"))
+            joinColumns = @JoinColumn(name = "ESERCIZI_ID", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "ELEMENTO_A_D_R_ID", referencedColumnName = "ID"))
     @ManyToMany
     private List<ElementoADR> elementoADRs;
+
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
+    }
 
     public List<ElementoADR> getElementoADRs() {
         return elementoADRs;

@@ -1,6 +1,8 @@
 package it.ac.cargoflow.view.trasportorinfusa;
 
+import com.vaadin.flow.data.renderer.TextRenderer;
 import com.vaadin.flow.router.Route;
+import io.jmix.flowui.component.grid.DataGrid;
 import io.jmix.flowui.view.*;
 import it.ac.cargoflow.entity.TrasportoRinfusa;
 import it.ac.cargoflow.view.main.MainView;
@@ -12,4 +14,12 @@ import it.ac.cargoflow.view.main.MainView;
 @LookupComponent("trasportoRinfusasDataGrid")
 @DialogMode(width = "64em")
 public class TrasportoRinfusaListView extends StandardListView<TrasportoRinfusa> {
+    @ViewComponent
+    private DataGrid<TrasportoRinfusa> trasportoRinfusasDataGrid;
+
+    @Subscribe
+    public void onBeforeShow(final BeforeShowEvent event) {
+        trasportoRinfusasDataGrid.getColumnByKey("codice").setRenderer(new TextRenderer<>(TrasportoRinfusa::getInstanceName));
+
+    }
 }

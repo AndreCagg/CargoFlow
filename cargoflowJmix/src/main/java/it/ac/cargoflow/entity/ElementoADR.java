@@ -63,13 +63,20 @@ public class ElementoADR {
     @OnDeleteInverse(DeletePolicy.DENY)
     private List<DisposizioniSpecialiADR> disposizioniSpeciali;
 
-    @NotNull
-    @Column(name = "QUANTITA_LIMITATE", nullable = false)
+    @Column(name = "QUANTITA_LIMITATE")
     private Integer quantitaLimitate;
 
-    @NotNull
-    @Column(name = "QUANTITA_ESENTI", nullable = false)
+    @Column(name = "QUANTITA_ESENTI")
     private Integer quantitaEsenti;
+
+    @Column(name = "COLLI")
+    private Boolean colli;
+
+    @Column(name = "T_RINFUSA")
+    private Boolean tRinfusa;
+
+    @Column(name = "CISTERNA")
+    private Boolean cisterna;
 
     @JoinTable(name = "ELEMENTO_ADR_ISTRUZIONI_IMBALLAGGIO_ADR_LINK",
             joinColumns = @JoinColumn(name = "ELEMENTO_A_D_R_ID", referencedColumnName = "ID"),
@@ -165,6 +172,30 @@ public class ElementoADR {
     @DeletedDate
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
+
+    public Boolean getCisterna() {
+        return cisterna;
+    }
+
+    public void setCisterna(Boolean cisterna) {
+        this.cisterna = cisterna;
+    }
+
+    public Boolean getTRinfusa() {
+        return tRinfusa;
+    }
+
+    public void setTRinfusa(Boolean tRinfusa) {
+        this.tRinfusa = tRinfusa;
+    }
+
+    public Boolean getColli() {
+        return colli;
+    }
+
+    public void setColli(Boolean colli) {
+        this.colli = colli;
+    }
 
     public void setEsercizi(List<Esercizi> esercizi) {
         this.esercizi = esercizi;

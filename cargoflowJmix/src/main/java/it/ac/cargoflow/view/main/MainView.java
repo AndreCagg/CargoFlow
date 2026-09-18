@@ -290,11 +290,17 @@ public class MainView extends StandardMainView implements BeforeEnterObserver{
     }
 
     private void aggiornaMenu() {
+        aggiornaMenu_("application");
+        aggiornaMenu_("ADR");
+        aggiornaMenu_("veicoli");
+    }
+
+    private void aggiornaMenu_(String menuStr){
         ListMenu.MenuItem users = menu.getMenuItem("User.list");
         ListMenu.MenuItem az = menu.getMenuItem("Azienda.list");
         ListMenu.MenuItem se = menu.getMenuItem("Sede.list");
 
-        ListMenu.MenuItem applicationMenu = menu.getMenuItem("application");
+        ListMenu.MenuItem applicationMenu = menu.getMenuItem(menuStr);
 
         if (applicationMenu instanceof ListMenu.MenuBarItem parent) {
             List<ListMenu.MenuItem> children = new ArrayList<>(parent.getChildren());

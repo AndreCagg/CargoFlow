@@ -1,6 +1,8 @@
 package it.ac.cargoflow.view.caricoscaricomovimentazione;
 
+import com.vaadin.flow.data.renderer.TextRenderer;
 import com.vaadin.flow.router.Route;
+import io.jmix.flowui.component.grid.DataGrid;
 import io.jmix.flowui.view.*;
 import it.ac.cargoflow.entity.CaricoScaricoMovimentazione;
 import it.ac.cargoflow.view.main.MainView;
@@ -12,4 +14,14 @@ import it.ac.cargoflow.view.main.MainView;
 @LookupComponent("caricoScaricoMovimentazionesDataGrid")
 @DialogMode(width = "64em")
 public class CaricoScaricoMovimentazioneListView extends StandardListView<CaricoScaricoMovimentazione> {
+    @ViewComponent
+    private DataGrid<CaricoScaricoMovimentazione> caricoScaricoMovimentazionesDataGrid;
+
+    @Subscribe
+    public void onBeforeShow(final BeforeShowEvent event) {
+        caricoScaricoMovimentazionesDataGrid.getColumnByKey("sigla").setRenderer(new TextRenderer<>(obj -> {
+            return "CV"+obj.getSigla();
+        }));
+
+    }
 }
