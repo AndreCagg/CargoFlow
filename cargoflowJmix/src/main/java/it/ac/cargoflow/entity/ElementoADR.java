@@ -37,6 +37,9 @@ public class ElementoADR {
     @Column(name = "ONU", nullable = false, length = 4)
     private String onu;
 
+    @Column(name = "UM")
+    private Integer um;
+
     @NotNull
     @Column(name = "DENOMINAZIONE", nullable = false, length = 100)
     private String denominazione;
@@ -172,6 +175,14 @@ public class ElementoADR {
     @DeletedDate
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
+
+    public UM getUm() {
+        return um == null ? null : UM.fromId(um);
+    }
+
+    public void setUm(UM um) {
+        this.um = um == null ? null : um.getId();
+    }
 
     public Boolean getCisterna() {
         return cisterna;

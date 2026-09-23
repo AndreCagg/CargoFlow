@@ -5,6 +5,8 @@ import io.jmix.core.annotation.DeletedBy;
 import io.jmix.core.annotation.DeletedDate;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
 import io.jmix.core.entity.annotation.OnDelete;
+import io.jmix.core.entity.annotation.OnDeleteInverse;
+import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -19,7 +21,9 @@ import java.util.UUID;
 @JmixEntity
 @Table(name = "MERCE", indexes = {
         @Index(name = "IDX_MERCE_INCARICO", columnList = "INCARICO_ID"),
-        @Index(name = "IDX_MERCE_ELEMENTO_ADR", columnList = "ELEMENTO_ADR_ID")
+        @Index(name = "IDX_MERCE_ELEMENTO_ADR", columnList = "ELEMENTO_ADR_ID"),
+        @Index(name = "IDX_MERCE_IMBALLAGGIO", columnList = "IMBALLAGGIO_ID"),
+        @Index(name = "IDX_MERCE_COLLI_ADR", columnList = "COLLI_ADR_ID")
 })
 @Entity
 public class Merce {
@@ -28,9 +32,21 @@ public class Merce {
     @Id
     private UUID id;
 
-    @Column(name = "QUANTITA_ADR")
-    private Double quantitaAdr;
+    @Column(name = "CONFEZIONI_INT_ADR")
+    private Integer confezioniIntAdr;
 
+    @Column(name = "DIMENSIONI_CONF")
+    private Double dimensioneConf;
+
+    @OnDeleteInverse(DeletePolicy.DENY)
+    @JoinColumn(name = "IMBALLAGGIO_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ImballaggioComune imballaggio;
+
+    @Column(name = "UM_ADR")
+    private Integer umAdr;
+
+    @InstanceName
     @Column(name = "SEGNACOLLO", nullable = false)
     @NotNull
     private String segnacollo;
@@ -92,12 +108,48 @@ public class Merce {
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
 
-    public Double getQuantitaAdr() {
-        return quantitaAdr;
+    @JoinColumn(name = "COLLI_ADR_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ColliADR colliADR;
+
+    public ColliADR getColliADR() {
+        return colliADR;
     }
 
-    public void setQuantitaAdr(Double quantitaAdr) {
-        this.quantitaAdr = quantitaAdr;
+    public void setColliADR(ColliADR colliADR) {
+        this.colliADR = colliADR;
+    }
+
+    public Double getDimensioneConf() {
+        return dimensioneConf;
+    }
+
+    public void setDimensioneConf(Double dimensioneConf) {
+        this.dimensioneConf = dimensioneConf;
+    }
+
+    public void setConfezioniIntAdr(Integer confezioniIntAdr) {
+        this.confezioniIntAdr = confezioniIntAdr;
+    }
+
+    public Integer getConfezioniIntAdr() {
+        return confezioniIntAdr;
+    }
+
+    public ImballaggioComune getImballaggio() {
+        return imballaggio;
+    }
+
+    public void setImballaggio(ImballaggioComune imballaggio) {
+        this.imballaggio = imballaggio;
+    }
+
+    public UM getUmAdr() {
+        return umAdr == null ? null : UM.fromId(umAdr);
+    }
+
+    public void setUmAdr(UM umAdr) {
+        this.umAdr = umAdr == null ? null : umAdr.getId();
     }
 
     public void setMerce_tipo(TipoMerce merce_tipo) {

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
+      title="msg://merceListView.title"
+      focusComponent="mercesDataGrid">
+    <data>
+        <collection id="mercesDc"
+                    class="it.ac.cargoflow.entity.Merce">
+            <fetchPlan extends="_base">
+                <property name="imballaggio" fetchPlan="_base"/>
+                <property name="incarico" fetchPlan="_base"/>
+                <property name="elementoAdr" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="mercesDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from Merce e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <genericFilter component="genericFilter"/>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <actions>
+        <action id="selectAction" type="lookup_select"/>
+        <action id="discardAction" type="lookup_discard"/>
+    </actions>
+    <layout>
+        <genericFilter id="genericFilter"
+                       dataLoader="mercesDl">
+            <properties include=".*"/>
+        </genericFilter>
+        <hbox id="buttonsPanel" classNames="buttons-panel">
+            <startSlot>
+            </startSlot>
+            <endSlot>
+                <simplePagination id="pagination" dataLoader="mercesDl"/>
+            </endSlot>
+        </hbox>
+        <dataGrid id="mercesDataGrid"
+                  width="100%"
+                  minHeight="20em"
+                  dataContainer="mercesDc"
+                  columnReorderingAllowed="true">
+            <actions>
+            </actions>
+            <columns resizable="true">
+                <column property="confezioniIntAdr"/>
+                <column property="dimensioneConf"/>
+                <column property="imballaggio"/>
+                <column property="umAdr"/>
+                <column property="segnacollo"/>
+                <column property="incarico"/>
+                <column property="merce_tipo"/>
+                <column property="peso_kg"/>
+                <column property="volume_m3"/>
+                <column property="fragile"/>
+                <column property="epal"/>
+                <column property="id_epal"/>
+                <column property="elementoAdr"/>
+            </columns>
+        </dataGrid>
+        <hbox id="lookupActions" visible="false">
+            <button id="selectButton" action="selectAction"/>
+            <button id="discardButton" action="discardAction"/>
+        </hbox>
+    </layout>
+</view>

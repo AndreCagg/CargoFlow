@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://colliADRDetailView.title"
+      focusComponent="form">
+    <data>
+        <instance id="colliADRDc"
+                  class="it.ac.cargoflow.entity.ColliADR">
+            <fetchPlan extends="_base">
+                <property name="colli" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="colliADRDl"/>
+        </instance>
+        <collection id="mercesDc" class="it.ac.cargoflow.entity.Merce">
+            <fetchPlan extends="_base">
+                <property name="elementoAdr" fetchPlan="_base">
+                    <property name="onu"/>
+                </property>
+            </fetchPlan>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveCloseAction" type="detail_saveClose"/>
+        <action id="closeAction" type="detail_close"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="colliADRDc">
+            <responsiveSteps>
+                <responsiveStep minWidth="0" columns="1"/>
+                <responsiveStep minWidth="40em" columns="2"/>
+            </responsiveSteps>
+
+            <vbox padding="false" colspan="2">
+                <select id="tipoImballaggioField" property="tipoImballaggio" dataContainer="colliADRDc"/>
+
+
+                <h4 text="msg://h4.text"/>
+                <dataGrid id="mercesDataGrid" dataContainer="mercesDc" width="100%" allRowsVisible="true">
+                    <columns>
+                        <column key="selezionato" sortable="false"/>
+                        <column property="segnacollo"/>
+                        <column property="elementoAdr.onu"/>
+                    </columns>
+                </dataGrid>
+            </vbox>
+
+        </formLayout>
+        <hbox id="detailActions">
+            <button id="saveAndCloseButton" action="saveCloseAction"/>
+            <button id="closeButton" action="closeAction"/>
+        </hbox>
+    </layout>
+</view>

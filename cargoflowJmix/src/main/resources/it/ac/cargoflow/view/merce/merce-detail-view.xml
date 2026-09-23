@@ -3,6 +3,14 @@
       title="msg://merceDetailView.title"
       focusComponent="form">
     <data>
+        <collection id="imballaggiosDc" class="it.ac.cargoflow.entity.Imballaggio">
+            <loader id="imballaggiosDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from Imballaggio e]]>
+                </query>
+            </loader>
+            <fetchPlan extends="_base"/>
+        </collection>
         <collection id="elementoADRsDc" class="it.ac.cargoflow.entity.ElementoADR">
             <loader id="elementoADRsDl" readOnly="true">
                 <query>
@@ -15,6 +23,7 @@
                   class="it.ac.cargoflow.entity.Merce">
             <fetchPlan extends="_base">
                 <property name="elementoAdr" fetchPlan="_base"/>
+                <property name="imballaggio" fetchPlan="_base"/>
             </fetchPlan>
             <loader id="merceDl"/>
         </instance>
@@ -43,11 +52,9 @@
                           width="100%"/>
                 <checkbox id="adr" label="msg://adr.label" width="100%"/>
             </vbox>
-
             <vbox padding="false">
                 <textField id="id_epalField" property="id_epal" dataContainer="merceDc"
                            label="msg://id_epalField.label" width="100%"/>
-
                 <vbox id="adrBox" padding="false">
                     <entityComboBox id="elementoAdrField" property="elementoAdr" dataContainer="merceDc"
                                     label="msg://elementoAdrField.label" width="100%" itemsContainer="elementoADRsDc">
@@ -56,7 +63,24 @@
                             <action id="entityClearAction" type="entity_clear"/>
                         </actions>
                     </entityComboBox>
-                    <numberField id="qtaAdr" label="msg://numberField.label" width="100%"/>
+                    <hbox width="100%">
+                        <numberField id="numConf" label="msg://numConf.label" width="50%" property="dimensioneConf"
+                                     dataContainer="merceDc"/>
+                        <!--<select id="tipoImball" itemsEnum="it.ac.cargoflow.entity.TipoImballaggio" width="50%"
+                                label="msg://select.label"/>-->
+                    </hbox>
+                    <hbox width="100%">
+                        <integerField id="confezioniIntAdr" label="msg://numberField.label" width="50%" property="confezioniIntAdr"
+                                     dataContainer="merceDc"/>
+                        <entityComboBox id="imballaggioField" property="imballaggio" dataContainer="merceDc"
+                                        itemsContainer="imballaggiosDc" label="msg://imballaggioField.label"
+                                        width="50%">
+                            <actions>
+                                <action id="entityLookupAction" type="entity_lookup"/>
+                                <action id="entityClearAction" type="entity_clear"/>
+                            </actions>
+                        </entityComboBox>
+                    </hbox>
                 </vbox>
             </vbox>
         </formLayout>

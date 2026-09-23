@@ -82,13 +82,11 @@
                 </prefix>
             </textField>
             <textField id="denominazioneField" property="denominazione" label="Denominazione Ufficiale"/>
-
             <hbox>
                 <checkbox id="colli" label="msg://colli.label" property="colli" dataContainer="elementoADRDc"/>
                 <checkbox id="rinfusa" label="msg://rinfusa.label" dataContainer="elementoADRDc" property="tRinfusa"/>
                 <checkbox id="cisterna" label="msg://cisterna.label" dataContainer="elementoADRDc" property="cisterna"/>
             </hbox>
-
             <select id="gruppoImballaggioField" property="gruppoImballaggio" visible="false"
                     emptySelectionAllowed="true">
                 <prefix>
@@ -156,6 +154,7 @@
                     <regexp regexp="^X?[0-9]{2,3}$"/>
                 </validators>
             </textField>
+            <select id="umField" property="um"/>
         </formLayout>
         <vbox id="etichette" visible="false" padding="false">
             <h4 text="msg://it.ac.cargoflow.entity/ElementoADR.etichette"/>
@@ -208,7 +207,6 @@
                 </columns>
             </dataGrid>
         </vbox>
-
         <vbox id="disposizioniImballaggio" visible="false" padding="false">
             <h4 text="msg://it.ac.cargoflow.entity/ElementoADR.disposizioniImballaggio"/>
             <hbox id="disposizioniImballaggioButtonsPanel" classNames="buttons-panel">

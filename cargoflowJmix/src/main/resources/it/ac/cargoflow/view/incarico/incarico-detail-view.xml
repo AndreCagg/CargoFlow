@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<view xmlns="http://jmix.io/schema/flowui/view"
+<view xmlns="http://jmix.io/schema/flowui/view" xmlns:groupg="http://jmix.io/schema/groupgrid/ui"
       xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
       title="msg://incaricoDetailView.title"
       focusComponent="form">
@@ -58,6 +58,20 @@
             <collection id="merceDc" property="merce"/>
             <collection id="fasceOrarieDc" property="fasceOrarie"/>
         </instance>
+        <collection id="colliADRsDc" class="it.ac.cargoflow.entity.ColliADR">
+            <fetchPlan extends="_base">
+                <property name="colli" fetchPlan="_base">
+                    <property name="elementoAdr" fetchPlan="_base">
+                        <property name="onu"/>
+                    </property>
+                </property>
+            </fetchPlan>
+            <loader id="colliADRsDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from ColliADR e]]>
+                </query>
+            </loader>
+        </collection>
     </data>
     <facets>
         <dataLoadCoordinator auto="true"/>
@@ -137,6 +151,47 @@
                 <column property="id_epal"/>
             </columns>
         </dataGrid>
+        <button id="creaCollo" visible="false" text="msg://button.text" icon="ADD_ACTION"
+                alignSelf="END" themeNames="primary"/>
+
+
+        <vbox id="colliBox" padding="false" visible="false">
+            <h4 text="msg://h4.text"/>
+            <hbox id="colliButtonsPanel" classNames="buttons-panel">
+                <button action="colliADRsDataGrid.edit"/>
+                <button action="colliADRsDataGrid.remove"/>
+            </hbox>
+            <!--<DataGrid id="colliADRsDataGrid" dataContainer="colliADRsDc" minWidth="100px" width="100%">
+                <actions>
+                    <action id="edit" type="list_edit"/>
+                    <action id="remove" type="list_remove"/>
+                </actions>
+                <columns>
+                    <column key="num" header="#" sortable="false" property="num"/>
+                    <column key="tipoImball" property="tipoImballaggio"/>
+                    <column property="colli.segnacollo"/>
+                    <column property="colli.elementoAdr.onu"/>
+                </columns>
+            </DataGrid>-->
+            <groupg:groupDataGrid id="colliADRsDataGrid" dataContainer="colliADRsDc" minWidth="100px" width="100%"
+                                  sortByGroupEnabled="false">
+                <groupg:actions>
+                    <groupg:action id="edit" type="list_edit"/>
+                    <groupg:action id="remove" type="list_remove"/>
+                </groupg:actions>
+                <groupg:groupBy>
+                    <groupg:columnRef key="num"/>
+                </groupg:groupBy>
+                <groupg:columns>
+                    <groupg:groupColumn header="#" displayColumnsGrouperOnIconClick="false" key="group"/>
+                    <groupg:column key="num" header="#" property="num"/>
+                    <groupg:column key="tipoImball" property="tipoImballaggio"/>
+                    <groupg:column property="colli.segnacollo"/>
+                    <groupg:column property="colli.elementoAdr.onu"/>
+                    <groupg:column key="adr" header="ADR"/>
+                </groupg:columns>
+            </groupg:groupDataGrid>
+        </vbox>
 
         <h4 text="Fasce Orarie"/>
         <hbox id="fasceOrarieButtonsPanel" classNames="buttons-panel">

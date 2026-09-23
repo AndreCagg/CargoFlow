@@ -1,19 +1,19 @@
 package it.ac.cargoflow.view.merce;
 
 import com.vaadin.flow.component.AbstractField;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import io.jmix.flowui.Notifications;
 import io.jmix.flowui.component.checkbox.JmixCheckbox;
 import io.jmix.flowui.component.combobox.EntityComboBox;
 import io.jmix.flowui.component.select.JmixSelect;
+import io.jmix.flowui.component.textfield.JmixIntegerField;
 import io.jmix.flowui.component.textfield.JmixNumberField;
 import io.jmix.flowui.component.textfield.TypedTextField;
 import io.jmix.flowui.component.valuepicker.EntityPicker;
 import io.jmix.flowui.view.*;
-import it.ac.cargoflow.entity.ElementoADR;
-import it.ac.cargoflow.entity.Merce;
-import it.ac.cargoflow.entity.TipoMerce;
+import it.ac.cargoflow.entity.*;
 import it.ac.cargoflow.view.main.MainView;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -37,7 +37,11 @@ public class MerceDetailView extends StandardDetailView<Merce> {
     @Autowired
     private Notifications notifications;
     @ViewComponent
-    private JmixNumberField qtaAdr;
+    private JmixIntegerField confezioniIntAdr;
+    @ViewComponent
+    private JmixNumberField numConf;
+    @ViewComponent
+    private EntityComboBox<Imballaggio> imballaggioField;
 
     @Subscribe("epalField")
     public void onEpalFieldComponentValueChange(final AbstractField.ComponentValueChangeEvent<JmixCheckbox, Boolean> event) {
@@ -76,7 +80,9 @@ public class MerceDetailView extends StandardDetailView<Merce> {
 
         if(!b){
             elementoAdrField.setValue(null);
-            qtaAdr.setValue(null);
+            confezioniIntAdr.setValue(0);
+            numConf.setValue(0D);
+            imballaggioField.setValue(null);
         }
     }
 
@@ -108,11 +114,21 @@ public class MerceDetailView extends StandardDetailView<Merce> {
         }
     }
 
+    @Subscribe("elementoAdrField")
+    public void onElementoAdrFieldComponentValueChange(final AbstractField.ComponentValueChangeEvent<EntityComboBox<ElementoADR>, ElementoADR> event) {
+        ElementoADR e = event.getValue();
+        UM um = e.getUm();
+
+        if(e!=null) {
+            numConf.setPrefixComponent(new Span(um.toString()));
+        }
+    }
+
     private boolean epalOk(){
         return !(epalField.getValue() && id_epalField.getValue().isEmpty());
     }
 
     private boolean adrOk(){
-        return !(adr.getValue() && (elementoAdrField.getValue()==null || qtaAdr.isInvalid() || qtaAdr.getValue()==null || qtaAdr.getValue()==0.0));
+        return !(adr.getValue() && (elementoAdrField.getValue()==null || confezioniIntAdr.isInvalid() || confezioniIntAdr.getValue()==null || confezioniIntAdr.getValue()==0 || numConf.getValue() == 0));
     }
 }

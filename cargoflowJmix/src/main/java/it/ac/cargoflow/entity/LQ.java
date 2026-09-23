@@ -74,7 +74,8 @@ public class LQ {
     @Column(name = "VALORE")
     private Double valoreCombinatiInterno;
 
-    @Column(name = "UM")
+    @NotNull
+    @Column(name = "UM", nullable = false)
     private Integer um;
 
     @Column(name = "VERSION", nullable = false)

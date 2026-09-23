@@ -3,13 +3,18 @@ package it.ac.cargoflow.view.incarico;
 import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.BlurNotifier;
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.combobox.ComboBoxBase;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.data.renderer.Renderer;
 import com.vaadin.flow.data.renderer.TextRenderer;
 import com.vaadin.flow.router.Route;
 import io.jmix.core.DataManager;
@@ -23,12 +28,17 @@ import io.jmix.flowui.component.grid.DataGridColumn;
 import io.jmix.flowui.component.textfield.TypedTextField;
 import io.jmix.flowui.component.validation.ValidationErrors;
 import io.jmix.flowui.component.valuepicker.EntityPicker;
+import io.jmix.flowui.kit.component.button.JmixButton;
 import io.jmix.flowui.model.*;
 import io.jmix.flowui.view.*;
+import io.jmix.groupgridflowui.component.GroupDataGrid;
+import io.jmix.groupgridflowui.component.renderer.GroupDataGridColumnComponentRenderer;
 import it.ac.cargoflow.app.AziendaSedeContext;
+import it.ac.cargoflow.app.ColliADRBean;
 import it.ac.cargoflow.conf.Costants;
 import it.ac.cargoflow.entity.*;
 import it.ac.cargoflow.view.cliente.ClienteDetailView;
+import it.ac.cargoflow.view.colliadr.ColliADRDetailView;
 import it.ac.cargoflow.view.main.MainView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +48,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Route(value = "incaricoes/:id", layout = MainView.class)
@@ -120,6 +132,28 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
     private H4 txtSediConsegna;
     @ViewComponent
     private JmixCheckbox nonConsegnare;
+    @ViewComponent
+    private DataGrid<Merce> merceDataGrid;
+    @ViewComponent
+    private CollectionPropertyContainer<Merce> merceDc;
+    @ViewComponent
+    private JmixButton creaCollo;
+    @ViewComponent
+    private VerticalLayout colliBox;
+    @ViewComponent
+    private CollectionContainer<ColliADR> colliADRsDc;
+    @ViewComponent
+    private GroupDataGrid<ColliADR> colliADRsDataGrid;
+    @Autowired
+    private ColliADRBean cb;
+
+    Supplier<Integer> generaNumADR = () ->{
+        return  colliADRsDc.getMutableItems().stream()
+                .mapToInt(child -> child.getNum())
+                .max()
+                .orElse(0);
+
+    };
 
     @Subscribe("ldvField")
     public void onLdvFieldValueChange(final AbstractField.ComponentValueChangeEvent<TypedTextField<String>, String> event) {
@@ -178,6 +212,7 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
         if(!errors.isEmpty()){
             validation.showValidationErrors(errors);
             event.preventSave();
+            return;
         }
     }
 
@@ -373,6 +408,59 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
         DataGridColumn<IncaricoFasciaOraria> tipo = fasceOrarieDataGrid.getColumnByKey("tipo");
 
         tipo.setRenderer(new TextRenderer<>(item -> Boolean.TRUE.equals(item.getConsegna()) ? "CONSEGNA" : "RITIRO"));
+
+
+        //TODO da cambiare per metterlo vicino al numero
+        colliADRsDataGrid.getColumnByKey("adr").setRenderer(new ComponentRenderer<>(this::createADRLabel));
+
+        creaCollo.setVisible(almenoUnADR());
+        colliADRsDataGrid.expandAll();
+
+        if(!es.isNew(getEditedEntity()))
+            colliBox.setVisible(cb.ciSonoColli(getEditedEntity()));
+    }
+
+    private Span createADRLabel(ColliADR obj){
+        Span s = new Span();
+
+        //1.
+        List<Merce> colli = obj.getColli();
+        for(Merce m : colli){
+            log.info("CIAOO");
+            Optional<Integer> lq = Optional.ofNullable(m.getElementoAdr().getQuantitaLimitate());
+
+            // verifica esenzione
+            if(lq.isEmpty() || lq.get() == 0){
+                s.setText("NON ESENTABILE");
+                s.getElement().getThemeList().add("badge warning");
+                break;
+            }
+
+            //2.
+            if(obj.getTipoImballaggio().equals(TipoImballaggio.COMBINATO)){
+                if(!(colli.stream().anyMatch(collo -> collo.getElementoAdr().getQuantitaLimitate()==0))){
+                    if(colli.stream().mapToDouble(m2 -> m.getDimensioneConf()*m.getConfezioniIntAdr()).sum()> 30.0){
+                        s.setText("Errore");//superato limite di 30kg per imballaggio combinato
+                        s.getElement().getThemeList().add("badge error");
+                    }
+                }
+            }else{
+                if(colli.stream().mapToDouble(m2 -> m.getDimensioneConf()*m.getConfezioniIntAdr()).sum()> 20.0){ //TODO esternalizzare questi parametri, ma forse conviene archiviarli
+                    s.setText("Errore");//superato limite di 20kg per imballaggio combinato
+                    s.getElement().getThemeList().add("badge error");
+                }
+            }
+
+
+            //3. verifica tipo imballo
+
+        }
+
+        return s;
+    }
+
+    private boolean almenoUnADR(){
+        return merceDc.getItems().stream().anyMatch(obj -> obj.getElementoAdr()!=null);
     }
 
     private void enableContrassegno(Boolean en) {
@@ -523,4 +611,100 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
             aggiornaFasceOrarie(event.getValue(), false);
         }
     }
+
+    @Subscribe(id = "merceDc", target = Target.DATA_CONTAINER)
+    public void onMerceDcCollectionChange(final CollectionContainer.CollectionChangeEvent<Merce> event) {
+        boolean b = almenoUnADR();
+
+        creaCollo.setVisible(b);
+
+        if(!b){
+            colliADRsDc.getMutableItems().clear();
+        }
+    }
+
+    @Subscribe(id = "creaCollo", subject = "clickListener")
+    public void onCreaColloClick(final ClickEvent<JmixButton> event) {
+        dialogWindows.detail(this, ColliADR.class)
+                .withParentDataContext(dc)
+                .withInitializer(collo -> {
+                    collo.setNum(generaNumADR.get() + 1);
+                })
+                .withViewConfigurer(detail -> {
+                    ((ColliADRDetailView) detail)
+                            .setMerce(merceDc.getMutableItems().stream()
+                                    .filter(m ->
+                                            m.getColliADR() == null &&
+                                                    m.getMerce_tipo().equals(TipoMerce.COLLO) && m.getElementoAdr()!=null).toList());
+                })
+                .withAfterCloseListener(close -> {
+                    if(close.closedWith(StandardOutcome.SAVE)){
+                        ColliADRDetailView view = (ColliADRDetailView) close.getView();
+                        List<Merce> selezionata = view.getSelezionata();
+
+                        colliBox.setVisible(true);
+
+                        ColliADR collo = view.getEditedEntity();
+                        collo.setColli(selezionata);
+                        collo.setTipoImballaggio(view.getTipoImballaggio());
+                        colliADRsDc.getMutableItems().add(collo);
+                        colliADRsDataGrid.expandAll();
+
+                        for(Merce m : selezionata){
+                            dc.merge(m).setColliADR(collo);
+                        }
+                    }
+                })
+                .build()
+                .open();
+    }
+
+    @Subscribe(id = "colliADRsDc", target = Target.DATA_CONTAINER)
+    public void onColliADRsDcCollectionChange(final CollectionContainer.CollectionChangeEvent<ColliADR> e) {
+        if (e.getChangeType() == CollectionChangeType.REMOVE_ITEMS) {
+            for (ColliADR removed : e.getChanges()) {
+                merceDc.getMutableItems().stream()
+                        .filter(m -> m.getColliADR() != null
+                                && m.getColliADR().getId().equals(removed.getId()))
+                        .forEach(m -> dc.merge(m).setColliADR(null));
+            }
+        }
+
+        if(colliADRsDc.getItems().isEmpty()){
+            colliBox.setVisible(false);
+        }
+    }
+
+    @Subscribe(id = "merceDc", target = Target.DATA_CONTAINER)
+    public void onMerceDcItemPropertyChange(final InstanceContainer.ItemPropertyChangeEvent<Merce> event) {
+        if (event.getProperty().equals("colliADR")) return;
+
+        //1. verifica se ce la merce in un collo. 2. stacca dal dc la relazione con m. 3. rimuovi m dalal lista colli. 4. assegna la nuova lista colli. 5. eventualmente rimuovi collo da cc e dc
+        // regola da infilare nel cervelletto: se una entità va modificata in qualche modo allora va fatta managed
+
+        Merce m = event.getItem();
+        boolean eligibile = m.getElementoAdr() == null || m.getMerce_tipo().equals(TipoMerce.PALLET);
+        if (!eligibile) return;
+
+        colliADRsDc.getItems().stream()
+                .filter(collo -> collo.getColli() != null && collo.getColli().contains(m))
+                .findFirst()
+                .ifPresent(collo -> {
+                    Merce merceManaged = dc.merge(m);
+                    ColliADR colloManaged = dc.merge(collo);
+
+                    merceManaged.setColliADR(null);
+
+                    List<Merce> aggiornata = new ArrayList<>(colloManaged.getColli());
+                    aggiornata.remove(merceManaged);
+                    colloManaged.setColli(aggiornata);
+
+                    if (aggiornata.isEmpty()) {
+                        colliADRsDc.getMutableItems().remove(colloManaged);
+                        dc.remove(colloManaged);
+                    }
+                });
+    }
+
+
 }
