@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS"
+        logicalFilePath="it/ac/cargoflow/liquibase/changelog/2026/09/24-164400-ed8687c7.xml">
+    <changeSet id="1" author="cargoflowJmix">
+        <addColumn tableName="ELEMENTO_ADR">
+            <column name="QUANTITA_ESENTI_ID" type="INT"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="2" author="cargoflowJmix">
+        <addForeignKeyConstraint baseColumnNames="QUANTITA_ESENTI_ID" baseTableName="ELEMENTO_ADR"
+                                 constraintName="FK_ELEMENTO_ADR_ON_QUANTITA_ESENTI" referencedColumnNames="ID"
+                                 referencedTableName="EQ"/>
+    </changeSet>
+    <changeSet id="3" author="cargoflowJmix">
+        <dropColumn columnName="quantita_esenti" tableName="elemento_adr"/>
+    </changeSet>
+</databaseChangeLog>

@@ -23,7 +23,6 @@ import java.util.UUID;
 @JmixEntity
 @Table(name = "ELEMENTO_ADR", indexes = {
         @Index(name = "IDX_ELEMENTO_ADR_CLASSE_PERICOLO", columnList = "CLASSE_PERICOLO_ID"),
-        @Index(name = "IDX_ELEMENTO_ADR_IMBALLAGGIO_COMUNE", columnList = "IMBALLAGGIO_COMUNE_ID"),
         @Index(name = "IDX_ELEMENTO_ADR_CODICE_CISTERNA", columnList = "CODICE_CISTERNA")
 })
 @Entity
@@ -59,18 +58,13 @@ public class ElementoADR {
     @OnDeleteInverse(DeletePolicy.DENY)
     private List<EtichetteADR> etichette;
 
-    @JoinTable(name = "ELEMENTO_ADR_DISPOSIZIONI_SPECIALI_ADR_LINK",
-            joinColumns = @JoinColumn(name = "ELEMENTO_A_D_R_ID", referencedColumnName = "ID"),
-            inverseJoinColumns = @JoinColumn(name = "DISPOSIZIONI_SPECIALI_A_D_R_ID", referencedColumnName = "ID"))
-    @ManyToMany
-    @OnDeleteInverse(DeletePolicy.DENY)
-    private List<DisposizioniSpecialiADR> disposizioniSpeciali;
+    @JoinColumn(name = "QUANTITA_LIMITATE_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private LQ quantitaLimitate;
 
-    @Column(name = "QUANTITA_LIMITATE")
-    private Integer quantitaLimitate;
-
-    @Column(name = "QUANTITA_ESENTI")
-    private Integer quantitaEsenti;
+    @JoinColumn(name = "QUANTITA_ESENTI_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Eq quantitaEsenti;
 
     @Column(name = "COLLI")
     private Boolean colli;
@@ -80,25 +74,6 @@ public class ElementoADR {
 
     @Column(name = "CISTERNA")
     private Boolean cisterna;
-
-    @JoinTable(name = "ELEMENTO_ADR_ISTRUZIONI_IMBALLAGGIO_ADR_LINK",
-            joinColumns = @JoinColumn(name = "ELEMENTO_A_D_R_ID", referencedColumnName = "ID"),
-            inverseJoinColumns = @JoinColumn(name = "ISTRUZIONI_IMBALLAGGIO_A_D_R_ID", referencedColumnName = "ID"))
-    @ManyToMany
-    @OnDeleteInverse(DeletePolicy.DENY)
-    private List<IstruzioniImballaggioADR> istruzioniImballaggio;
-
-    @JoinTable(name = "ELEMENTO_ADR_DISPOSIZIONI_SPECIALI_IMBALL_ADR_LINK",
-            joinColumns = @JoinColumn(name = "ELEMENTO_A_D_R_ID", referencedColumnName = "ID"),
-            inverseJoinColumns = @JoinColumn(name = "DISPOSIZIONI_SPECIALI_IMBALL_A_D_R_ID", referencedColumnName = "ID"))
-    @ManyToMany
-    @OnDeleteInverse(DeletePolicy.DENY)
-    private List<DisposizioniSpecialiImballADR> disposizioniImballaggio;
-
-    @OnDeleteInverse(DeletePolicy.DENY)
-    @JoinColumn(name = "IMBALLAGGIO_COMUNE_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private ImballaggioComune imballaggioComune;
 
     @Column(name = "CODICE_CISTERNA")
     private Integer codiceCisterna;
@@ -120,16 +95,6 @@ public class ElementoADR {
 
     @Column(name = "COD_RESTRIZIONE_B")
     private Character codRestrizioneB;
-
-    @OnDeleteInverse(DeletePolicy.DENY)
-    @JoinColumn(name = "TRASPORTO_COLLI_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private TrasportoColli trasportoColli;
-
-    @OnDeleteInverse(DeletePolicy.DENY)
-    @JoinColumn(name = "RINFUSA_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private TrasportoRinfusa rinfusa;
 
     @JoinTable(name = "ELEMENTO_ADR_CARICO_SCARICO_MOVIMENTAZIONE_LINK",
             joinColumns = @JoinColumn(name = "ELEMENTO_A_D_R_ID", referencedColumnName = "ID"),
@@ -175,6 +140,30 @@ public class ElementoADR {
     @DeletedDate
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
+
+    public void setQuantitaEsenti(Eq quantitaEsenti) {
+        this.quantitaEsenti = quantitaEsenti;
+    }
+
+    public Eq getQuantitaEsenti() {
+        return quantitaEsenti;
+    }
+
+    public void setCategoriaTrasporto(CatTrasporto categoriaTrasporto) {
+        this.categoriaTrasporto = categoriaTrasporto == null ? null : categoriaTrasporto.getId();
+    }
+
+    public CatTrasporto getCategoriaTrasporto() {
+        return categoriaTrasporto == null ? null : CatTrasporto.fromId(categoriaTrasporto);
+    }
+
+    public void setQuantitaLimitate(LQ quantitaLimitate) {
+        this.quantitaLimitate = quantitaLimitate;
+    }
+
+    public LQ getQuantitaLimitate() {
+        return quantitaLimitate;
+    }
 
     public UM getUm() {
         return um == null ? null : UM.fromId(um);
@@ -248,22 +237,6 @@ public class ElementoADR {
         this.caricoScaricoMovimentazione = caricoScaricoMovimentazione;
     }
 
-    public void setRinfusa(TrasportoRinfusa rinfusa) {
-        this.rinfusa = rinfusa;
-    }
-
-    public TrasportoRinfusa getRinfusa() {
-        return rinfusa;
-    }
-
-    public void setTrasportoColli(TrasportoColli trasportoColli) {
-        this.trasportoColli = trasportoColli;
-    }
-
-    public TrasportoColli getTrasportoColli() {
-        return trasportoColli;
-    }
-
     public Character getCodRestrizioneB() {
         return codRestrizioneB;
     }
@@ -286,62 +259,6 @@ public class ElementoADR {
 
     public void setLimiteGalleria(Integer limiteGalleria) {
         this.limiteGalleria = limiteGalleria;
-    }
-
-    public Integer getCategoriaTrasporto() {
-        return categoriaTrasporto;
-    }
-
-    public void setCategoriaTrasporto(Integer categoriaTrasporto) {
-        this.categoriaTrasporto = categoriaTrasporto;
-    }
-
-    public ImballaggioComune getImballaggioComune() {
-        return imballaggioComune;
-    }
-
-    public void setImballaggioComune(ImballaggioComune imballaggioComune) {
-        this.imballaggioComune = imballaggioComune;
-    }
-
-    public List<DisposizioniSpecialiImballADR> getDisposizioniImballaggio() {
-        return disposizioniImballaggio;
-    }
-
-    public void setDisposizioniImballaggio(List<DisposizioniSpecialiImballADR> disposizioniImballaggio) {
-        this.disposizioniImballaggio = disposizioniImballaggio;
-    }
-
-    public List<IstruzioniImballaggioADR> getIstruzioniImballaggio() {
-        return istruzioniImballaggio;
-    }
-
-    public void setIstruzioniImballaggio(List<IstruzioniImballaggioADR> istruzioniImballaggio) {
-        this.istruzioniImballaggio = istruzioniImballaggio;
-    }
-
-    public Integer getQuantitaEsenti() {
-        return quantitaEsenti;
-    }
-
-    public void setQuantitaEsenti(Integer quantitaEsenti) {
-        this.quantitaEsenti = quantitaEsenti;
-    }
-
-    public Integer getQuantitaLimitate() {
-        return quantitaLimitate;
-    }
-
-    public void setQuantitaLimitate(Integer quantitaLimitate) {
-        this.quantitaLimitate = quantitaLimitate;
-    }
-
-    public List<DisposizioniSpecialiADR> getDisposizioniSpeciali() {
-        return disposizioniSpeciali;
-    }
-
-    public void setDisposizioniSpeciali(List<DisposizioniSpecialiADR> disposizioniSpeciali) {
-        this.disposizioniSpeciali = disposizioniSpeciali;
     }
 
     public List<EtichetteADR> getEtichette() {

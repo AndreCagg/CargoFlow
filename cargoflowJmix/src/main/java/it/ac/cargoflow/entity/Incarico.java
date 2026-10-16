@@ -94,6 +94,10 @@ public class Incarico {
     private Incarico child;
 
     @OnDeleteInverse(DeletePolicy.DENY)
+    @OneToMany(mappedBy = "incarico")
+    private List<Movimenti> movimenti;
+
+    @OnDeleteInverse(DeletePolicy.DENY)
     @JoinColumn(name = "AZIENDA_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Azienda azienda;
@@ -140,6 +144,14 @@ public class Incarico {
     @DeletedDate
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
+
+    public List<Movimenti> getMovimenti() {
+        return movimenti;
+    }
+
+    public void setMovimenti(List<Movimenti> movimenti) {
+        this.movimenti = movimenti;
+    }
 
     public List<IncaricoFasciaOraria> getFasceOrarie() {
         return fasceOrarie;

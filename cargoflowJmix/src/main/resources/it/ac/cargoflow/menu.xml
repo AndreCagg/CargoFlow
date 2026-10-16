@@ -2,7 +2,6 @@
 <menu-config xmlns="http://jmix.io/schema/flowui/menu">
 
     <menu id="application" title="msg://it.ac.cargoflow/menu.application.title" opened="true">
-        <item view="User.list" title="msg://it.ac.cargoflow.view.user/UserListView.title"/>
         <item view="ContrassegnoTipo.list"
               title="msg://it.ac.cargoflow.view.contrassegnotipo/contrassegnoTipoListView.title"/>
         <item view="Incarico.list" title="msg://it.ac.cargoflow.view.incarico/incaricoListView.title"/>
@@ -10,7 +9,6 @@
         <item view="FasciaOraria.list" title="msg://it.ac.cargoflow.view.fasciaoraria/fasciaOrariaListView.title"/>
         <item view="Azienda.list" title="msg://it.ac.cargoflow.view.azienda/aziendaListView.title"/>
         <item view="Sede.list" title="msg://it.ac.cargoflow.view.sede/sedeListView.title"/>
-        <item view="LQ.list" title="msg://it.ac.cargoflow.view.lq/LQListView.title"/>
         <item view="Merce.list" title="msg://it.ac.cargoflow.view.merce/merceListView.title"/>
     </menu>
 
@@ -18,29 +16,23 @@
         <item view="ElementoADR.list" title="msg://it.ac.cargoflow.view.elementoadr/elementoADRListView.title"/>
         <item view="ClassePericolo.list"
               title="msg://it.ac.cargoflow.view.classepericolo/classePericoloListView.title"/>
-        <item view="ImballaggioComune.list"
-              title="msg://it.ac.cargoflow.view.imballaggiocomune/imballaggioComuneListView.title"/>
         <item view="DisposizioniCisternaADR.list"
               title="msg://it.ac.cargoflow.view.disposizionicisternaadr/disposizioniCisternaADRListView.title"/>
-        <item view="TrasportoRinfusa.list"
-              title="msg://it.ac.cargoflow.view.trasportorinfusa/trasportoRinfusaListView.title"/>
-        <item view="TrasportoColli.list"
-              title="msg://it.ac.cargoflow.view.trasportocolli/trasportoColliListView.title"/>
         <item view="EtichetteADR.list" title="msg://it.ac.cargoflow.view.etichetteadr/etichetteADRListView.title"/>
-        <item view="DisposizioniSpecialiADR.list"
-              title="msg://it.ac.cargoflow.view.disposizionispecialiadr/disposizioniSpecialiADRListView.title"/>
-        <item view="IstruzioniImballaggioADR.list"
-              title="msg://it.ac.cargoflow.view.istruzioniimballaggioadr/istruzioniImballaggioADRListView.title"/>
-        <item view="DisposizioniSpecialiImballADR.list"
-              title="msg://it.ac.cargoflow.view.disposizionispecialiimballadr/disposizioniSpecialiImballADRListView.title"/>
         <item view="CaricoScaricoMovimentazione.list"
               title="msg://it.ac.cargoflow.view.caricoscaricomovimentazione/caricoScaricoMovimentazioneListView.title"/>
         <item view="Esercizi.list" title="msg://it.ac.cargoflow.view.esercizi/eserciziListView.title"/>
+        <item view="LQ.list" title="msg://it.ac.cargoflow.view.lq/LQListView.title"/>
+        <item view="Eq.list" title="msg://it.ac.cargoflow.view.eq/eqListView.title"/>
     </menu>
 
     <menu id="veicoli" title="msg:///veicoliMenu" opened="true">
         <item view="VeicoliTrasporto.list"
               title="msg://it.ac.cargoflow.view.veicolitrasporto/veicoliTrasportoListView.title"/>
+    </menu>
+
+    <menu id="accesso" title="msg:///accessomenu" opened="true">
+        <item view="User.list" title="msg://it.ac.cargoflow.view.user/UserListView.title"/>
     </menu>
 
 </menu-config>

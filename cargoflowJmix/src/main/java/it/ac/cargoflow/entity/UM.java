@@ -8,7 +8,8 @@ public enum UM implements EnumClass<Integer> {
 
     L(10),
     KG(20),
-    ML(30);
+    ML(30),
+    G(40);
 
     private final Integer id;
 

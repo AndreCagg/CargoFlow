@@ -18,7 +18,8 @@ import java.util.UUID;
 @JmixEntity
 @Table(name = "VEICOLI", indexes = {
         @Index(name = "IDX_VEICOLI_AZIENDA", columnList = "AZIENDA_ID"),
-        @Index(name = "IDX_VEICOLI_SEDE", columnList = "SEDE_ID")
+        @Index(name = "IDX_VEICOLI_SEDE", columnList = "SEDE_ID"),
+        @Index(name = "IDX_VEICOLI_CODICE_CISTERNA", columnList = "CODICE_CISTERNA_ID")
 })
 @Entity
 public class Veicoli {

@@ -27,10 +27,6 @@ import java.util.*;
 @EditedEntityContainer("elementoADRDc")
 public class ElementoADRDetailView extends StandardDetailView<ElementoADR> {
     @ViewComponent
-    private DataGrid<IstruzioniImballaggioADR> istruzioniImballaggioDataGrid;
-    @ViewComponent
-    private DataGrid<DisposizioniSpecialiImballADR> disposizioniImballaggioDataGrid;
-    @ViewComponent
     private DataGrid<CaricoScaricoMovimentazione> caricoScaricoMovimentazioneDataGrid;
     @ViewComponent
     private DataGrid<Esercizi> eserciziDataGrid;
@@ -38,12 +34,6 @@ public class ElementoADRDetailView extends StandardDetailView<ElementoADR> {
     private TypedTextField<Object> limiteGalleriaField;
     @Autowired
     private Notifications notifications;
-    @ViewComponent
-    private EntityComboBox<TrasportoColli> trasportoColliField;
-    @ViewComponent
-    private EntityComboBox<TrasportoRinfusa> rinfusaField;
-    @ViewComponent
-    private EntityComboBox<ImballaggioComune> imballaggioComuneField;
     @ViewComponent
     private JmixSelect<TipoCisterna> codiceCisternaField;
     @ViewComponent
@@ -55,30 +45,16 @@ public class ElementoADRDetailView extends StandardDetailView<ElementoADR> {
     @ViewComponent
     private JmixSelect<GruppoImballaggio> gruppoImballaggioField;
     @ViewComponent
-    private TypedTextField<Integer> quantitaLimitateField;
+    private EntityComboBox<LQ> quantitaLimitateField;
     @ViewComponent
     private TypedTextField<Integer> quantitaEsentiField;
-    @ViewComponent
-    private VerticalLayout imballaggio;
-    @ViewComponent
-    private CollectionPropertyContainer<IstruzioniImballaggioADR> istruzioniImballaggioDc;
-    @ViewComponent
-    private HorizontalLayout disposizioniImballaggioButtonsPanel;
-    @ViewComponent
-    private CollectionPropertyContainer<DisposizioniSpecialiImballADR> disposizioniImballaggioDc;
     @ViewComponent
     private JmixCheckbox colli;
     @ViewComponent
     private VerticalLayout etichette;
-    @ViewComponent
-    private VerticalLayout disposizioniImballaggio;
-    @ViewComponent
-    private CollectionPropertyContainer<EtichetteADR> etichetteDc;
 
     @Subscribe
     public void onBeforeShow(final BeforeShowEvent event) {
-        istruzioniImballaggioDataGrid.getColumnByKey("codice").setRenderer(new TextRenderer<>(IstruzioniImballaggioADR::getCodice));
-        disposizioniImballaggioDataGrid.getColumnByKey("codice").setRenderer(new TextRenderer<>(DisposizioniSpecialiImballADR::getCodice));
         caricoScaricoMovimentazioneDataGrid.getColumnByKey("sigla").setRenderer(new TextRenderer<>(obj -> "CV"+obj.getSigla()));
         eserciziDataGrid.getColumnByKey("codice").setRenderer(new TextRenderer<>(obj -> "S"+obj.getCodice()));
         Character sup = getEditedEntity().getCodRestrizioneA();
@@ -120,65 +96,6 @@ public class ElementoADRDetailView extends StandardDetailView<ElementoADR> {
             event.preventSave();
             return;
         }
-
-            if(colliB){
-                if(disposizioniImballaggioDc.getItems().size()>0 && istruzioniImballaggioDc.getItems().size()==0){
-                    notifications.create("Non è possibile salvare la materia ADR in quanto sono specificate disposizioni speciali di imballaggio in assenza di istruzioni di imballaggio")
-                            .withType(Notifications.Type.ERROR)
-                            .show();
-
-                    event.preventSave();
-                    return;
-                }
-            }
-
-        List<IstruzioniImballaggioADR> istruzioni = istruzioniImballaggioDc.getItems();
-         Set<TipoIstrImballaggio> tipiIstr = new HashSet<>();
-
-        for(IstruzioniImballaggioADR istr : istruzioni){
-            tipiIstr.add(istr.getTipo());
-        }
-
-        List<DisposizioniSpecialiImballADR> disposizioni = disposizioniImballaggioDc.getItems();
-        for(DisposizioniSpecialiImballADR disp : disposizioni){
-            if(disp.getTipo().equals(TipoDispImball.PP) && !tipiIstr.contains(TipoIstrImballaggio.P)){
-                notifications.create("Non è possibile salvare la materia ADR in quanto le disposizioni di imballaggio non sono compatibili con gli imballaggi specificati")
-                        .withType(Notifications.Type.ERROR)
-                        .show();
-
-                event.preventSave();
-                return;
-            }
-
-            if(disp.getTipo().equals(TipoDispImball.L) && !tipiIstr.contains(TipoIstrImballaggio.LP)){
-                notifications.create("Non è possibile salvare la materia ADR in quanto le disposizioni di imballaggio non sono compatibili con gli imballaggi specificati")
-                        .withType(Notifications.Type.ERROR)
-                        .show();
-
-                event.preventSave();
-                return;
-            }
-
-            if(disp.getTipo().equals(TipoDispImball.RR) && !tipiIstr.contains(TipoIstrImballaggio.R)){
-                notifications.create("Non è possibile salvare la materia ADR in quanto le disposizioni di imballaggio non sono compatibili con gli imballaggi specificati")
-                        .withType(Notifications.Type.ERROR)
-                        .show();
-
-                event.preventSave();
-                return;
-            }
-
-            if((disp.getTipo().equals(TipoDispImball.BB) || disp.getTipo().equals(TipoDispImball.B)) && !tipiIstr.contains(TipoIstrImballaggio.IBC)){
-                notifications.create("Non è possibile salvare la materia ADR in quanto le disposizioni di imballaggio non sono compatibili con gli imballaggi specificati")
-                        .withType(Notifications.Type.ERROR)
-                        .show();
-
-                event.preventSave();
-                return;
-            }
-        }
-
-
     }
 
     @Subscribe("colli")
@@ -189,12 +106,8 @@ public class ElementoADRDetailView extends StandardDetailView<ElementoADR> {
             gruppoImballaggioField.setVisible(true);
             quantitaLimitateField.setVisible(true);
             quantitaEsentiField.setVisible(true);
-            imballaggioComuneField.setVisible(true);
-            trasportoColliField.setVisible(true);
 
             etichette.setVisible(true);
-            imballaggio.setVisible(true);
-            disposizioniImballaggio.setVisible(true);
         }else if(!colli.getValue() && !rinfusa.getValue() && !cisterna.getValue()){
             resetAndHideAll(null);
         }
@@ -206,7 +119,6 @@ public class ElementoADRDetailView extends StandardDetailView<ElementoADR> {
             resetAndHideAll(TipoADR.RINFUSA);
             rinfusa.setValue(true);
 
-            rinfusaField.setVisible(true);
         }else if(!colli.getValue() && !rinfusa.getValue() && !cisterna.getValue()){
             resetAndHideAll(null);
         }
@@ -238,33 +150,19 @@ public class ElementoADRDetailView extends StandardDetailView<ElementoADR> {
         gruppoImballaggioField.clear();
         quantitaLimitateField.clear();
         quantitaEsentiField.clear();
-        imballaggioComuneField.clear();
-        trasportoColliField.clear();
-        rinfusaField.clear();
         codiceCisternaField.clear();
         disposizioniCisternaField.clear();
 
         if (getEditedEntity().getEtichette() != null) {
             getEditedEntity().getEtichette().clear();
         }
-        if (getEditedEntity().getIstruzioniImballaggio() != null) {
-            getEditedEntity().getIstruzioniImballaggio().clear();
-        }
-        if (getEditedEntity().getDisposizioniImballaggio() != null) {
-            getEditedEntity().getDisposizioniImballaggio().clear();
-        }
 
         gruppoImballaggioField.setVisible(false);
         quantitaLimitateField.setVisible(false);
         quantitaEsentiField.setVisible(false);
-        imballaggioComuneField.setVisible(false);
-        trasportoColliField.setVisible(false);
-        rinfusaField.setVisible(false);
         codiceCisternaField.setVisible(false);
         disposizioniCisternaField.setVisible(false);
 
         etichette.setVisible(false);
-        imballaggio.setVisible(false);
-        disposizioniImballaggio.setVisible(false);
     }
 }

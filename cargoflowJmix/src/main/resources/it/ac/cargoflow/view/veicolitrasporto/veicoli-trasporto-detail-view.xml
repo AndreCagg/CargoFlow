@@ -6,10 +6,13 @@
         <instance id="veicoliTrasportoDc"
                   class="it.ac.cargoflow.entity.VeicoliTrasporto">
             <fetchPlan extends="_base">
-                <property name="caratteristicheAdr" fetchPlan="_base"/>
+                <property name="certificati" fetchPlan="_base"/>
+                <property name="codiceCisterna" fetchPlan="_base"/>
+                <property name="disposizioniCisterna" fetchPlan="_base"/>
             </fetchPlan>
             <loader id="veicoliTrasportoDl"/>
-            <collection id="caratteristicheAdrDc" property="caratteristicheAdr"/>
+            <collection id="certificatiDc" property="certificati"/>
+            <collection id="disposizioniCisternaDc" property="disposizioniCisterna"/>
         </instance>
     </data>
     <facets>
@@ -26,41 +29,95 @@
                 <responsiveStep minWidth="40em" columns="2"/>
             </responsiveSteps>
             <textField id="targaField" property="targa"/>
-
-            <hbox>
-                <checkbox id="adrField" property="adr" label="msg://adrField.label" dataContainer="veicoliTrasportoDc"/>
-                <checkbox id="cisternaAdrField" property="cisternaAdr" label="msg://cisternaAdrField.label"
-                          visible="false" dataContainer="veicoliTrasportoDc"/>
-            </hbox>
-            <textField id="codCisterna" label="msg://codCisterna.label" visible="false"/>
+            <textField id="portataUtileField" property="portataUtile"/>
+            <textField id="volumeUtileField" property="volumeUtile"/>
+            <select id="mtaField" property="mta"
+                    label="Massa complessiva a pieno carico"/>
+            <checkbox id="adrField" property="adr" label="msg://adrField.label"/>
         </formLayout>
-        <vbox id="caratteristiche" padding="false">
-            <h4 text="msg://it.ac.cargoflow.entity/VeicoliTrasporto.caratteristicheAdr"/>
-            <hbox id="caratteristicheAdrButtonsPanel" classNames="buttons-panel">
-                <button id="addColli" action="caratteristicheAdrDataGrid.addColliAction" text="msg://button.text"/>
-                <button id="addRinfusa" action="caratteristicheAdrDataGrid.addRinfusaAction" text="msg://button1.text"/>
-                <button
-                        id="disposizioniCisterna" action="caratteristicheAdrDataGrid.addCisternaAction"
-                        text="msg://button2.text" visible="false"/>
-                <button action="caratteristicheAdrDataGrid.excludeAction"/>
+
+        <vbox id="adrVbox" padding="false" width="100%">
+            <formLayout id="adrForm" dataContainer="veicoliTrasportoDc">
+                <responsiveSteps>
+                    <responsiveStep minWidth="0" columns="1"/>
+                    <responsiveStep minWidth="40em" columns="2"/>
+                </responsiveSteps>
+                <select id="tipologiaField" property="tipologia"
+                        label="msg://tipologiaField.label"/>
+                <hbox>
+                    <checkbox id="pannelliAdrField" property="pannelliAdr"
+                              label="msg://pannelliAdrField.label" dataContainer="veicoliTrasportoDc"/>
+                    <checkbox id="etichetteAdrField" property="etichetteAdr"
+                              label="msg://etichetteAdrField.label" dataContainer="veicoliTrasportoDc"/>
+                    <checkbox id="borsaEqAdrField" property="borsaEqAdr"
+                              label="msg://borsaEqAdrField.label" dataContainer="veicoliTrasportoDc"/>
+                </hbox>
+                <numberField id="kgEstintoreField" property="kgEstintore"
+                           label="Kg estintore"/>
+                <entityComboBox id="codiceCisternaField" property="codiceCisterna"
+                                label="msg://codiceCisternaField.label">
+                    <actions>
+                        <action id="entityClearAction" type="entity_clear"/>
+                    </actions>
+                </entityComboBox>
+                <numberField id="pressioneCalcoloField" property="pressioneCalcolo"
+                           label="msg://pressioneCalcoloField.label"/>
+                <numberField id="pressioneProvaField" property="pressioneProva"
+                           label="msg://pressioneProvaField.label"/>
+            </formLayout>
+        </vbox>
+
+        <vbox id="certBox" padding="false">
+
+            <h4 text="msg://h4.text"/>
+            <hbox id="certificatiButtonsPanel" classNames="buttons-panel">
+                <button action="certificatiDataGrid.addAction"/>
+                <button action="certificatiDataGrid.excludeAction"/>
             </hbox>
-            <dataGrid id="caratteristicheAdrDataGrid" dataContainer="caratteristicheAdrDc" width="100%" minHeight="20em">
+            <dataGrid id="certificatiDataGrid" dataContainer="certificatiDc" width="100%" height="100%">
                 <actions>
-                    <action id="addColliAction" type="list_add"/>
-                    <action id="addRinfusaAction" type="list_add"/>
-                    <action id="addCisternaAction" type="list_add"/>
+                    <action id="addAction" type="list_add">
+                        <properties>
+                            <property name="openMode" value="DIALOG"/>
+                        </properties>
+                    </action>
                     <action id="excludeAction" type="list_exclude"/>
                 </actions>
                 <columns>
-                    <column key="tipo" header="msg://column1.header"/>
-                    <column key="instanceName" header="msg://veicoliTrasportoDetailView.caratteristicheAdrColumn"/>
-                    <column property="descrizione" header="msg://column.header"/>
+                    <column property="codice"/>
+                    <column property="descrizione"/>
                 </columns>
             </dataGrid>
         </vbox>
-        <hbox id="detailActions">
-            <button id="saveAndCloseButton" action="saveCloseAction"/>
-            <button id="closeButton" action="closeAction"/>
-        </hbox>
+
+        <vbox id="disposizCisternaBox" padding="false">
+
+            <h4 text="Disposizioni ADR cisterna"/>
+            <hbox id="disposizioniCisternaButtonsPanel" classNames="buttons-panel">
+                <button action="disposizioniCisternaDataGrid.addAction"/>
+                <button action="disposizioniCisternaDataGrid.excludeAction"/>
+            </hbox>
+            <dataGrid id="disposizioniCisternaDataGrid" dataContainer="disposizioniCisternaDc" width="100%" height="100%">
+                <actions>
+                    <action id="addAction" type="list_add">
+                        <properties>
+                            <property name="openMode" value="DIALOG"/>
+                        </properties>
+                    </action>
+                    <action id="excludeAction" type="list_exclude"/>
+                </actions>
+                <columns>
+                    <column property="tipoRequisito"/>
+                    <column property="descrizione"/>
+                    <column property="num"/>
+                    <column property="tipo"/>
+                </columns>
+            </dataGrid>
+
+            <hbox id="detailActions">
+                <button id="saveAndCloseButton" action="saveCloseAction"/>
+                <button id="closeButton" action="closeAction"/>
+            </hbox>
+        </vbox>
     </layout>
 </view>

@@ -293,6 +293,7 @@ public class MainView extends StandardMainView implements BeforeEnterObserver{
         aggiornaMenu_("application");
         aggiornaMenu_("ADR");
         aggiornaMenu_("veicoli");
+        aggiornaMenu_("accesso");
     }
 
     private void aggiornaMenu_(String menuStr){

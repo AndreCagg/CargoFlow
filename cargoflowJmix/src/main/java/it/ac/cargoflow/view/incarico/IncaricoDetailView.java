@@ -10,6 +10,8 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -21,6 +23,7 @@ import io.jmix.core.DataManager;
 import io.jmix.core.EntityStates;
 import io.jmix.core.security.CurrentAuthentication;
 import io.jmix.flowui.DialogWindows;
+import io.jmix.flowui.UiComponents;
 import io.jmix.flowui.component.checkbox.JmixCheckbox;
 import io.jmix.flowui.component.combobox.EntityComboBox;
 import io.jmix.flowui.component.grid.DataGrid;
@@ -35,6 +38,8 @@ import io.jmix.groupgridflowui.component.GroupDataGrid;
 import io.jmix.groupgridflowui.component.renderer.GroupDataGridColumnComponentRenderer;
 import it.ac.cargoflow.app.AziendaSedeContext;
 import it.ac.cargoflow.app.ColliADRBean;
+import it.ac.cargoflow.app.IncaricoBean;
+import it.ac.cargoflow.app.StatoMovimentoBean;
 import it.ac.cargoflow.conf.Costants;
 import it.ac.cargoflow.entity.*;
 import it.ac.cargoflow.view.cliente.ClienteDetailView;
@@ -47,6 +52,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -136,24 +142,20 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
     private DataGrid<Merce> merceDataGrid;
     @ViewComponent
     private CollectionPropertyContainer<Merce> merceDc;
-    @ViewComponent
-    private JmixButton creaCollo;
-    @ViewComponent
-    private VerticalLayout colliBox;
-    @ViewComponent
-    private CollectionContainer<ColliADR> colliADRsDc;
-    @ViewComponent
-    private GroupDataGrid<ColliADR> colliADRsDataGrid;
     @Autowired
     private ColliADRBean cb;
-
-    Supplier<Integer> generaNumADR = () ->{
-        return  colliADRsDc.getMutableItems().stream()
-                .mapToInt(child -> child.getNum())
-                .max()
-                .orElse(0);
-
-    };
+    @Autowired
+    private UiComponents ui;
+    @ViewComponent
+    private CollectionPropertyContainer<IncaricoSedeMittDest> sedi_mitt_destDc;
+    @ViewComponent
+    private Span stato;
+    @Autowired
+    private IncaricoBean ib;
+    @Autowired
+    private StatoMovimentoBean smb;
+    @ViewComponent
+    private VerticalLayout movimentiBox;
 
     @Subscribe("ldvField")
     public void onLdvFieldValueChange(final AbstractField.ComponentValueChangeEvent<TypedTextField<String>, String> event) {
@@ -201,11 +203,16 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
                     incarico.setSedi_mitt_dest(List.of(ismd));
                 }
 
-                Movimenti m = this.dm.create(Movimenti.class);
-                Movimenti mdc = this.dc.merge(m);
+                Movimenti mdc = this.dc.create(Movimenti.class);
                 incarico.setAzienda(asc.getAzienda());
-                mdc.setSede(asc.getSede());
-                mdc.setDescrizione(StatoMovimenti.INSERITO);
+                mdc.setDescrizione(StatoMovimenti.DISPONIBILE_MAGAZZINO);
+                mdc.setIncarico(getEditedEntity());
+
+                if (incarico.getMovimenti() == null) {
+                    incarico.setMovimenti(new ArrayList<>());
+                }
+
+                incarico.getMovimenti().add(mdc);
             }
         }
 
@@ -379,15 +386,28 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
         this.data_consegna_previstaField.setMin(LocalDate.now());
         this.enableContrassegno(false);
         Incarico giaCreato = this.getEditedEntity();
+        boolean isnew = this.es.isNew(giaCreato);
+        movimentiBox.setVisible(!isnew);
 
-        if (this.es.isNew(giaCreato)) {
+        String statoStr = "", statoTheme = "";
+
+        if (isnew) {
             this.sedeMittDest.setVisible(true);
             this.sedi_mitt_destDataGrid.setVisible(false);
             this.sedi_mitt_destButtonsPanel.setVisible(false);
             txtSediConsegna.setVisible(false);
-        } else {
-            this.sedeMittDest.setVisible(false);
+
+            //TODO lo stato di bozza o disponibile magazzino si decide in base al fatto se adr e tutte le cose sono valide o meno
+            statoStr = StatoMovimenti.DISPONIBILE_MAGAZZINO.toString();
+            statoTheme = "badge primary";
+        }else{
+            StatoMovimenti sm = ib.ultimoMovimento(getEditedEntity());
+            statoStr = sm.name();
+            statoTheme = "badge "+smb.getColore(sm);
         }
+
+        stato.setText(statoStr);
+        stato.getElement().getThemeList().add(statoTheme);
 
         nonConsegnare.setVisible(ritiroField.getValue());
 
@@ -410,53 +430,221 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
         tipo.setRenderer(new TextRenderer<>(item -> Boolean.TRUE.equals(item.getConsegna()) ? "CONSEGNA" : "RITIRO"));
 
 
-        //TODO da cambiare per metterlo vicino al numero
-        colliADRsDataGrid.getColumnByKey("adr").setRenderer(new ComponentRenderer<>(this::createADRLabel));
+        merceDataGrid.getColumnByKey("adr").setRenderer(new ComponentRenderer<>(this::createADRLabel));
+        merceDataGrid.getColumnByKey("fragile").setRenderer(new ComponentRenderer<>(obj -> {
+            Icon icon = ui.create(Icon.class);
 
-        creaCollo.setVisible(almenoUnADR());
-        colliADRsDataGrid.expandAll();
-
-        if(!es.isNew(getEditedEntity()))
-            colliBox.setVisible(cb.ciSonoColli(getEditedEntity()));
-    }
-
-    private Span createADRLabel(ColliADR obj){
-        Span s = new Span();
-
-        //1.
-        List<Merce> colli = obj.getColli();
-        for(Merce m : colli){
-            log.info("CIAOO");
-            Optional<Integer> lq = Optional.ofNullable(m.getElementoAdr().getQuantitaLimitate());
-
-            // verifica esenzione
-            if(lq.isEmpty() || lq.get() == 0){
-                s.setText("NON ESENTABILE");
-                s.getElement().getThemeList().add("badge warning");
-                break;
-            }
-
-            //2.
-            if(obj.getTipoImballaggio().equals(TipoImballaggio.COMBINATO)){
-                if(!(colli.stream().anyMatch(collo -> collo.getElementoAdr().getQuantitaLimitate()==0))){
-                    if(colli.stream().mapToDouble(m2 -> m.getDimensioneConf()*m.getConfezioniIntAdr()).sum()> 30.0){
-                        s.setText("Errore");//superato limite di 30kg per imballaggio combinato
-                        s.getElement().getThemeList().add("badge error");
-                    }
-                }
+            if(obj.getFragile()){
+                icon.setIcon(VaadinIcon.CHECK);
             }else{
-                if(colli.stream().mapToDouble(m2 -> m.getDimensioneConf()*m.getConfezioniIntAdr()).sum()> 20.0){ //TODO esternalizzare questi parametri, ma forse conviene archiviarli
-                    s.setText("Errore");//superato limite di 20kg per imballaggio combinato
-                    s.getElement().getThemeList().add("badge error");
-                }
+                icon.setIcon(VaadinIcon.CLOSE_SMALL);
             }
 
+            return icon;
+        }));
+        merceDataGrid.getColumnByKey("epal").setRenderer(new ComponentRenderer<>(obj -> {
+            Icon icon = ui.create(Icon.class);
 
-            //3. verifica tipo imballo
+            if(obj.getEpal()){
+                icon.setIcon(VaadinIcon.CHECK);
+            }else{
+                icon.setIcon(VaadinIcon.CLOSE_SMALL);
+            }
 
+            return icon;
+        }));
+
+        List<IncaricoSedeMittDest> sedi = sedi_mitt_destDc.getItems().stream()
+                .filter(this::isValida)
+                .sorted(Comparator.comparing(IncaricoSedeMittDest::getDal,
+                        Comparator.nullsLast(Comparator.naturalOrder())))
+                .toList();
+
+        if(!sedi.isEmpty()){
+            sedeMitt.setValue(sedi.getLast().getSede_mittente());
+            sedeDest.setValue(sedi.getLast().getSede_destinatario());
+        }else{
+            sedeMitt.setVisible(false);
+            sedeDest.setVisible(false);
         }
 
-        return s;
+        sedi_mitt_destDataGrid.getColumnByKey("stato").setRenderer(new ComponentRenderer<>(obj -> {
+            IncaricoSedeMittDest i = (IncaricoSedeMittDest) obj;
+
+            Span s = ui.create(Span.class);
+
+            s.setText(i.getStato().getLast().getStato().toString());
+            if(i.getStato().getLast().getStato().equals(StatoIntegrazione.VALIDO)){
+                s.getElement().getThemeList().add("badge success");
+            }else{
+                s.getElement().getThemeList().add("badge warning");
+            }
+
+
+            return s;
+        }));
+    }
+
+    private Span createADRLabel(Merce obj) {
+        Span s = new Span();
+
+        ElementoADR elemento = obj.getElementoAdr();
+        boolean adr = elemento != null;
+
+        if (!adr)
+            return s;
+
+        // Default per merce ADR rilevata
+        dc.merge(obj).setStatoAdr(StatoADR.VALIDO);
+
+        TipoImballaggio ti = obj.getTipoImball();
+        boolean isTermo = ti.equals(TipoImballaggio.TERMO);
+        boolean isCombinato = ti.equals(TipoImballaggio.COMBINATO);
+        boolean isCat0 = elemento.getCategoriaTrasporto().equals(CatTrasporto.CAT0);
+
+        // ==========================================
+        // 1. VERIFICA REGIME EQ (Quantità Esenti - ADR 3.5)
+        // ==========================================
+        if (obj.getUmAdr().equals(UM.G) || obj.getUmAdr().equals(UM.ML)) {
+            Eq eq = elemento.getQuantitaEsenti();
+            if (eq != null && eq.getCodice() != 0) {
+
+                boolean internoEqVietato = Boolean.TRUE.equals(eq.getVietatoInterno());
+                boolean esternoEqVietato = Boolean.TRUE.equals(eq.getVietatoEsterno());
+
+                if (!internoEqVietato && !esternoEqVietato) {
+                    double nettoInterno = obj.getNettoInterno();
+                    double nettoTotaleCollo = obj.getNettoInterno() * obj.getConfezioniIntAdr();
+
+                    boolean qtaInternaOk = eq.getQtaInterno() != null && nettoInterno <= eq.getQtaInterno();
+                    boolean qtaEsternaOk = eq.getQtaEsterno() != null && nettoTotaleCollo <= eq.getQtaEsterno();
+
+                    if (qtaInternaOk && qtaEsternaOk) {
+                        s.setText("REGIME EQ (E" + eq.getCodice() + ")");
+                        s.getElement().getThemeList().add("badge success");
+                        dc.merge(obj).setStatoAdr(StatoADR.VALIDO);
+                        return s;
+                    }
+                }
+            }
+        }
+
+        // ==========================================
+        // 2. VERIFICA REGIME LQ (Quantità Limitate - ADR 3.4)
+        // ==========================================
+        LQ lq = elemento.getQuantitaLimitate();
+        if (lq != null && lq.getLq() != 0) {
+
+            // --- A. BLOCCO STRUTTURALE/TASSAZIONE NORMATIVA (Es. LQ3 su Termo) ---
+            // Se c'è un divieto di legge assoluto non legato alla quantità, blocca con NON CONFORME.
+            if (lq.getLq() == 3 && isTermo) {
+                s.setText("ADR NON CONFORME (LQ3 vietato su termo)");
+                s.getElement().getThemeList().add("badge error");
+                dc.merge(obj).setStatoAdr(StatoADR.NON_VALIDO);
+                return s;
+            }
+
+            // --- B. VERIFICA AUTORIZZAZIONE ED IDONEITÀ QUANTITÀ (INTERNO ED ESTERNO) ---
+            boolean lqValido = false;
+
+            if (isCombinato) {
+                // Controlla se la modalità combinata è vietata a prescindere
+                boolean combinatoAutorizzato = !Boolean.TRUE.equals(lq.getCombinatoInternoNonAutorizzato())
+                        && !Boolean.TRUE.equals(lq.getCombinatoColloNonAutorizzato());
+
+                if (combinatoAutorizzato) {
+                    // Controllo capienza recipiente interno
+                    boolean internoOk = Boolean.TRUE.equals(lq.getCombinatoInternoIllimitato())
+                            || (lq.getValoreCombinatiInterno() != null && obj.getNettoInterno() <= lq.getValoreCombinatiInterno());
+
+                    // Controllo limite peso/massa collo
+                    double limiteCollo = (lq.getValoreCombinatiCollo() != null && !Boolean.TRUE.equals(lq.getCombinatoColloIllimitato()))
+                            ? lq.getValoreCombinatiCollo() : 30.0;
+
+                    boolean colloOk = Boolean.TRUE.equals(lq.getCombinatoColloIllimitato())
+                            || obj.getDimensioneConf() <= limiteCollo;
+
+                    if (internoOk && colloOk) {
+                        lqValido = true;
+                    }
+                }
+            } else if (isTermo) {
+                // Controlla se la modalità pellicola/termo è vietata a prescindere
+                boolean termoAutorizzato = !Boolean.TRUE.equals(lq.getPellicolaInternoNonAutorizzato())
+                        && !Boolean.TRUE.equals(lq.getPellicolaColloNonAutorizzato());
+
+                if (termoAutorizzato) {
+                    // Controllo capienza recipiente interno
+                    boolean internoOk = Boolean.TRUE.equals(lq.getPellicolaInternoIllimitato())
+                            || (lq.getValorePellicolaInterno() != null && obj.getNettoInterno() <= lq.getValorePellicolaInterno());
+
+                    // Controllo limite peso/massa collo
+                    double limiteCollo = (lq.getValorePellicolaCollo() != null && !Boolean.TRUE.equals(lq.getPellicolaColloIllimitato()))
+                            ? lq.getValorePellicolaCollo() : 20.0;
+
+                    boolean colloOk = Boolean.TRUE.equals(lq.getPellicolaColloIllimitato())
+                            || obj.getDimensioneConf() <= limiteCollo;
+
+                    if (internoOk && colloOk) {
+                        lqValido = true;
+                    }
+                }
+            }
+
+            // Se tutti i parametri rientrano nelle soglie autorizzate per LQ
+            if (lqValido) {
+                s.setText("REGIME LQ");
+                s.getElement().getThemeList().add("badge warning");
+                dc.merge(obj).setStatoAdr(StatoADR.VALIDO);
+                return s;
+            }
+        }
+
+        // ==========================================
+        // 3. FALLBACK: ESENZIONE 1.1.3.6 O ADR COMPLETO (Passo 4)
+        // ==========================================
+        // Se l'imballo non è autorizzato per LQ causa superamento quantità,
+        // la merce scala automaticamente alla verifica dei 1000 Punti o ADR Completo.
+        if (!isCat0) {
+            return esenzioneParziale(s, obj);
+        } else {
+            s.setText("ADR COMPLETO");
+            s.getElement().getThemeList().add("badge warning");
+            dc.merge(obj).setStatoAdr(StatoADR.VALIDO);
+            return s;
+        }
+    }
+
+    @Subscribe("ritiroField")
+    public void onRitiroFieldValueChange(final AbstractField.ComponentValueChangeEvent<JmixCheckbox, Boolean> event) {
+        log.info("ritiro: {} -> {} (fromClient={})",
+                event.getOldValue(), event.getValue(), event.isFromClient());
+        if (!event.isFromClient()) {
+            new Exception("trace ritiro").printStackTrace();
+        }
+    }
+
+    private Span esenzioneParziale(Span s, Merce obj) {
+        if (esenzioneParziale_(obj)) {
+            s.setText("ADR ESENTE 1.1.3.6");
+            s.getElement().getThemeList().add("badge warning");
+            return s;
+        } else {
+            s.setText("ADR COMPLETO");
+            s.getElement().getThemeList().add("badge warning");
+            return s;
+        }
+    }
+
+    private boolean esenzioneParziale_(Merce obj) {
+        // Quantità totale per il calcolo dei punti (Litri o Kg)
+        double quantitaTotale = obj.getNettoInterno() * obj.getConfezioniIntAdr();
+
+        // Recupera il MOLTIPLICATORE (non l'ID) in base alla Categoria di Trasporto ADR 1.1.3.6.4:
+        // Cat 1 -> 50, Cat 2 -> 3, Cat 3 -> 1, Cat 4 -> 0
+        int moltiplicatore = obj.getElementoAdr().getCategoriaTrasporto().getId();
+
+        return (quantitaTotale * moltiplicatore) <= 1000;
     }
 
     private boolean almenoUnADR(){
@@ -515,6 +703,43 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
                 }
             }
         }
+
+        List<IncaricoSedeMittDest> sedi = sedi_mitt_destDc.getItems().stream()
+                .filter(this::isValida)
+                .sorted(Comparator.comparing(IncaricoSedeMittDest::getDal,
+                        Comparator.nullsLast(Comparator.naturalOrder())))
+                .toList();
+
+        boolean b = sedi.size()>1;
+        sedeMitt.setVisible(b);
+        sedeDest.setVisible(b);
+
+        if(b){
+            sedeMitt.setValue(sedi.getLast().getSede_mittente());
+            sedeDest.setValue(sedi.getLast().getSede_destinatario());
+        }else{
+            sedeMitt.setValue(null);
+            sedeDest.setValue(null);
+        }
+
+        eliminaFasceOrarie(false);
+        eliminaFasceOrarie(true);
+        Cliente sm = sedeMitt.getValue(), sd = sedeDest.getValue();
+
+        if(ritiroField.getValue()){
+            aggiornaFasceOrarie(sm != null ? sm : mittenteField.getValue(), false);
+            aggiornaFasceOrarie(sd != null ? sd : destinatarioField.getValue(), true);
+        }else{
+            aggiornaFasceOrarie(sd != null ? sd : destinatarioField.getValue(), true);
+        }
+    }
+
+    private boolean isValida(IncaricoSedeMittDest s) {
+        List<StatoVariazioneSedi> stati = s.getStato();
+        if (stati == null || stati.isEmpty()) return false;
+
+        StatoVariazioneSedi ultimo = stati.stream().filter(obj -> obj.getStato().equals(StatoIntegrazione.VALIDO)).max(Comparator.comparing(StatoVariazioneSedi::getDataStato)).orElse(null);
+        return ultimo != null && ultimo.getStato().equals(StatoIntegrazione.VALIDO);
     }
 
     @Subscribe("destinatarioField")
@@ -592,11 +817,11 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
         List<IncaricoFasciaOraria> rimuovere = new ArrayList<>();
 
         for(IncaricoFasciaOraria f : lst){
-            if(!consegna && f.getRitiro()){
+            if(!consegna && Boolean.TRUE.equals(f.getRitiro())){
                 rimuovere.add(f);
             }
 
-            if(consegna && f.getConsegna()){
+            if(consegna && Boolean.TRUE.equals(f.getConsegna())){
                 rimuovere.add(f);
             }
         }
@@ -612,18 +837,7 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
         }
     }
 
-    @Subscribe(id = "merceDc", target = Target.DATA_CONTAINER)
-    public void onMerceDcCollectionChange(final CollectionContainer.CollectionChangeEvent<Merce> event) {
-        boolean b = almenoUnADR();
-
-        creaCollo.setVisible(b);
-
-        if(!b){
-            colliADRsDc.getMutableItems().clear();
-        }
-    }
-
-    @Subscribe(id = "creaCollo", subject = "clickListener")
+    /*@Subscribe(id = "creaCollo", subject = "clickListener")
     public void onCreaColloClick(final ClickEvent<JmixButton> event) {
         dialogWindows.detail(this, ColliADR.class)
                 .withParentDataContext(dc)
@@ -657,9 +871,9 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
                 })
                 .build()
                 .open();
-    }
+    }*/
 
-    @Subscribe(id = "colliADRsDc", target = Target.DATA_CONTAINER)
+    /*@Subscribe(id = "colliADRsDc", target = Target.DATA_CONTAINER)
     public void onColliADRsDcCollectionChange(final CollectionContainer.CollectionChangeEvent<ColliADR> e) {
         if (e.getChangeType() == CollectionChangeType.REMOVE_ITEMS) {
             for (ColliADR removed : e.getChanges()) {
@@ -673,7 +887,7 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
         if(colliADRsDc.getItems().isEmpty()){
             colliBox.setVisible(false);
         }
-    }
+    }*/
 
     @Subscribe(id = "merceDc", target = Target.DATA_CONTAINER)
     public void onMerceDcItemPropertyChange(final InstanceContainer.ItemPropertyChangeEvent<Merce> event) {
@@ -686,7 +900,7 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
         boolean eligibile = m.getElementoAdr() == null || m.getMerce_tipo().equals(TipoMerce.PALLET);
         if (!eligibile) return;
 
-        colliADRsDc.getItems().stream()
+        /*colliADRsDc.getItems().stream()
                 .filter(collo -> collo.getColli() != null && collo.getColli().contains(m))
                 .findFirst()
                 .ifPresent(collo -> {
@@ -703,7 +917,7 @@ public class IncaricoDetailView extends StandardDetailView<Incarico> {
                         colliADRsDc.getMutableItems().remove(colloManaged);
                         dc.remove(colloManaged);
                     }
-                });
+                });*/
     }
 
 

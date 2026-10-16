@@ -64,11 +64,11 @@
             <columns resizable="true">
                 <column property="ldv"/>
                 <column property="data_consegna_prevista"/>
-                <column property="ritiro"/>
+                <column key="ritiro" property="ritiro"/>
                 <column property="mittente"/>
                 <column property="destinatario"/>
                 <column property="azienda"/>
-                <column property="contrassegno"/>
+                <column key="contrassegno" property="contrassegno"/>
                 <column property="note"/>
             </columns>
         </dataGrid>

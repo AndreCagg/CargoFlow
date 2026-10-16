@@ -31,6 +31,7 @@
                 <property name="destinatario" fetchPlan="_base">
                     <property name="azienda" fetchPlan="_base"/>
                 </property>
+                <property name="movimenti" fetchPlan="_base"/>
                 <property name="azienda" fetchPlan="_base"/>
                 <property name="contrassegno_tipo" fetchPlan="_base"/>
                 <property name="sedi_mitt_dest" fetchPlan="_base">
@@ -58,17 +59,11 @@
             <collection id="merceDc" property="merce"/>
             <collection id="fasceOrarieDc" property="fasceOrarie"/>
         </instance>
-        <collection id="colliADRsDc" class="it.ac.cargoflow.entity.ColliADR">
-            <fetchPlan extends="_base">
-                <property name="colli" fetchPlan="_base">
-                    <property name="elementoAdr" fetchPlan="_base">
-                        <property name="onu"/>
-                    </property>
-                </property>
-            </fetchPlan>
-            <loader id="colliADRsDl" readOnly="true">
+        <collection id="movimentisDc" class="it.ac.cargoflow.entity.Movimenti">
+            <fetchPlan extends="_base"/>
+            <loader id="movimentisDl" readOnly="true">
                 <query>
-                    <![CDATA[select e from ColliADR e]]>
+                    <![CDATA[select e from Movimenti e]]>
                 </query>
             </loader>
         </collection>
@@ -81,6 +76,8 @@
         <action id="closeAction" type="detail_close"/>
     </actions>
     <layout>
+
+        <span id="stato"/>
         <formLayout id="form" dataContainer="incaricoDc">
             <responsiveSteps>
                 <responsiveStep minWidth="0" columns="1"/>
@@ -91,9 +88,17 @@
             <datePicker id="data_consegna_previstaField" property="data_consegna_prevista"/>
             <textField id="valore_doganaleField" property="valore_doganale"/>
             <textField id="valore_assicurazioneField" property="valore_assicurazione"/>
-            <entityComboBox id="mittenteField" property="mittente" itemsContainer="clientiDc" allowCustomValue="true"/>
+            <entityComboBox id="mittenteField" property="mittente" itemsContainer="clientiDc" allowCustomValue="true">
+                <actions>
+                    <action id="entityClearAction" type="entity_clear"/>
+                </actions>
+            </entityComboBox>
             <entityComboBox id="destinatarioField" property="destinatario" itemsContainer="clientiDc"
-                            allowCustomValue="true"/>
+                            allowCustomValue="true">
+                <actions>
+                    <action id="entityClearAction" type="entity_clear"/>
+                </actions>
+            </entityComboBox>
             <textField id="contrassegno_valoreField" property="contrassegno_valore"/>
             <entityComboBox id="contrassegno_tipoField" property="contrassegno_tipo"
                             itemsContainer="contrassegnoTipoesDc"/>
@@ -146,12 +151,13 @@
                 <column property="merce_tipo"/>
                 <column property="peso_kg"/>
                 <column property="volume_m3"/>
-                <column property="fragile"/>
-                <column property="epal"/>
+                <column key="fragile" property="fragile"/>
+                <column key="epal" property="epal"/>
                 <column property="id_epal"/>
+                <column key="adr" sortable="false"/>
             </columns>
         </dataGrid>
-        <button id="creaCollo" visible="false" text="msg://button.text" icon="ADD_ACTION"
+        <!--<button id="creaCollo" visible="false" text="msg://button.text" icon="ADD_ACTION"
                 alignSelf="END" themeNames="primary"/>
 
 
@@ -161,18 +167,6 @@
                 <button action="colliADRsDataGrid.edit"/>
                 <button action="colliADRsDataGrid.remove"/>
             </hbox>
-            <!--<DataGrid id="colliADRsDataGrid" dataContainer="colliADRsDc" minWidth="100px" width="100%">
-                <actions>
-                    <action id="edit" type="list_edit"/>
-                    <action id="remove" type="list_remove"/>
-                </actions>
-                <columns>
-                    <column key="num" header="#" sortable="false" property="num"/>
-                    <column key="tipoImball" property="tipoImballaggio"/>
-                    <column property="colli.segnacollo"/>
-                    <column property="colli.elementoAdr.onu"/>
-                </columns>
-            </DataGrid>-->
             <groupg:groupDataGrid id="colliADRsDataGrid" dataContainer="colliADRsDc" minWidth="100px" width="100%"
                                   sortByGroupEnabled="false">
                 <groupg:actions>
@@ -191,7 +185,7 @@
                     <groupg:column key="adr" header="ADR"/>
                 </groupg:columns>
             </groupg:groupDataGrid>
-        </vbox>
+        </vbox>-->
 
         <h4 text="Fasce Orarie"/>
         <hbox id="fasceOrarieButtonsPanel" classNames="buttons-panel">
@@ -252,9 +246,29 @@
                 <column property="sede_destinatario.ragioneSociale"/>
                 <column property="sede_destinatario.indirizzo"/>
                 <column property="sede_destinatario.cap"/>
-                <column property="ultimoStato" header="Stato"/>
+                <column key="stato" property="ultimoStato" header="Stato"/>
             </columns>
         </dataGrid>
+        <vbox id="movimentiBox" padding="false">
+            <h4 text="msg://h41.text"/>
+            <hbox id="movimentiButtonsPanel" classNames="buttons-panel">
+                <button action="movimentisDataGrid.create"/>
+                <button action="movimentisDataGrid.edit"/>
+                <button action="movimentisDataGrid.remove"/>
+            </hbox>
+            <dataGrid id="movimentisDataGrid" dataContainer="movimentisDc" minWidth="100px" width="100%">
+                <actions>
+                    <action id="create" type="list_create"/>
+                    <action id="edit" type="list_edit"/>
+                    <action id="remove" type="list_remove"/>
+                </actions>
+                <columns>
+                    <column property="data"/>
+                    <column property="descrizione"/>
+                </columns>
+            </dataGrid>
+        </vbox>
+
         <hbox id="detailActions">
             <button id="saveAndCloseButton" action="saveCloseAction"/>
             <button id="closeButton" action="closeAction"/>

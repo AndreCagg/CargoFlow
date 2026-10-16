@@ -7,7 +7,8 @@ import org.springframework.lang.Nullable;
 
 public enum StatoMovimenti implements EnumClass<Integer> {
 
-    INSERITO(10);
+    NON_VALIDO(20),
+    DISPONIBILE_MAGAZZINO(30);
 
     private final Integer id;
 

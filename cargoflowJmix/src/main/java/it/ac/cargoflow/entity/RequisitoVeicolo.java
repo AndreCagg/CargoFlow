@@ -1,10 +1,8 @@
 package it.ac.cargoflow.entity;
 
-import io.jmix.core.DeletePolicy;
 import io.jmix.core.annotation.DeletedBy;
 import io.jmix.core.annotation.DeletedDate;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
-import io.jmix.core.entity.annotation.OnDelete;
 import io.jmix.core.metamodel.annotation.DependsOnProperties;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
@@ -17,7 +15,6 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 
 @JmixEntity
 @Table(name = "REQUISITO_VEICOLO")
@@ -69,27 +66,12 @@ public class RequisitoVeicolo {
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
 
-    @OnDelete(DeletePolicy.DENY)
-    @JoinTable(name = "VEICOLI_TRASPORTO_REQUISITO_VEICOLO_LINK",
-            joinColumns = @JoinColumn(name = "REQUISITO_VEICOLO_ID", referencedColumnName = "ID"),
-            inverseJoinColumns = @JoinColumn(name = "VEICOLI_TRASPORTO_ID", referencedColumnName = "ID"))
-    @ManyToMany
-    private List<VeicoliTrasporto> veicoliTrasportoes;
-
     public TipoRequisitiVeicolo getTipoRequisito() {
         return tipoRequisito == null ? null : TipoRequisitiVeicolo.fromId(tipoRequisito);
     }
 
     public void setTipoRequisito(TipoRequisitiVeicolo tipoRequisito) {
         this.tipoRequisito = tipoRequisito == null ? null : tipoRequisito.getId();
-    }
-
-    public List<VeicoliTrasporto> getVeicoliTrasportoes() {
-        return veicoliTrasportoes;
-    }
-
-    public void setVeicoliTrasportoes(List<VeicoliTrasporto> veicoliTrasportoes) {
-        this.veicoliTrasportoes = veicoliTrasportoes;
     }
 
     public OffsetDateTime getDeletedDate() {

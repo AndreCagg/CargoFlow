@@ -6,7 +6,9 @@
     <data>
         <collection id="veicoliTrasportoesDc"
                     class="it.ac.cargoflow.entity.VeicoliTrasporto">
-            <fetchPlan extends="_base"/>
+            <fetchPlan extends="_base">
+                <property name="codiceCisterna" fetchPlan="_base"/>
+            </fetchPlan>
             <loader id="veicoliTrasportoesDl" readOnly="true">
                 <query>
                     <![CDATA[select e from VeicoliTrasporto e]]>
@@ -53,7 +55,6 @@
             <columns resizable="true">
                 <column property="targa"/>
                 <column property="adr"/>
-                <column property="cisternaAdr"/>
             </columns>
         </dataGrid>
         <hbox id="lookupActions" visible="false">

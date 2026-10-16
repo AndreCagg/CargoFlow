@@ -1,22 +1,24 @@
 package it.ac.cargoflow.entity;
 
+import io.jmix.core.DeletePolicy;
 import io.jmix.core.annotation.DeletedBy;
 import io.jmix.core.annotation.DeletedDate;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
+import io.jmix.core.entity.annotation.OnDelete;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @JmixEntity
 @Table(name = "MOVIMENTI", indexes = {
-        @Index(name = "IDX_MOVIMENTI_SEDE", columnList = "SEDE_ID")
+        @Index(name = "IDX_MOVIMENTI_INCARICO", columnList = "INCARICO_ID")
 })
 @Entity
 public class Movimenti {
@@ -28,10 +30,8 @@ public class Movimenti {
     @Column(name = "DESCRIZIONE")
     private Integer descrizione;
 
-    @JoinColumn(name = "SEDE_ID", nullable = false)
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private Sede sede;
+    @Column(name = "DATA_")
+    private LocalDateTime data = LocalDateTime.now();
 
     @Column(name = "VERSION", nullable = false)
     @Version
@@ -61,20 +61,33 @@ public class Movimenti {
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
 
+    @OnDelete(DeletePolicy.DENY)
+    @JoinColumn(name = "INCARICO_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Incarico incarico;
+
+    public Incarico getIncarico() {
+        return incarico;
+    }
+
+    public void setIncarico(Incarico incarico) {
+        this.incarico = incarico;
+    }
+
+    public LocalDateTime getData() {
+        return data;
+    }
+
+    public void setData(LocalDateTime data) {
+        this.data = data;
+    }
+
     public void setDescrizione(StatoMovimenti descrizione) {
         this.descrizione = descrizione == null ? null : descrizione.getId();
     }
 
     public StatoMovimenti getDescrizione() {
         return descrizione == null ? null : StatoMovimenti.fromId(descrizione);
-    }
-
-    public Sede getSede() {
-        return sede;
-    }
-
-    public void setSede(Sede sede) {
-        this.sede = sede;
     }
 
     public OffsetDateTime getDeletedDate() {

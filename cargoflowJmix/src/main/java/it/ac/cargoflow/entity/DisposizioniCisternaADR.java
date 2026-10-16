@@ -1,20 +1,14 @@
 package it.ac.cargoflow.entity;
 
+import io.jmix.core.DeletePolicy;
 import io.jmix.core.MetadataTools;
-import io.jmix.core.annotation.DeletedBy;
-import io.jmix.core.annotation.DeletedDate;
-import io.jmix.core.entity.annotation.JmixGeneratedValue;
+import io.jmix.core.entity.annotation.OnDelete;
 import io.jmix.core.metamodel.annotation.DependsOnProperties;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.OffsetDateTime;
+import java.util.List;
 
 @JmixEntity
 @Table(name = "CODICE_CISTERNA")
@@ -34,6 +28,21 @@ public class DisposizioniCisternaADR extends RequisitoVeicolo {
     //@Column(name = "TIPO", nullable = false)
     @Column(name = "TIPO")
     private Integer tipo;
+
+    @OnDelete(DeletePolicy.DENY)
+    @JoinTable(name = "VEICOLI_TRASPORTO_DISPOSIZIONI_CISTERNA_ADR_LINK",
+            joinColumns = @JoinColumn(name = "DISPOSIZIONI_CISTERNA_A_D_R_ID"),
+            inverseJoinColumns = @JoinColumn(name = "VEICOLI_TRASPORTO_ID"))
+    @ManyToMany
+    private List<VeicoliTrasporto> veicoliTrasportoes1;
+
+    public List<VeicoliTrasporto> getVeicoliTrasportoes1() {
+        return veicoliTrasportoes1;
+    }
+
+    public void setVeicoliTrasportoes1(List<VeicoliTrasporto> veicoliTrasportoes1) {
+        this.veicoliTrasportoes1 = veicoliTrasportoes1;
+    }
 
 //    @NotNull
 //    @Column(name = "NUM", nullable = false)

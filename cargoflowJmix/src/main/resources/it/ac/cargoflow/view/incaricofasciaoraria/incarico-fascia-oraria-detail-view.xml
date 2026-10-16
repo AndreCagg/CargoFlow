@@ -34,8 +34,8 @@
             </entityPicker>
             <vbox padding="false">
                 <hbox>
-                    <checkbox id="solo_ritiroField" property="ritiro" dataContainer="incaricoFasciaOrariaDc" label="Solo ritiro"/>
-                    <checkbox id="solo_consegnaField" property="consegna" dataContainer="incaricoFasciaOrariaDc" label="Solo consegna"/>
+                    <checkbox id="solo_ritiroField" property="ritiro" dataContainer="incaricoFasciaOrariaDc" label="msg://solo_ritiroField.label"/>
+                    <checkbox id="solo_consegnaField" property="consegna" dataContainer="incaricoFasciaOrariaDc" label="msg://solo_consegnaField.label"/>
                 </hbox>
                 <hbox>
                     <checkbox id="sempre" label="Tutti i giorni" css="background-color: #F2F2F2; border-radius: 15px; padding: 5px"/>

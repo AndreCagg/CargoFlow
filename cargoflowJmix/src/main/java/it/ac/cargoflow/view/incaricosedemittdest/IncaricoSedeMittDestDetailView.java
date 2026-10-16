@@ -77,6 +77,11 @@ public class IncaricoSedeMittDestDetailView extends StandardDetailView<IncaricoS
         } else {
             this.statoComboBox.setVisible(false);
         }
+
+        if(es.isNew(getEditedEntity())){
+            dalField.setReadOnly(true);
+            dalField.setValue(LocalDateTime.now());
+        }
     }
 
     @Subscribe
@@ -106,31 +111,35 @@ public class IncaricoSedeMittDestDetailView extends StandardDetailView<IncaricoS
 
         IncaricoSedeMittDest entity = presave;
 
-        IncaricoSedeMittDest ismd = this.dm.load(IncaricoSedeMittDest.class)
+        List<IncaricoSedeMittDest> ismdList = this.dm.load(IncaricoSedeMittDest.class)
                 .query("select ismd from IncaricoSedeMittDest ismd where ismd.incarico.id = :id order by ismd.createdDate desc")
-                .parameter("id", entity.getIncarico().getId())
-                .optional().orElse(null);
+                .parameter("id", entity.getIncarico().getId()).list();
 
-        if (ismd != null) {
-            IncaricoSedeMittDest ismddc = event.getDataContext().merge(ismd);
-            ismddc.setAl(LocalDateTime.now());
-        }
+        if(!ismdList.isEmpty()) {
+            IncaricoSedeMittDest ismd = ismdList.getFirst();
 
-        if ( this.statoComboBox.getValue() != null) {
-            String stato = this.statoComboBox.getValue().toString();
-            StatoVariazioneSedi svs = this.dm.create(StatoVariazioneSedi.class);
-            StatoVariazioneSedi svsdc = event.getDataContext().merge(svs);
-            svsdc.setStato(StatoIntegrazione.valueOf(stato));
-            svsdc.setIncarico(ismd.getIncarico());
-            svsdc.setSedeMittDest(entity);
-            svsdc.setDataStato(LocalDateTime.now());
-
-            if(entity.getStato()!=null) {
-                entity.getStato().add(svsdc);
-            }else{
-                entity.setStato(new ArrayList<>(List.of(svsdc)));
+            if (ismd != null && ismd.getAl() == null) {
+                IncaricoSedeMittDest ismddc = event.getDataContext().merge(ismd);
+                ismddc.setAl(LocalDateTime.now());
             }
 
+
+            if (this.statoComboBox.getValue() != null) {
+                String stato = this.statoComboBox.getValue().toString();
+                StatoVariazioneSedi svs = this.dm.create(StatoVariazioneSedi.class);
+                StatoVariazioneSedi svsdc = event.getDataContext().merge(svs);
+                svsdc.setStato(StatoIntegrazione.valueOf(stato));
+                svsdc.setIncarico(ismd.getIncarico());
+                svsdc.setSedeMittDest(entity);
+                svsdc.setDataStato(LocalDateTime.now());
+
+                if (entity.getStato() != null) {
+                    entity.getStato().add(svsdc);
+                } else {
+                    entity.setStato(new ArrayList<>(List.of(svsdc)));
+                }
+
+            }
         }
     }
 

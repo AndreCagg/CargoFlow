@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS"
+        logicalFilePath="it/ac/cargoflow/liquibase/changelog/2026/09/28-093231-ed8687c7.xml">
+    <changeSet id="1" author="cargoflowJmix">
+        <dropForeignKeyConstraint baseTableName="veicoli_trasporto_requisito_veicolo_link"
+                                  constraintName="fk_veitrareqvei_on_requisito_veicolo"/>
+    </changeSet>
+    <changeSet id="2" author="cargoflowJmix">
+        <dropForeignKeyConstraint baseTableName="veicoli_trasporto_requisito_veicolo_link"
+                                  constraintName="fk_veitrareqvei_on_veicoli_trasporto"/>
+    </changeSet>
+    <changeSet id="3" author="cargoflowJmix">
+        <dropTable cascadeConstraints="true" tableName="veicoli_trasporto_requisito_veicolo_link"/>
+    </changeSet>
+</databaseChangeLog>

@@ -114,16 +114,6 @@ public class MerceDetailView extends StandardDetailView<Merce> {
         }
     }
 
-    @Subscribe("elementoAdrField")
-    public void onElementoAdrFieldComponentValueChange(final AbstractField.ComponentValueChangeEvent<EntityComboBox<ElementoADR>, ElementoADR> event) {
-        ElementoADR e = event.getValue();
-        UM um = e.getUm();
-
-        if(e!=null) {
-            numConf.setPrefixComponent(new Span(um.toString()));
-        }
-    }
-
     private boolean epalOk(){
         return !(epalField.getValue() && id_epalField.getValue().isEmpty());
     }

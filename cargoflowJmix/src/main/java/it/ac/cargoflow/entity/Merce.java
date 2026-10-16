@@ -5,7 +5,6 @@ import io.jmix.core.annotation.DeletedBy;
 import io.jmix.core.annotation.DeletedDate;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
 import io.jmix.core.entity.annotation.OnDelete;
-import io.jmix.core.entity.annotation.OnDeleteInverse;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
@@ -21,9 +20,7 @@ import java.util.UUID;
 @JmixEntity
 @Table(name = "MERCE", indexes = {
         @Index(name = "IDX_MERCE_INCARICO", columnList = "INCARICO_ID"),
-        @Index(name = "IDX_MERCE_ELEMENTO_ADR", columnList = "ELEMENTO_ADR_ID"),
-        @Index(name = "IDX_MERCE_IMBALLAGGIO", columnList = "IMBALLAGGIO_ID"),
-        @Index(name = "IDX_MERCE_COLLI_ADR", columnList = "COLLI_ADR_ID")
+        @Index(name = "IDX_MERCE_ELEMENTO_ADR", columnList = "ELEMENTO_ADR_ID")
 })
 @Entity
 public class Merce {
@@ -35,13 +32,11 @@ public class Merce {
     @Column(name = "CONFEZIONI_INT_ADR")
     private Integer confezioniIntAdr;
 
+    @Column(name = "NETTO_INTERNO")
+    private Double nettoInterno;
+
     @Column(name = "DIMENSIONI_CONF")
     private Double dimensioneConf;
-
-    @OnDeleteInverse(DeletePolicy.DENY)
-    @JoinColumn(name = "IMBALLAGGIO_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private ImballaggioComune imballaggio;
 
     @Column(name = "UM_ADR")
     private Integer umAdr;
@@ -73,12 +68,18 @@ public class Merce {
     @Column(name = "EPAL")
     private Boolean epal = false;
 
+    @Column(name = "STATO_ADR")
+    private Integer statoAdr;
+
     @Column(name = "ID_EPAL", length = 50)
     private String id_epal;
 
     @JoinColumn(name = "ELEMENTO_ADR_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private ElementoADR elementoAdr;
+
+    @Column(name = "TIPO_IMBALL")
+    private Integer tipoImball;
 
     @Column(name = "VERSION", nullable = false)
     @Version
@@ -108,16 +109,28 @@ public class Merce {
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
 
-    @JoinColumn(name = "COLLI_ADR_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private ColliADR colliADR;
-
-    public ColliADR getColliADR() {
-        return colliADR;
+    public StatoADR getStatoAdr() {
+        return statoAdr == null ? null : StatoADR.fromId(statoAdr);
     }
 
-    public void setColliADR(ColliADR colliADR) {
-        this.colliADR = colliADR;
+    public void setStatoAdr(StatoADR statoAdr) {
+        this.statoAdr = statoAdr == null ? null : statoAdr.getId();
+    }
+
+    public TipoImballaggio getTipoImball() {
+        return tipoImball == null ? null : TipoImballaggio.fromId(tipoImball);
+    }
+
+    public void setTipoImball(TipoImballaggio tipoImball) {
+        this.tipoImball = tipoImball == null ? null : tipoImball.getId();
+    }
+
+    public Double getNettoInterno() {
+        return nettoInterno;
+    }
+
+    public void setNettoInterno(Double nettoInterno) {
+        this.nettoInterno = nettoInterno;
     }
 
     public Double getDimensioneConf() {
@@ -134,14 +147,6 @@ public class Merce {
 
     public Integer getConfezioniIntAdr() {
         return confezioniIntAdr;
-    }
-
-    public ImballaggioComune getImballaggio() {
-        return imballaggio;
-    }
-
-    public void setImballaggio(ImballaggioComune imballaggio) {
-        this.imballaggio = imballaggio;
     }
 
     public UM getUmAdr() {

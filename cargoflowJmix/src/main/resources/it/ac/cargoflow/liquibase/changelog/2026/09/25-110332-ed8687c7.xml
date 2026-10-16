@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS"
+        logicalFilePath="it/ac/cargoflow/liquibase/changelog/2026/09/25-110332-ed8687c7.xml">
+    <changeSet id="1" author="cargoflowJmix">
+        <dropForeignKeyConstraint baseTableName="elemento_adr_disposizioni_speciali_adr_link"
+                                  constraintName="fk_eleadrdisspeadr_on_disposizioni_speciali_a_d_r"/>
+    </changeSet>
+    <changeSet id="2" author="cargoflowJmix">
+        <dropForeignKeyConstraint baseTableName="elemento_adr_disposizioni_speciali_adr_link"
+                                  constraintName="fk_eleadrdisspeadr_on_elemento_a_d_r"/>
+    </changeSet>
+    <changeSet id="3" author="cargoflowJmix">
+        <dropForeignKeyConstraint baseTableName="elemento_adr_disposizioni_speciali_imball_adr_link"
+                                  constraintName="fk_eleadrdisspeimbadr_on_disposizioni_speciali_imball_a_d_r"/>
+    </changeSet>
+    <changeSet id="4" author="cargoflowJmix">
+        <dropForeignKeyConstraint baseTableName="elemento_adr_disposizioni_speciali_imball_adr_link"
+                                  constraintName="fk_eleadrdisspeimbadr_on_elemento_a_d_r"/>
+    </changeSet>
+    <changeSet id="5" author="cargoflowJmix">
+        <dropForeignKeyConstraint baseTableName="elemento_adr_istruzioni_imballaggio_adr_link"
+                                  constraintName="fk_eleadristimbadr_on_elemento_a_d_r"/>
+    </changeSet>
+    <changeSet id="6" author="cargoflowJmix">
+        <dropForeignKeyConstraint baseTableName="elemento_adr_istruzioni_imballaggio_adr_link"
+                                  constraintName="fk_eleadristimbadr_on_istruzioni_imballaggio_a_d_r"/>
+    </changeSet>
+    <changeSet id="7" author="cargoflowJmix">
+        <dropForeignKeyConstraint baseTableName="istruzioni_imballaggio_adr"
+                                  constraintName="fk_istruzioni_imballaggio_adr_on_elemento_adr"/>
+    </changeSet>
+    <changeSet id="8" author="cargoflowJmix">
+        <dropForeignKeyConstraint baseTableName="t_rasporto_rinfusa" constraintName="fk_t_rasporto_rinfusa_on_id"/>
+    </changeSet>
+    <changeSet id="9" author="cargoflowJmix">
+        <dropForeignKeyConstraint baseTableName="trasporto_colli" constraintName="fk_trasporto_colli_on_id"/>
+    </changeSet>
+    <changeSet id="10" author="cargoflowJmix">
+        <dropForeignKeyConstraint baseTableName="varianti_imballaggio"
+                                  constraintName="fk_varianti_imballaggio_on_istruzioni_imballaggio_adr"/>
+    </changeSet>
+    <changeSet id="11" author="cargoflowJmix">
+        <createTable tableName="CERTIFICATI_VEICOLO_ADR">
+            <column name="ID" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CERTIFICATI_VEICOLO_ADR"/>
+            </column>
+            <column name="CODICE" type="VARCHAR(5)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DESCRIZIONE" type="VARCHAR(255)"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="${offsetDateTime.type}"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="${offsetDateTime.type}"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="${offsetDateTime.type}"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="12" author="cargoflowJmix">
+        <createTable tableName="VEICOLI_TRASPORTO_CERTIFICATI_VEICOLO_ADR_LINK">
+            <column name="CERTIFICATI_VEICOLO_A_D_R_ID" type="INT">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="PK_VEICOLI_TRASPORTO_CERTIFICATI_VEICOLO_ADR_LINK"/>
+            </column>
+            <column name="VEICOLI_TRASPORTO_ID" type="UUID">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="PK_VEICOLI_TRASPORTO_CERTIFICATI_VEICOLO_ADR_LINK"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="13" author="cargoflowJmix">
+        <createTable tableName="VEICOLI_TRASPORTO_DISPOSIZIONI_CISTERNA_ADR_LINK">
+            <column name="DISPOSIZIONI_CISTERNA_A_D_R_ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="PK_VEICOLI_TRASPORTO_DISPOSIZIONI_CISTERNA_ADR_LINK"/>
+            </column>
+            <column name="VEICOLI_TRASPORTO_ID" type="UUID">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="PK_VEICOLI_TRASPORTO_DISPOSIZIONI_CISTERNA_ADR_LINK"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="14" author="cargoflowJmix">
+        <addColumn tableName="VEICOLI">
+            <column name="BORSA_EQ_ADR" type="BOOLEAN"/>
+            <column name="CODICE_CISTERNA_ID" type="INT"/>
+            <column name="ETICHETTE_ADR" type="BOOLEAN"/>
+            <column name="KG_ESTINTORE" type="DOUBLE"/>
+            <column name="MTA" type="INT"/>
+            <column name="PANNELLI_ADR" type="BOOLEAN"/>
+            <column name="PORTATA_UTILE" type="DOUBLE"/>
+            <column name="PRESSIONE_CALCOLO" type="DOUBLE"/>
+            <column name="PRESSIONE_PROVA" type="DOUBLE"/>
+            <column name="TIPOLOGIA" type="INT"/>
+            <column name="VOLUME_UTILE" type="DOUBLE"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="15" author="cargoflowJmix">
+        <createIndex indexName="IDX_VEICOLI_CODICE_CISTERNA" tableName="VEICOLI">
+            <column name="CODICE_CISTERNA_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="CODICE_CISTERNA_ID" baseTableName="VEICOLI"
+                                 constraintName="FK_VEICOLI_ON_CODICE_CISTERNA" referencedColumnNames="ID"
+                                 referencedTableName="VEICOLO_TRASPORTO_ADR_GERARCHIA"/>
+    </changeSet>
+    <changeSet id="16" author="cargoflowJmix">
+        <addForeignKeyConstraint baseColumnNames="CERTIFICATI_VEICOLO_A_D_R_ID"
+                                 baseTableName="VEICOLI_TRASPORTO_CERTIFICATI_VEICOLO_ADR_LINK"
+                                 constraintName="FK_VEITRACERVEIADR_ON_CERTIFICATI_VEICOLO_A_D_R"
+                                 referencedColumnNames="ID" referencedTableName="CERTIFICATI_VEICOLO_ADR"/>
+    </changeSet>
+    <changeSet id="17" author="cargoflowJmix">
+        <addForeignKeyConstraint baseColumnNames="VEICOLI_TRASPORTO_ID"
+                                 baseTableName="VEICOLI_TRASPORTO_CERTIFICATI_VEICOLO_ADR_LINK"
+                                 constraintName="FK_VEITRACERVEIADR_ON_VEICOLI_TRASPORTO" referencedColumnNames="ID"
+                                 referencedTableName="VEICOLI"/>
+    </changeSet>
+    <changeSet id="18" author="cargoflowJmix">
+        <addForeignKeyConstraint baseColumnNames="DISPOSIZIONI_CISTERNA_A_D_R_ID"
+                                 baseTableName="VEICOLI_TRASPORTO_DISPOSIZIONI_CISTERNA_ADR_LINK"
+                                 constraintName="FK_VEITRADISCISADR_ON_DISPOSIZIONI_CISTERNA_A_D_R"
+                                 referencedColumnNames="ID" referencedTableName="CODICE_CISTERNA"/>
+    </changeSet>
+    <changeSet id="19" author="cargoflowJmix">
+        <addForeignKeyConstraint baseColumnNames="VEICOLI_TRASPORTO_ID"
+                                 baseTableName="VEICOLI_TRASPORTO_DISPOSIZIONI_CISTERNA_ADR_LINK"
+                                 constraintName="FK_VEITRADISCISADR_ON_VEICOLI_TRASPORTO" referencedColumnNames="ID"
+                                 referencedTableName="VEICOLI"/>
+    </changeSet>
+    <changeSet id="20" author="cargoflowJmix">
+        <dropTable cascadeConstraints="true" tableName="disposizioni_speciali_adr"/>
+    </changeSet>
+    <changeSet id="21" author="cargoflowJmix">
+        <dropTable cascadeConstraints="true" tableName="disposizioni_speciali_imball_adr"/>
+    </changeSet>
+    <changeSet id="22" author="cargoflowJmix">
+        <dropTable cascadeConstraints="true" tableName="elemento_adr_disposizioni_speciali_adr_link"/>
+    </changeSet>
+    <changeSet id="23" author="cargoflowJmix">
+        <dropTable cascadeConstraints="true" tableName="elemento_adr_disposizioni_speciali_imball_adr_link"/>
+    </changeSet>
+    <changeSet id="24" author="cargoflowJmix">
+        <dropTable cascadeConstraints="true" tableName="elemento_adr_istruzioni_imballaggio_adr_link"/>
+    </changeSet>
+    <changeSet id="25" author="cargoflowJmix">
+        <dropTable cascadeConstraints="true" tableName="imballaggio_comune"/>
+    </changeSet>
+    <changeSet id="26" author="cargoflowJmix">
+        <dropTable cascadeConstraints="true" tableName="istruzioni_imballaggio_adr"/>
+    </changeSet>
+    <changeSet id="27" author="cargoflowJmix">
+        <dropTable cascadeConstraints="true" tableName="t_rasporto_rinfusa"/>
+    </changeSet>
+    <changeSet id="28" author="cargoflowJmix">
+        <dropTable cascadeConstraints="true" tableName="trasporto_colli"/>
+    </changeSet>
+    <changeSet id="29" author="cargoflowJmix">
+        <dropTable cascadeConstraints="true" tableName="varianti_imballaggio"/>
+    </changeSet>
+    <changeSet id="30" author="cargoflowJmix">
+        <dropColumn columnName="cisterna_adr" tableName="veicoli"/>
+    </changeSet>
+    <changeSet id="31" author="cargoflowJmix">
+        <dropColumn columnName="imballaggio_comune_id" tableName="elemento_adr"/>
+
+        <dropColumn columnName="rinfusa_id" tableName="elemento_adr"/>
+
+        <dropColumn columnName="trasporto_colli_id" tableName="elemento_adr"/>
+    </changeSet>
+</databaseChangeLog>

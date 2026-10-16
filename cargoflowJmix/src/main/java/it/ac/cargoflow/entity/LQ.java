@@ -3,7 +3,10 @@ package it.ac.cargoflow.entity;
 import io.jmix.core.annotation.DeletedBy;
 import io.jmix.core.annotation.DeletedDate;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
+import io.jmix.core.metamodel.annotation.DependsOnProperties;
+import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
+import io.jmix.core.metamodel.datatype.DatatypeFormatter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedBy;
@@ -314,4 +317,9 @@ public class LQ {
         this.id = id;
     }
 
+    @InstanceName
+    @DependsOnProperties({"lq"})
+    public String getInstanceName(DatatypeFormatter datatypeFormatter) {
+        return "LQ"+datatypeFormatter.formatInteger(lq);
+    }
 }

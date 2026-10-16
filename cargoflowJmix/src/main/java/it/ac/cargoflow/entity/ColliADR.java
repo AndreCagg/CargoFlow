@@ -1,10 +1,8 @@
 package it.ac.cargoflow.entity;
 
-import io.jmix.core.DeletePolicy;
 import io.jmix.core.annotation.DeletedBy;
 import io.jmix.core.annotation.DeletedDate;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
-import io.jmix.core.entity.annotation.OnDeleteInverse;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -14,7 +12,6 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @JmixEntity
@@ -54,10 +51,6 @@ public class ColliADR {
     @Column(name = "DELETED_DATE")
     private OffsetDateTime deletedDate;
 
-    @OnDeleteInverse(DeletePolicy.DENY)
-    @OneToMany(mappedBy = "colliADR")
-    private List<Merce> colli;
-
     @Column(name = "NUM")
     private Integer num;
 
@@ -79,14 +72,6 @@ public class ColliADR {
 
     public void setTipoImballaggio(TipoImballaggio tipoImballaggio) {
         this.tipoImballaggio = tipoImballaggio == null ? null : tipoImballaggio.getId();
-    }
-
-    public List<Merce> getColli() {
-        return colli;
-    }
-
-    public void setColli(List<Merce> colli) {
-        this.colli = colli;
     }
 
     public OffsetDateTime getDeletedDate() {

@@ -8,7 +8,9 @@
             <fetchPlan extends="_base">
                 <property name="sede_mittente" fetchPlan="_base"/>
                 <property name="sede_destinatario" fetchPlan="_base"/>
-                <property name="stato" fetchPlan="_base"/>
+                <property name="stato" fetchPlan="_base">
+                    <property name="stato"/>
+                </property>
             </fetchPlan>
             <loader id="incaricoSedeMittDestDl"/>
             <collection id="statoDc" property="stato"/>
@@ -46,8 +48,9 @@
             <dateTimePicker id="dalField" property="dal"/>
             <dateTimePicker id="alField" property="al"/>
             <textField id="autorizzazioneField" property="autorizzazione"/>
+            <comboBox id="statoComboBox" itemsEnum="it.ac.cargoflow.entity.StatoIntegrazione" dataContainer="statoDc"
+                      property="stato"/>
         </formLayout>
-        <comboBox id="statoComboBox" itemsEnum="it.ac.cargoflow.entity.Stato" width="50%"/>
         <hbox id="statoButtonsPanel" classNames="buttons-panel">
             <button action="statoDataGrid.createAction"/>
             <button action="statoDataGrid.editAction"/>

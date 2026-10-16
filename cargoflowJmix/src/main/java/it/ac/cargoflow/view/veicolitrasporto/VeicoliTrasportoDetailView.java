@@ -1,15 +1,17 @@
 package it.ac.cargoflow.view.veicolitrasporto;
 
 import com.vaadin.flow.component.AbstractField;
-import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.TextRenderer;
 import com.vaadin.flow.router.Route;
 import io.jmix.core.MetadataTools;
 import io.jmix.flowui.action.list.AddAction;
 import io.jmix.flowui.component.checkbox.JmixCheckbox;
+import io.jmix.flowui.component.combobox.EntityComboBox;
+import io.jmix.flowui.component.formlayout.JmixFormLayout;
 import io.jmix.flowui.component.grid.DataGrid;
+import io.jmix.flowui.component.select.JmixSelect;
+import io.jmix.flowui.component.textfield.JmixNumberField;
 import io.jmix.flowui.component.textfield.TypedTextField;
 import io.jmix.flowui.kit.component.button.JmixButton;
 import io.jmix.flowui.model.CollectionPropertyContainer;
@@ -19,8 +21,6 @@ import it.ac.cargoflow.app.AziendaSedeContext;
 import it.ac.cargoflow.entity.*;
 import it.ac.cargoflow.view.disposizionicisternaadr.DisposizioniCisternaADRListView;
 import it.ac.cargoflow.view.main.MainView;
-import it.ac.cargoflow.view.trasportocolli.TrasportoColliListView;
-import it.ac.cargoflow.view.trasportorinfusa.TrasportoRinfusaListView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
@@ -31,148 +31,99 @@ import java.util.List;
 @ViewDescriptor(path = "veicoli-trasporto-detail-view.xml")
 @EditedEntityContainer("veicoliTrasportoDc")
 public class VeicoliTrasportoDetailView extends StandardDetailView<VeicoliTrasporto> {
-    @ViewComponent("caratteristicheAdrDataGrid.addColliAction")
-    private AddAction<TrasportoColli> caratteristicheAdrDataGridAddColliAction;
-    @ViewComponent("caratteristicheAdrDataGrid.addRinfusaAction")
-    private AddAction<TrasportoRinfusa> caratteristicheAdrDataGridAddRinfusaAction;
-    @ViewComponent
-    private DataGrid<RequisitoVeicolo> caratteristicheAdrDataGrid;
     @Autowired
     private MetadataTools metadataTools;
-    @ViewComponent
-    private JmixCheckbox cisternaAdrField;
-    @ViewComponent
-    private CollectionPropertyContainer<RequisitoVeicolo> caratteristicheAdrDc;
-    @ViewComponent
-    private JmixCheckbox adrField;
-    @ViewComponent
-    private VerticalLayout caratteristiche;
-    @ViewComponent
-    private TypedTextField<Object> codCisterna;
-    @ViewComponent("caratteristicheAdrDataGrid.addCisternaAction")
-    private AddAction<RequisitoVeicolo> caratteristicheAdrDataGridAddCisternaAction;
-    @ViewComponent
-    private JmixButton disposizioniCisterna;
-    @ViewComponent
-    private JmixButton addColli;
-    @ViewComponent
-    private JmixButton addRinfusa;
     @ViewComponent
     private DataContext dc;
     @Autowired
     private AziendaSedeContext asc;
+    @ViewComponent
+    private VerticalLayout adrVbox;
+    @ViewComponent
+    private JmixCheckbox adrField;
+    @ViewComponent
+    private VerticalLayout certBox;
+    @ViewComponent
+    private VerticalLayout disposizCisternaBox;
+    @ViewComponent
+    private JmixSelect<TipoVeicolo> tipologiaField;
+    @ViewComponent
+    private JmixFormLayout adrForm;
+    @ViewComponent
+    private JmixCheckbox pannelliAdrField;
+    @ViewComponent
+    private JmixCheckbox etichetteAdrField;
+    @ViewComponent
+    private JmixCheckbox borsaEqAdrField;
+    @ViewComponent
+    private JmixNumberField kgEstintoreField;
+    @ViewComponent
+    private EntityComboBox<VeicoloTrasportoADRGerarchia> codiceCisternaField;
+    @ViewComponent
+    private JmixNumberField pressioneCalcoloField;
+    @ViewComponent
+    private JmixNumberField pressioneProvaField;
+    @ViewComponent
+    private CollectionPropertyContainer<CertificatiVeicoloADR> certificatiDc;
+    @ViewComponent
+    private CollectionPropertyContainer<DisposizioniCisternaADR> disposizioniCisternaDc;
 
     @Subscribe
-    public void onInit(final InitEvent event) {
-        caratteristicheAdrDataGridAddColliAction.setViewClass(TrasportoColliListView.class);
-        caratteristicheAdrDataGridAddColliAction.setAfterCloseHandler(e->{
-            if(e.closedWith(StandardOutcome.SELECT)){
-                LookupView<?> lookupView = (LookupView<?>) e.getView();
-                Collection<?> selezionati = lookupView.getLookupComponent().getSelectedItems();
-
-                selezionati.forEach(item -> {
-                    TrasportoColli entita = (TrasportoColli) item;
-                    TrasportoColli merged = dc.merge(entita);
-                    merged.setTipoRequisito(TipoRequisitiVeicolo.TRASPORTO_COLLI);
-                    caratteristicheAdrDc.getMutableItems().add(merged);
-                });
-            }
-        });
-
-        caratteristicheAdrDataGridAddRinfusaAction.setViewClass(TrasportoRinfusaListView.class);
-        caratteristicheAdrDataGridAddRinfusaAction.setAfterCloseHandler(e->{
-            if(e.closedWith(StandardOutcome.SELECT)){
-                LookupView<?> lookupView = (LookupView<?>) e.getView();
-                Collection<?> selezionati = lookupView.getLookupComponent().getSelectedItems();
-
-                selezionati.forEach(item -> {
-                    TrasportoRinfusa entita = (TrasportoRinfusa) item;
-                    TrasportoRinfusa merged = dc.merge(entita);
-                    merged.setTipoRequisito(TipoRequisitiVeicolo.TRASPORTO_RINFUSA);
-                    caratteristicheAdrDc.getMutableItems().add(merged);
-                });
-            }
-        });
-
-        caratteristicheAdrDataGridAddCisternaAction.setViewClass(DisposizioniCisternaADRListView.class);
-        caratteristicheAdrDataGridAddCisternaAction.setAfterCloseHandler(e->{
-            if(e.closedWith(StandardOutcome.SELECT)){
-                LookupView<?> lookupView = (LookupView<?>) e.getView();
-                Collection<?> selezionati = lookupView.getLookupComponent().getSelectedItems();
-
-                selezionati.forEach(item -> {
-                    DisposizioniCisternaADR entita = (DisposizioniCisternaADR) item;
-                    DisposizioniCisternaADR merged = dc.merge(entita);
-                    merged.setTipoRequisito(TipoRequisitiVeicolo.DISPOSIZIONI_CISTERNA);
-                    caratteristicheAdrDc.getMutableItems().add(merged);
-                });
-            }
-        });
-
-        caratteristicheAdrDataGrid.getColumnByKey("tipo")
-                .setRenderer(new TextRenderer<>(obj -> {
-                    return switch(obj.getTipoRequisito()){
-                        case TRASPORTO_COLLI -> "Trasporto Colli";
-                        case TRASPORTO_RINFUSA -> "Trasporto Rinfusa";
-                        case DISPOSIZIONI_CISTERNA -> "Disposizioni Cisterna";
-                        default -> "";
-                    };
-                }));
-
-        caratteristicheAdrDataGrid.getColumnByKey("instanceName")
-                .setRenderer(new TextRenderer<>(metadataTools::getInstanceName));
-
-        boolean b = adrField.getValue();
-        cisternaAdrField.setVisible(b);
-
-        boolean b2 = cisternaAdrField.getValue();
-
-        caratteristiche.setVisible(b);
-        codCisterna.setVisible(b2);
-        disposizioniCisterna.setVisible(b2);
-        addColli.setVisible(!b2);
-        addRinfusa.setVisible(!b2);
-    }
-
-    @Subscribe("adrField")
-    public void onAdrFieldComponentValueChange(final AbstractField.ComponentValueChangeEvent<JmixCheckbox, Boolean> event) {
-        boolean b = event.getValue();
-
-        cisternaAdrField.setVisible(b);
-        caratteristiche.setVisible(b);
-
-        if(event.isFromClient()){
-            caratteristicheAdrDc.setItems(List.of());
-        }
-
-        if(!b){
-            cisternaAdrField.setValue(b);
-            caratteristicheAdrDc.setItems(List.of());
-        }
-    }
-
-    @Subscribe("cisternaAdrField")
-    public void onCisternaAdrFieldComponentValueChange(final AbstractField.ComponentValueChangeEvent<JmixCheckbox, Boolean> event) {
-        boolean b = event.getValue();
-
-        codCisterna.setVisible(b);
-        disposizioniCisterna.setVisible(b);
-        addColli.setVisible(!b);
-        addRinfusa.setVisible(!b);
-
-        if(event.isFromClient()){
-            caratteristicheAdrDc.setItems(List.of());
-        }
-
-        if(!b){
-            codCisterna.setValue("");
-
-
-        }
+    public void onBeforeShow(final BeforeShowEvent event) {
+        adrVisibile(adrField.getValue());
     }
 
     @Subscribe
     public void onBeforeSave(final BeforeSaveEvent event) {
         getEditedEntity().setSede(asc.getSede());
+    }
+
+    @Subscribe("adrField")
+    public void onAdrFieldComponentValueChange(final AbstractField.ComponentValueChangeEvent<JmixCheckbox, Boolean> event) {
+        adrVisibile(event.getValue());
+    }
+
+    private void adrVisibile(boolean v){
+        adrVbox.setVisible(v);
+        certBox.setVisible(v);
+        disposizCisternaBox.setVisible(v);
+
+        TipoVeicolo tv = tipologiaField.getValue();
+        disposizCisternaBox.setVisible(tv != null && tv.equals(TipoVeicolo.CISTERNA_PORTACISTERNA));
+
+        if(!v){
+            tipologiaField.setValue(null);
+            pannelliAdrField.setValue(false);
+            etichetteAdrField.setValue(false);
+            borsaEqAdrField.setValue(false);
+            kgEstintoreField.setValue(0D);
+
+            pulisciCampiCisterna();
+            certificatiDc.getMutableItems().clear();
+        }
+    }
+
+    @Subscribe("tipologiaField")
+    public void onTipologiaFieldComponentValueChange(final AbstractField.ComponentValueChangeEvent<JmixSelect<TipoVeicolo>, TipoVeicolo> event) {
+        if(!event.isFromClient())
+            return;
+
+        boolean cisterna = event.getValue().equals(TipoVeicolo.CISTERNA_PORTACISTERNA);
+        TipoVeicolo old = event.getOldValue();
+
+        disposizCisternaBox.setVisible(cisterna);
+        pressioneCalcoloField.setVisible(cisterna);
+        pressioneProvaField.setVisible(cisterna);
+        codiceCisternaField.setVisible(cisterna);
+
+        if(old != null && old.equals(TipoVeicolo.CISTERNA_PORTACISTERNA))
+            pulisciCampiCisterna();
+    }
+
+    private void pulisciCampiCisterna(){
+        codiceCisternaField.setValue(null);
+        pressioneCalcoloField.setValue(0D);
+        pressioneProvaField.setValue(0D);
+        disposizioniCisternaDc.getMutableItems().clear();
     }
 }
